@@ -3,12 +3,12 @@ using System.Diagnostics;
 public class FastAPIService : BackgroundService
 {
     private readonly ILogger<FastAPIService> _logger;
-    private Process _aiProcess;
+    private Process _apiProcess;
 
     public FastAPIService(ILogger<FastAPIService> logger)
     {
         _logger = logger;
-        _aiProcess = new Process
+        _apiProcess = new Process
         {
             StartInfo = new ProcessStartInfo
             {
@@ -22,14 +22,14 @@ public class FastAPIService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        _aiProcess.Start();
-        await _aiProcess.WaitForExitAsync();
+        _apiProcess.Start();
+        await _apiProcess.WaitForExitAsync();
         _logger.Log(LogLevel.Information, "AI API process exited");
     }
 
     public override void Dispose()
     {
-        _aiProcess?.Kill();
+        _apiProcess?.Kill();
         base.Dispose();
     }
 }
