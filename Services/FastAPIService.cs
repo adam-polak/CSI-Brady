@@ -1,11 +1,11 @@
 using System.Diagnostics;
 
-public class AiService : BackgroundService
+public class FastAPIService : BackgroundService
 {
-    private readonly ILogger<AiService> _logger;
+    private readonly ILogger<FastAPIService> _logger;
     private Process _aiProcess;
 
-    public AiService(ILogger<AiService> logger)
+    public FastAPIService(ILogger<FastAPIService> logger)
     {
         _logger = logger;
         _aiProcess = new Process

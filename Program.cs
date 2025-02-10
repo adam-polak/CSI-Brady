@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHostedService<AiService>();
+builder.Services.AddHostedService<FastAPIService>();
 
 var app = builder.Build();
 
