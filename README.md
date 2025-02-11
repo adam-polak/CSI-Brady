@@ -14,15 +14,20 @@ A website to identify OSHA and ANSI violations from images.
 ## How to Setup
 
 1. Create venv
-    run "python -m venv ./venv"
+    ```bash
+    python -m venv ./venv
 2. Activate venv
-    run "source ./venv/bin/activate"
+    ```bash
+    source ./venv/bin/activate
 3. Install packages
-    run "pip install -r ./FastAPI/requirements.txt"
+    ```bash
+    pip install -r ./FastAPI/requirements.txt
 4. Run project
-    run "dotnet run"
+    ```bash
+    dotnet run
 5. When done
-    run "deactivate" to exit venv
+    ```bash
+    deactivate
 
 ### Prerequisites
 
