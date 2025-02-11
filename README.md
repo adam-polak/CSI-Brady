@@ -29,11 +29,6 @@ A website to identify OSHA and ANSI violations from images.
     ```bash
     deactivate
 
-### Prerequisites
-
-- List any software or tools that need to be installed (e.g., Node.js, Python, Docker).
-- Any other dependencies or system requirements.
-
 ### Installation
 
 1. **Clone the repository:**
