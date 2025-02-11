@@ -40,5 +40,4 @@ A website to identify OSHA and ANSI violations from images.
    ```bash
    git clone https://github.com/your-username/your-repo-name.git
 2. **Install .NET SDK**
-    ```bash
-    https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+- https://dotnet.microsoft.com/en-us/download/dotnet/8.0
