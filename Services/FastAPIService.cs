@@ -13,7 +13,7 @@ public class FastAPIService : BackgroundService
             StartInfo = new ProcessStartInfo
             {
                 FileName = "fastapi",
-                Arguments = "run --host 127.0.0.1. ./FastAPI/api.py",
+                Arguments = "run --host localhost ./FastAPI/api.py",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             }
