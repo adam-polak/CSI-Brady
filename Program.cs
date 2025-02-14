@@ -1,5 +1,7 @@
 using CSI_Brady.Middleware;
+using CSI_Brady.Util.Auth0;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
@@ -28,13 +30,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     
     -To add policy follow format below
 */
-// builder.Services.AddAuthorization(options =>
-// {
-//     options.AddPolicy("read:messages", policy => policy.Requirements.Add(
-//         new HasScopeRequirement("read:messages", domain)));
-// });
-// 
-// builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("loggedin", policy => policy.Requirements.Add(
+        new HasScopeRequirement("loggedin", domain)));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
 builder.Services.AddControllersWithViews();
 
@@ -57,10 +59,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
-app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

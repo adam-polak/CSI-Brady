@@ -9,12 +9,11 @@ public class SameSiteNoneMiddleware
     {
         _next = next;
         _logger = logger;
+        _logger.Log(LogLevel.Critical, "Middleware should only be used locally");
     }
 
     public async Task InvokeAsync(HttpContext context)
     {
-        _logger.Log(LogLevel.Critical, "Middleware should only be used locally");
-
         CookieOptions cookieOptions = new CookieOptions
         {
             Secure = false,
