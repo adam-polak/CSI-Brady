@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LoginButton from './Login';
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -6,6 +7,7 @@ export class Home extends Component {
   render() {
     return (
       <div>
+        <LoginButton />
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>

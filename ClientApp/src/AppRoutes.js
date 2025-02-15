@@ -1,3 +1,4 @@
+import { AuthenticationGuard } from "./components/AuthenticationGuard";
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
@@ -9,7 +10,7 @@ const AppRoutes = [
   },
   {
     path: '/counter',
-    element: <Counter />
+    element: <AuthenticationGuard component={Counter} />
   },
   {
     path: '/fetch-data',
