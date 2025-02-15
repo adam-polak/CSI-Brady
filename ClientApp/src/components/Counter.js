@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LogoutButton from './Logout';
+import { Profile } from './Profile';
 
 export class Counter extends Component {
   static displayName = Counter.name;
@@ -20,6 +21,7 @@ export class Counter extends Component {
     return (
       <div>
         <LogoutButton />
+        <Profile />
         <h1>Counter</h1>
 
         <p>This is a simple example of a React component.</p>
