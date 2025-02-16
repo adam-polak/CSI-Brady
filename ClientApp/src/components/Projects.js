@@ -6,7 +6,7 @@ export class Projects extends Component {
     render() {
         return (
           <div>
-            Projects
+            <h1>Projects</h1>
             <CreateProject />
             <ProjectsContainer />
           </div>
