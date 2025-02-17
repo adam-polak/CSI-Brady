@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import LogoutButton from './Logout';
 import { Profile } from './Profile';
+import LogoutButton from './Logout';
 
 export class Counter extends Component {
   static displayName = Counter.name;
