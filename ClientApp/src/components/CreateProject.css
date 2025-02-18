@@ -1,0 +1,17 @@
+.CreateProjectContainer {
+    display: flex;
+    box-shadow: rgba(33, 35, 38, 0.25) 0px 10px 10px -10px;
+    align-items: center;
+
+    height: 5vh;
+    margin-bottom: 20px;
+}
+
+.CreateProjectContainer > div {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+form {
+    flex-grow: 5;
+}

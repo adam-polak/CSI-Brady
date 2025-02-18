@@ -1,13 +1,17 @@
 import React from "react";
 import ProjectEntry from "./ProjectEntry";
 
-const ProjectsContainer = () => {
-  return (
-    <>
-      {/* <div>ProjectsContainer</div> */}
-      <ProjectEntry />
-    </>
-  );
-};
+export default function ProjectsContainer() {
+  const entries = ["Quad", "Husco", "Brady"];
+  const handleSelectItem = (entry) => console.log(entry);
 
-export default ProjectsContainer;
+  return (
+    <div>
+      {entries.map((entry) => (
+        <ProjectEntry key={entry} onSelectItem={handleSelectItem}>
+          {entry}
+        </ProjectEntry> // TODO:k key={project.id}
+      ))}
+    </div>
+  );
+}
