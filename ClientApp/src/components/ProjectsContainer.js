@@ -3,14 +3,18 @@ import ProjectEntry from "./ProjectEntry";
 
 export default function ProjectsContainer() {
   const entries = ["Quad", "Husco", "Brady"];
+
   const handleSelectItem = (entry) => console.log(entry);
 
   return (
     <div>
       {entries.map((entry) => (
-        <ProjectEntry key={entry} onSelectItem={handleSelectItem}>
+        <ProjectEntry
+          key={entry} // TODO: key={project.id}
+          onSelectItem={handleSelectItem}
+        >
           {entry}
-        </ProjectEntry> // TODO:k key={project.id}
+        </ProjectEntry>
       ))}
     </div>
   );

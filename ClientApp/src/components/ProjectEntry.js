@@ -1,9 +1,14 @@
 import React from "react";
-import "./ProjectEntry.css";
 
 export default function ProjectEntry({ children, onSelectItem }) {
+  const style = {
+    borderStyle: "solid",
+    textAlign: "center",
+    margin: "10px",
+  };
+
   return (
-    <div className="projectEntry" onClick={onSelectItem}>
+    <div className="projectEntry" onClick={onSelectItem} style={style}>
       {children}
     </div>
   );
