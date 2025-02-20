@@ -8,8 +8,6 @@ if(builder.Environment.IsDevelopment())
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHostedService<FastAPIService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
