@@ -22,9 +22,10 @@ public class FastAPIService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        _logger.Log(LogLevel.Information, "FastAPI starting");
         _apiProcess.Start();
         await _apiProcess.WaitForExitAsync();
-        _logger.Log(LogLevel.Information, "AI API process exited");
+        _logger.Log(LogLevel.Information, "FastAPI process exited");
     }
 
     public override void Dispose()
