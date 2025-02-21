@@ -3,7 +3,7 @@ name: Linux_Container_Workflow
 
 jobs:
     build-and-deploy:
-        runs-on: ubuntu-laapp
+        runs-on: ubuntu-latest
         steps:
         # checkout the repo
         - name: 'Checkout GitHub Action'
