@@ -1,6 +1,6 @@
 import { AuthenticationGuard } from "./components/AuthenticationGuard";
 import { Home } from "./components/Home";
-import { Projects } from "./components/Projects";
+import { Facilities } from "./components/facility/Facilities";
 
 const AppRoutes = [
   {
@@ -9,7 +9,7 @@ const AppRoutes = [
   },
   {
     path: '/projects',
-    element: <AuthenticationGuard component={Projects} />
+    element: <AuthenticationGuard component={Facilities} />
   },
 ];
 

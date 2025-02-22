@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import FilterBar from "./FilterBar";
-import ProjectsContainer from "./ProjectsContainer";
-// import Logout from "./Logout"q
+import FilterBar from "../filter/FilterBar";
+import FacilitiesContainer from "./FacilitiesContainer";
+import Logout from "../Logout"
 
-export class Projects extends Component {
-  
+export class Facilities extends Component {
   render() {
     const entries = ["Quad", "Husco", "Brady"];
     return (
@@ -12,7 +11,7 @@ export class Projects extends Component {
         <h1 style={{textAlign: "center"}}>Facilities</h1>
         <Logout />
         <FilterBar />
-        <ProjectsContainer entries={entries} />
+        <FacilitiesContainer entries={entries} />
       </div>
     );
   }

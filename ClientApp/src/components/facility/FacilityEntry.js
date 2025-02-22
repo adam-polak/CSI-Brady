@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ProjectEntry({ children, onSelectItem }) {
+export default function FacilityEntry({ children, onSelectItem }) {
   const style = {
     borderStyle: "solid",
     textAlign: "center",
