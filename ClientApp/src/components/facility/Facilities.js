@@ -8,7 +8,7 @@ export class Facilities extends Component {
     const obj1 = {
       Address: "123 Good Road",
       CompanyName: "Husco",
-      CompanyImgLink: ""
+      CompanyImgLink: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR03ByQHEPHqOZVAbAVZFa1kFWDz7lcocGSSA&s"
     }
 
     const obj2 = {
