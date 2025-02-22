@@ -1,16 +1,18 @@
 import React, { Component } from "react";
-import CreateProject from "./CreateProject";
+import FilterBar from "./FilterBar";
 import ProjectsContainer from "./ProjectsContainer";
-import Logout from "./Logout"
+// import Logout from "./Logout"q
 
 export class Projects extends Component {
+  
   render() {
+    const entries = ["Quad", "Husco", "Brady"];
     return (
       <div>
-        <h1>Projects</h1>
-        <Logout />
-        <CreateProject />
-        <ProjectsContainer />
+        <h1 style={{textAlign: "center"}}>Facilities</h1>
+        {/* <Logout /> */}
+        <FilterBar />
+        <ProjectsContainer entries={entries} />
       </div>
     );
   }

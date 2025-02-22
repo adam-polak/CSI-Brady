@@ -1,8 +1,7 @@
 import React from "react";
 import ProjectEntry from "./ProjectEntry";
 
-export default function ProjectsContainer() {
-  const entries = ["Quad", "Husco", "Brady"];
+export default function ProjectsContainer({ entries }) {
 
   const handleSelectItem = (entry) => console.log(entry);
 
