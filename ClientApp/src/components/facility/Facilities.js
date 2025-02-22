@@ -18,7 +18,7 @@ export class Facilities extends Component {
     }
 
     const obj3 = {
-      Address: "8543 Spectacular Road, Milwaukee, Wi 53534",
+      Address: "8543 Spectacular Road, Milwaukee, WI 53534",
       CompanyName: "Brady",
       CompanyImgLink: "https://cdn.worldvectorlogo.com/logos/brady-3.svg"
     }

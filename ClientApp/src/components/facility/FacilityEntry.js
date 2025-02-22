@@ -1,5 +1,13 @@
 import React from "react";
-import { Button, Card, CardTitle, CardText } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardTitle,
+  CardText,
+  Container,
+  Row,
+  Col,
+} from "reactstrap";
 
 /**
  * facility object
@@ -20,25 +28,31 @@ export default function FacilityEntry({ facility, onSelectItem }) {
   console.log(facility);
 
   return (
-    <div>
-      <Card>
-        <Button onClick={onSelectItem}>
-          <div className="FacilityContainer" style={{display: "flex", alignItems: "center" }}>
-            <div>
+    <Card>
+      <Button onClick={onSelectItem} style={{paddingLeft: "0px"}}>
+        <Container className="FacilityContainer">
+          <Row>
+            <Col xs="2" className="d-flex justify-content-center">
               <img
                 alt={facility.CompanyName + " Logo"}
                 src={facility.CompanyImgLink}
                 width="50px"
-                style={{marginRight: "25px"}}
+                style={{alignItems: "center"}}
               />
-            </div>
-            <div>
-              <CardTitle tag="h5">{facility.Address}</CardTitle>
-              <CardText>{facility.CompanyName}</CardText>
-            </div>
-          </div>
-        </Button>
-      </Card>
-    </div>
+            </Col>
+            <Col>
+              <Row>
+                <CardTitle tag="h5" style={{ textAlign: "left" }}>
+                  {facility.Address}
+                </CardTitle>
+                <CardText style={{ textAlign: "left" }}>
+                  {facility.CompanyName}
+                </CardText>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </Button>
+    </Card>
   );
 }
