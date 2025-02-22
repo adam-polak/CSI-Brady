@@ -6,21 +6,21 @@ import Logout from "../Logout"
 export class Facilities extends Component {
   render() {
     const obj1 = {
-      Address: "123 Good Road",
+      Address: "9123 Good Road",
       CompanyName: "Husco",
       CompanyImgLink: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR03ByQHEPHqOZVAbAVZFa1kFWDz7lcocGSSA&s"
     }
 
     const obj2 = {
-      Address: "123 Bad Road",
+      Address: "4213 Bad Road",
       CompanyName: "Quad",
-      CompanyImgLink: ""
+      CompanyImgLink: "https://static.stocktitan.net/company-logo/quad-lg.webp"
     }
 
     const obj3 = {
-      Address: "123 Spectacular Road",
+      Address: "8543 Spectacular Road, Milwaukee, Wi 53534",
       CompanyName: "Brady",
-      CompanyImgLink: ""
+      CompanyImgLink: "https://cdn.worldvectorlogo.com/logos/brady-3.svg"
     }
 
     const facilities = [obj1, obj2, obj3];

@@ -29,11 +29,12 @@ export default function FacilityEntry({ facility, onSelectItem }) {
                 alt={facility.CompanyName + " Logo"}
                 src={facility.CompanyImgLink}
                 width="50px"
+                style={{marginRight: "25px"}}
               />
             </div>
             <div>
-              <CardTitle tag="h5">{facility.CompanyName}</CardTitle>
-              <CardText>{facility.Address}</CardText>
+              <CardTitle tag="h5">{facility.Address}</CardTitle>
+              <CardText>{facility.CompanyName}</CardText>
             </div>
           </div>
         </Button>
