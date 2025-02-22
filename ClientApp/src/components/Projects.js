@@ -10,7 +10,7 @@ export class Projects extends Component {
     return (
       <div>
         <h1 style={{textAlign: "center"}}>Facilities</h1>
-        {/* <Logout /> */}
+        <Logout />
         <FilterBar />
         <ProjectsContainer entries={entries} />
       </div>
