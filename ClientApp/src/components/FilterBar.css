@@ -1,0 +1,11 @@
+.FilterBarContainer {
+    display: flex;
+    align-items: center;
+    height: 5vh;
+    box-shadow: rgba(33, 35, 38, 0.25) 0px 10px 10px -10px;
+    margin-bottom: 20px;
+}
+
+.FilterBarContainer > label{
+    margin-left: 15px;
+}
