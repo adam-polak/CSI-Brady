@@ -1,18 +1,19 @@
 import React from "react";
 import FacilityEntry from "./FacilityEntry";
 
-export default function FacilitiesContainer({ entries }) {
-
-  const handleSelectItem = (entry) => console.log(entry);
+export default function FacilitiesContainer({ facilities }) {
+  const handleSelectEntry = (i) => {
+    console.log(i);
+  };
 
   return (
-    <div>
-      {entries.map((entry) => (
+    <div className="container-lg">
+      {facilities.map((facility, i) => (
         <FacilityEntry
-          key={entry} // TODO: key={project.id}
-          onSelectItem={handleSelectItem}
+          key={`facility-${i}`}
+          facility={facility}
+          onSelectItem={() => handleSelectEntry(i)}
         >
-          {entry}
         </FacilityEntry>
       ))}
     </div>
