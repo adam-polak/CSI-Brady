@@ -1,5 +1,6 @@
 import React from "react";
-import { Button } from 'reactstrap';
+import { Button, CardTitle, CardText } from "reactstrap";
+import { Card } from "reactstrap";
 
 /**
  * facility object
@@ -19,9 +20,12 @@ export default function FacilityEntry({ facility, onSelectItem }) {
 
   return (
     <div>
-      <Button onClick={onSelectItem}>
-        test
-      </Button>
+      <Card>
+        <Button onClick={onSelectItem}>
+          <CardTitle tag="h5">CompanyName</CardTitle>
+          <CardText>1000 Address Rd. 53211</CardText>
+        </Button>
+      </Card>
     </div>
   );
 }
