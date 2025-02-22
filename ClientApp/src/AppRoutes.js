@@ -1,5 +1,6 @@
 import { AuthenticationGuard } from "./components/AuthenticationGuard";
 import { Home } from "./components/Home";
+import { Dashboard } from "./components/dashboard/Dashboard";
 import { Facilities } from "./components/facility/Facilities";
 
 const AppRoutes = [
@@ -8,9 +9,13 @@ const AppRoutes = [
     element: <Home />
   },
   {
-    path: '/projects',
+    path: '/facilities',
     element: <AuthenticationGuard component={Facilities} />
   },
+  {
+    path: '/dashboard',
+    element: <AuthenticationGuard component={Dashboard} />
+  }
 ];
 
 export default AppRoutes;
