@@ -18,12 +18,14 @@ export default function FacilityEntry({ facility, onSelectItem }) {
   //   margin: "10px",
   // };
 
+  console.log(facility);
+
   return (
     <div>
       <Card>
         <Button onClick={onSelectItem}>
-          <CardTitle tag="h5">CompanyName</CardTitle>
-          <CardText>1000 Address Rd. 53211</CardText>
+          <CardTitle tag="h5">{facility.CompanyName}</CardTitle>
+          <CardText>{facility.Address}</CardText>
         </Button>
       </Card>
     </div>

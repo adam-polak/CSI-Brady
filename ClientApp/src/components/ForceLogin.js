@@ -5,6 +5,8 @@ export const ForceLogin = ({redirectRoute}) => {
     const { isAuthenticated, loginWithRedirect, isLoading } = useAuth0();
     const nav = useNavigate();
 
+    console.log(isAuthenticated);
+    console.log(isLoading);
     if(isAuthenticated) {
         nav(redirectRoute);
     } else if(!isLoading) {
