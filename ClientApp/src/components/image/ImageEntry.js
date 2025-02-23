@@ -66,7 +66,7 @@ export default function ImageEntry({ image }) {
                                     <AccordionBody accordionId={i}>
                                         <Container fluid>
                                             <Row>
-                                                <p>View more information <a target="_blank" href={violation.Link}>here</a></p>
+                                                <p>View more information <a target="_blank" rel="noreferrer" href={violation.Link}>here</a></p>
                                             </Row>
                                             {
                                                 violation.Products.length === 0
