@@ -41,19 +41,21 @@ export class Dashboard extends Component {
     render() {
 
         const product1 = {
-            Name: "Printer",
-            ImageSrc: "",
-            Link: "https://www.google.com/"
+            Name: "Brady M710 Label Printer",
+            ImageSrc: "https://cdn-01-artemis.media-brady.com/Assets/ImageRoot/WPSAmericasWeb_Name/04/87/M710_Left_Angled_BWI-3d_seton_dam_4800487.jpg",
+            Link: "https://www.seton.com/m710-labeler-2-label-width-from-brady-bid155.html"
         }
 
         const violation1 = {
             Name: "OSHA 22381",
+            Summary: "",
             Link: "https://www.google.com/",
             Products: [product1]
         }
 
         const violation2 = {
             Name: "OSHA 4521",
+            Summary: "",
             Link: "https://www.google.com/",
             Products: []            
         }

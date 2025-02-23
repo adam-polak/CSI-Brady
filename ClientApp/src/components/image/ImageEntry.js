@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardBody, Container, Row, Accordion, AccordionItem, AccordionHeader, AccordionBody } from "reactstrap";
+import ProductEntry from "../product/ProductEntry";
 
 /**
  * image object
@@ -13,6 +14,7 @@ import { Card, CardBody, Container, Row, Accordion, AccordionItem, AccordionHead
  * violation object
  * {
  *      Name,
+ *      Summary,
  *      Link,
  *      Products[]
  * },
@@ -66,14 +68,19 @@ export default function ImageEntry({ image }) {
                                     <AccordionBody accordionId={i}>
                                         <Container fluid>
                                             <Row>
-                                                <p>View more information <a target="_blank" rel="noreferrer" href={violation.Link}>here</a></p>
+                                                <h4>Summary</h4>
+                                                <p>{violation.Summary} <a target="_blank" rel="noreferrer" href={violation.Link}>more information</a></p>
+                                            </Row>
+                                            <Row>
+                                                <h4 className="text-center">Recommended products</h4>
+                                                <hr />
                                             </Row>
                                             {
                                                 violation.Products.length === 0
-                                                ? <Row><p>*No products to recommend</p></Row>
+                                                ? <Row><p className="text-center">*No products to recommend</p></Row>
                                                 : violation.Products.map(product => (
                                                     <Row>
-                                                        <h2>{product.Name}</h2>
+                                                        <ProductEntry product={product} />
                                                     </Row>
                                                 ))
                                             }
