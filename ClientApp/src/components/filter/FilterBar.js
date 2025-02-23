@@ -1,6 +1,6 @@
 import React from "react";
 import FilterTag from "./FilterTag";
-import { Container, Row, Col, Badge } from "reactstrap";
+import { Badge, Button } from "reactstrap";
 import "./FilterBar.css";
 
 export default function FilterBar({ handleAdd, tags }) {
@@ -13,6 +13,8 @@ export default function FilterBar({ handleAdd, tags }) {
 
     // Get input from filter's form
     const filterInput = form.children[0].children[0];
+
+    // Add to filters array
     handleAdd(filterInput.value);
 
     // Reset input to be empty
@@ -29,17 +31,32 @@ export default function FilterBar({ handleAdd, tags }) {
           <button type="submit">+</button>
         </form>
       </div>
-      <Container className="TagContainer mb-3">
-        <Row>
-          {tags.map((tag, i) => (
-            <Col>
-              <Badge className="mt-2 mb-2 p-2">
-                <FilterTag key={`tag-${i}`}>{tag}</FilterTag>
+
+      {/* Horizontal Scroll Container */}
+      <div
+        className="TagContainer mb-3"
+        style={{
+          width: "100%",
+          overflowX: "auto",
+          display: "flex",
+          flexWrap: "nowrap",
+          gap: "8px",
+          padding: "8px 0",
+        }}
+      >
+        {tags.map((tag, i) => (
+          <div
+            key={`tag-${i}`}
+            style={{ flexShrink: 0 }} // Safeguard to prevent items from shrinking
+          >
+            <Button className="mt-2 mb-2">
+              <Badge>
+                <FilterTag>{tag}</FilterTag>
               </Badge>
-            </Col>
-          ))}
-        </Row>
-      </Container>
+            </Button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

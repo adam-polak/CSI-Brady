@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Logout from "../Logout";
+// import Logout from "../Logout";
 import FacilitiesContainer from "./FacilitiesContainer";
 
 export class Facilities extends Component {
@@ -28,7 +28,7 @@ export class Facilities extends Component {
     return (
       <div>
         <h1 style={{ textAlign: "center" }}>Facilities</h1>
-        <Logout />
+        {/* <Logout /> */}
         <FacilitiesContainer facilities={facilities} />
       </div>
     );
