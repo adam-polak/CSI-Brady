@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FacilityEntry from "./FacilityEntry";
 import FilterBar from "../filter/FilterBar";
 
 export default function FacilitiesContainer({ facilities }) {
   const [filters, setFilters] = useState([]);
+  const nav = useNavigate();
 
   const handleSelectEntry = (i) => {
+    nav("/dashboard");
     console.log(i);
   };
+
   console.log(facilities[0].Address);
 
   function addToFilters(str) {
@@ -16,6 +20,9 @@ export default function FacilitiesContainer({ facilities }) {
       setFilters([...filters, str]);
     }
   }
+
+    
+    // console.log(i);
 
   return (
     <>
