@@ -1,8 +1,10 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AuthenticationGuard = ({ component }) => {
     const { isAuthenticated } = useAuth0();
+    const nav = useNavigate();
 
     const Component = withAuthenticationRequired(component, {
         onRedirecting: () => (
@@ -11,6 +13,10 @@ export const AuthenticationGuard = ({ component }) => {
             </div>
         )
     });
+
+    if(!isAuthenticated) {
+        nav("/");
+    }
 
     return isAuthenticated && <Component />
 }

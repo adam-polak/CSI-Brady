@@ -7,7 +7,7 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <ForceLogin redirectRoute={"/projects"} />
+        <ForceLogin redirectRoute={"/facilities"} />
       </div>
     );
   }
