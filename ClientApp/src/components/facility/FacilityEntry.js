@@ -19,8 +19,6 @@ import {
  */
 
 export default function FacilityEntry({ facility, onSelectItem }) {
-  console.log(facility);
-
   return (
     <Card>
       <Button onClick={onSelectItem} style={{ paddingLeft: "0px" }}>
