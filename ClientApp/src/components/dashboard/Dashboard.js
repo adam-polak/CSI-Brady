@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import ImageEntry from '../image/ImageEntry';
 import { Button, Col, Container, Row } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 const DashBoardHeader = () => {
+    const nav = useNavigate();
+
     return (
         <Container fluid>
             <Row className="mt-4">
                 <Col className="d-inline-flex">
-                    <Button>Back</Button>
+                    <Button onClick={() => nav("/facilities")}>Back</Button>
                 </Col>
                 <Col>
                     <h1 className="text-center">Dashboard</h1>
@@ -24,14 +27,13 @@ export default function ImagesContainer({ images }) {
     return (
         <Container style={{overflow: "scroll", height: "80vh"}} fluid>
             {images.map((image, i) => (
-            <Row className="mb-4">
-                <Col className="d-inline-flex justify-content-center">
-                    <ImageEntry
-                    key={`image-${i}`}
-                    image={image}
-                    />
-                </Col>
-            </Row>
+                <Row className="mb-4" key={`image-${i}`}>
+                    <Col className="d-inline-flex justify-content-center">
+                        <ImageEntry
+                        image={image}
+                        />
+                    </Col>
+                </Row>
             ))}
         </Container>
     );
@@ -47,9 +49,9 @@ export class Dashboard extends Component {
         }
 
         const violation1 = {
-            Name: "OSHA 22381",
-            Summary: "",
-            Link: "https://www.google.com/",
+            Name: "OSHA 1910.303(e)",
+            Summary: "Electric equipment must have identification of manufacturer and ratings.",
+            Link: "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.303#1910.303(e)",
             Products: [product1]
         }
 

@@ -1,5 +1,5 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const AuthenticationGuard = ({ component }) => {
@@ -14,9 +14,11 @@ export const AuthenticationGuard = ({ component }) => {
         )
     });
 
-    if(!isAuthenticated) {
-        nav("/");
-    }
+    useEffect(() => {
+        if(!isAuthenticated) {
+            nav("/");
+        }
+    });
 
     return isAuthenticated && <Component />
 }
