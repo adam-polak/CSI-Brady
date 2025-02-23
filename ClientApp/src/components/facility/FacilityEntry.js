@@ -19,17 +19,9 @@ import {
  */
 
 export default function FacilityEntry({ facility, onSelectItem }) {
-  // const style = {
-  //   borderStyle: "solid",
-  //   textAlign: "center",
-  //   margin: "10px",
-  // };
-
-  console.log(facility);
-
   return (
     <Card>
-      <Button onClick={onSelectItem} style={{paddingLeft: "0px"}}>
+      <Button onClick={onSelectItem} style={{ paddingLeft: "0px" }}>
         <Container className="FacilityContainer">
           <Row>
             <Col xs="2" className="d-flex justify-content-center">
@@ -37,7 +29,7 @@ export default function FacilityEntry({ facility, onSelectItem }) {
                 alt={facility.CompanyName + " Logo"}
                 src={facility.CompanyImgLink}
                 width="50px"
-                style={{alignItems: "center"}}
+                style={{ alignItems: "center" }}
               />
             </Col>
             <Col>
