@@ -32,7 +32,7 @@ export default function ImageEntry({ image }) {
 
     const toggle = (id) => {
         if(open === id) {
-            setOpen();
+            setOpen('');
         } else {
             setOpen(id);
         }
@@ -68,8 +68,7 @@ export default function ImageEntry({ image }) {
                                     <AccordionBody accordionId={"" + i}>
                                         <Container fluid>
                                             <Row>
-                                                <h4>Summary</h4>
-                                                <p>{violation.Summary} <a target="_blank" rel="noreferrer" href={violation.Link}>more information</a></p>
+                                                <p>{violation.Summary} <a target="_blank" rel="noreferrer" href={violation.Link}>More information</a></p>
                                             </Row>
                                             <Row>
                                                 <h4 className="text-center">Recommended products</h4>

@@ -26,7 +26,7 @@ export default function ProductEntry({ product }) {
                                 />
                             </Col>
                             <Col>
-                                <h4 className="text-start mt-2"><a target="_blank" rel="noreferrer" href={product.Link}>{product.Name}</a></h4>
+                                <h5 className="text-start mt-2"><a target="_blank" rel="noreferrer" href={product.Link}>{product.Name}</a></h5>
                             </Col>
                         </Row>
                     </Container>
