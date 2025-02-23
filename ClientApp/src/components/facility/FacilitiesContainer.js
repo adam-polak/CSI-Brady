@@ -9,7 +9,7 @@ export default function FacilitiesContainer({ facilities }) {
     console.log(i);
   };
   console.log(facilities[0].Address);
- 
+
   function addToFilters(str) {
     console.log(str);
     if (str !== "") {
@@ -21,16 +21,18 @@ export default function FacilitiesContainer({ facilities }) {
     <>
       <FilterBar handleAdd={addToFilters} tags={filters} />
       <div className="container-lg">
-        {facilities.map(
-          (facility, i) =>
-            !filters.includes(facility) && (
-              <FacilityEntry
-                key={`facility-${i}`}
-                facility={facility}
-                onSelectItem={() => handleSelectEntry(i)}
-              ></FacilityEntry>
-            )
-        )}
+        {facilities
+          .filter(
+            (facility) =>
+              filters.length === 0 || filters.includes(facility.Address)
+          )
+          .map((facility, i) => (
+            <FacilityEntry
+              key={`facility-${i}`}
+              facility={facility}
+              onSelectItem={() => handleSelectEntry(i)}
+            />
+          ))}
       </div>
     </>
   );
