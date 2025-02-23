@@ -1,9 +1,8 @@
 import React from "react";
 import FilterTag from "./FilterTag";
-import { Badge, Button } from "reactstrap";
 import "./FilterBar.css";
 
-export default function FilterBar({ handleAdd, tags }) {
+export default function FilterBar({ handleAdd, handleRemove, tags }) {
   function handleSubmit(e) {
     // Prevent the browser from reloading the page
     e.preventDefault();
@@ -49,11 +48,7 @@ export default function FilterBar({ handleAdd, tags }) {
             key={`tag-${i}`}
             style={{ flexShrink: 0 }} // Safeguard to prevent items from shrinking
           >
-            <Button className="mt-2 mb-2">
-              <Badge>
-                <FilterTag>{tag}</FilterTag>
-              </Badge>
-            </Button>
+            <FilterTag tag={tag} index={i} onSelectItem={handleRemove}/>
           </div>
         ))}
       </div>

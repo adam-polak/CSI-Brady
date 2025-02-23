@@ -9,24 +9,26 @@ export default function FacilitiesContainer({ facilities }) {
 
   const handleSelectEntry = (i) => {
     nav("/dashboard");
-    console.log(i);
   };
 
-  console.log(facilities[0].Address);
-
   function addToFilters(str) {
-    console.log(str);
     if (str !== "") {
       setFilters([...filters, str]);
     }
   }
 
-    
-    // console.log(i);
+  function removeFromFilters(i) {
+    filters.splice(i, 1);
+    setFilters([...filters]);
+  }
 
   return (
     <>
-      <FilterBar handleAdd={addToFilters} tags={filters} />
+      <FilterBar
+        handleAdd={addToFilters}
+        handleRemove={removeFromFilters}
+        tags={filters}
+      />
       <div className="container-lg">
         {facilities
           .filter(
