@@ -16,7 +16,7 @@ const DashBoardHeader = () => {
                     <h1 className="text-center">Dashboard</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
-                    <Button>Camera</Button>
+                    <Button onClick={() => nav("/camera")}>Camera</Button>
                 </Col>
             </Row>
         </Container>

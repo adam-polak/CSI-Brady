@@ -1,5 +1,6 @@
 import { AuthenticationGuard } from "./components/AuthenticationGuard";
 import { Home } from "./components/Home";
+import { Camera } from "./components/camera/Camera";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { Facilities } from "./components/facility/Facilities";
 
@@ -15,6 +16,10 @@ const AppRoutes = [
   {
     path: '/dashboard',
     element: <AuthenticationGuard component={Dashboard} />
+  },
+  {
+    path: '/camera',
+    element: <AuthenticationGuard component={Camera} />
   }
 ];
 
