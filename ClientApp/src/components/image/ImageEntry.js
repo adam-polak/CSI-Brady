@@ -39,7 +39,7 @@ export default function ImageEntry({ image }) {
     }
 
     return (
-        <div style={{width: "80%"}}>
+        <div style={{width: "90%"}}>
             <Card>
                 <CardBody className="pt-4">
                     <Container fluid>
@@ -63,9 +63,9 @@ export default function ImageEntry({ image }) {
                             image.Violations.length === 0
                             ? <h5 className="text-center">*No violations detected</h5>
                             : image.Violations.map((violation, i) => (
-                                <AccordionItem>
-                                    <AccordionHeader targetId={i}>{violation.Name}</AccordionHeader>
-                                    <AccordionBody accordionId={i}>
+                                <AccordionItem key={`violation-${i}`}>
+                                    <AccordionHeader targetId={"" + i}>{violation.Name}</AccordionHeader>
+                                    <AccordionBody accordionId={"" + i}>
                                         <Container fluid>
                                             <Row>
                                                 <h4>Summary</h4>
@@ -78,8 +78,8 @@ export default function ImageEntry({ image }) {
                                             {
                                                 violation.Products.length === 0
                                                 ? <Row><p className="text-center">*No products to recommend</p></Row>
-                                                : violation.Products.map(product => (
-                                                    <Row>
+                                                : violation.Products.map((product, i) => (
+                                                    <Row key={`product-${i}`}>
                                                         <ProductEntry product={product} />
                                                     </Row>
                                                 ))

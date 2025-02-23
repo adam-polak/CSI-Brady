@@ -15,9 +15,9 @@ export default function ProductEntry({ product }) {
             <Card>
                 <CardBody>
                     <Container fluid>
-                        <Row className="inline-block">
+                        <Row className="inline-block column-gap-5">
                             <Col
-                                xs="3"
+                                xs="1"
                             >
                                 <img
                                     alt="Product"

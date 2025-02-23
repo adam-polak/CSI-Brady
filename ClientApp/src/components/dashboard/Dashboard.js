@@ -24,14 +24,13 @@ export default function ImagesContainer({ images }) {
     return (
         <Container style={{overflow: "scroll", height: "80vh"}} fluid>
             {images.map((image, i) => (
-            <Row className="mb-4">
-                <Col className="d-inline-flex justify-content-center">
-                    <ImageEntry
-                    key={`image-${i}`}
-                    image={image}
-                    />
-                </Col>
-            </Row>
+                <Row className="mb-4" key={`image-${i}`}>
+                    <Col className="d-inline-flex justify-content-center">
+                        <ImageEntry
+                        image={image}
+                        />
+                    </Col>
+                </Row>
             ))}
         </Container>
     );
