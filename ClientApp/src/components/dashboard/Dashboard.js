@@ -77,8 +77,9 @@ export class Dashboard extends Component {
         }
 
         return (
-            <div>
+            <div className="bg-grey" style={{height: "100vh"}}>
                 <DashBoardHeader />
+                <div className="mb-4" />
                 <ImagesContainer images={images} /> 
             </div>
         );

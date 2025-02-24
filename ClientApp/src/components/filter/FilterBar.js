@@ -40,9 +40,11 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
   }
 
   return (
-    <div>
+    <div style={{borderBottom: "2px solid black"}} className="bg-grey">
       <FilterBarHeader />
-      <div className={tags.length === 0 ? "FilterBarContainer" : ""}>
+      <div 
+        className={tags.length === 0 ? "FilterBarContainer" : ""}
+      >
         <div className="text-center mt-3" >
           <form onSubmit={handleSubmit}>
             <input type="text" placeholder="Add filters" style={{marginRight: ".5em", width: "50%", display: "inline-block"}} name="filter" />
