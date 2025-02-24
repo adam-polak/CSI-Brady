@@ -16,3 +16,15 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.header-style {
+  height: 6vh;
+}
+
+.bg-brady {
+  background-color: #25336a;
+}
+
+.text-brady {
+  color: #25336a;
+}

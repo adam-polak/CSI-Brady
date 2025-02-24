@@ -7,16 +7,16 @@ const DashBoardHeader = () => {
     const nav = useNavigate();
 
     return (
-        <Container fluid>
-            <Row className="mt-4">
+        <Container fluid className="header-style bg-brady pt-2">
+            <Row>
                 <Col className="d-inline-flex">
-                    <Button onClick={() => nav("/facilities")}>Back</Button>
+                    <Button className="bg-white text-brady" onClick={() => nav("/facilities")}><b>Back</b></Button>
                 </Col>
                 <Col>
-                    <h1 className="text-center">Dashboard</h1>
+                    <h1 className="text-center text-white">Dashboard</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
-                    <Button>Camera</Button>
+                    <Button className="bg-white text-brady"><b>Camera</b></Button>
                 </Col>
             </Row>
         </Container>

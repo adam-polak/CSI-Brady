@@ -1,6 +1,17 @@
 import React from "react";
 import FilterTag from "./FilterTag";
 import "./FilterBar.css";
+import { Container } from "reactstrap";
+
+function FilterBarHeader() {
+  return (
+    <>
+      <Container fluid className="header-style bg-brady">
+
+      </Container>
+    </>
+  );
+}
 
 export default function FilterBar({ handleAdd, handleRemove, tags }) {
   function handleSubmit(e) {
@@ -21,41 +32,44 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
   }
 
   return (
-    <div className={tags.length === 0 ? "FilterBarContainer mb-3" : ""}>
-      <div className="FilterSearch text-center mt-3 mb-1" >
-        <form onSubmit={handleSubmit}>
-          <label>
-            Filter: <input name="filter" />
-          </label>
-          <button type="submit">+</button>
-        </form>
-      </div>
+    <div>
+      <FilterBarHeader />
+      <div className={tags.length === 0 ? "FilterBarContainer mb-3" : ""}>
+        <div className="FilterSearch text-center mt-3 mb-1" >
+          <form onSubmit={handleSubmit}>
+            <label>
+              Filter: <input name="filter" />
+            </label>
+            <button type="submit">+</button>
+          </form>
+        </div>
 
-      {/* Horizontal Scroll Container */}
-      <div
-        className="TagContainer mb-3"
-        style={{
-          width: "100%",
-          flex: "row",
-          justifyContent: "center"
-        }}
-      >
-        <div style={{
-          width: "90%",
-          padding: "0 10px",
-          overflowX: "auto",
-          display: "flex",
-          flexWrap: "nowrap",
-          gap: "8px",
-        }}>
-          {tags.map((tag, i) => (
-            <div
-              key={`tag-${i}`}
-              style={{ flexShrink: 0 }} // Safeguard to prevent items from shrinking
-            >
-              <FilterTag tag={tag} index={i} onSelectItem={handleRemove}/>
-            </div>
-          ))}
+        {/* Horizontal Scroll Container */}
+        <div
+          className="TagContainer mb-3"
+          style={{
+            width: "100%",
+            flex: "row",
+            justifyContent: "center"
+          }}
+        >
+          <div style={{
+            width: "90%",
+            padding: "0 10px",
+            overflowX: "auto",
+            display: "flex",
+            flexWrap: "nowrap",
+            gap: "8px",
+          }}>
+            {tags.map((tag, i) => (
+              <div
+                key={`tag-${i}`}
+                style={{ flexShrink: 0 }} // Safeguard to prevent items from shrinking
+              >
+                <FilterTag tag={tag} index={i} onSelectItem={handleRemove}/>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
