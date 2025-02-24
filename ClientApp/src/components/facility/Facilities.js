@@ -25,7 +25,7 @@ export class Facilities extends Component {
     const facilities = [obj1, obj2, obj3];
 
     return (
-      <div>
+      <div className="bg-grey">
         <FacilitiesContainer facilities={facilities} />
       </div>
     );

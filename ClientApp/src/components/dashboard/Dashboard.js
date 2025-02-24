@@ -27,7 +27,7 @@ const DashBoardHeader = () => {
 
 export default function ImagesContainer({ images }) {
     return (
-        <Container style={{overflow: "scroll", height: "85vh"}} fluid>
+        <Container style={{overflow: "scroll", height: "85vh", width: "100vw"}} fluid>
             {images.map((image, i) => (
                 <Row className="mb-4" key={`image-${i}`}>
                     <Col className="d-inline-flex justify-content-center">
@@ -77,7 +77,7 @@ export class Dashboard extends Component {
         }
 
         return (
-            <div className="bg-grey" style={{height: "100vh"}}>
+            <div className="bg-grey" style={{height: "100vh", width: "100vw"}}>
                 <DashBoardHeader />
                 <div className="mb-4" />
                 <ImagesContainer images={images} /> 

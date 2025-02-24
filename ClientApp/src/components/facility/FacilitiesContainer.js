@@ -26,7 +26,7 @@ function FilteredFacilities({handleSelectEntry, facilities, filters}) {
       {arr.length === 0 
       ? <p className="text-center">*No facilities to display</p>
       : arr.map((facility, i) => (
-            <div className="mb-3 bg-grey">
+            <div className="mb-3">
               <FacilityEntry
                 key={`facility-${i}`}
                 facility={facility}
@@ -64,7 +64,7 @@ export default function FacilitiesContainer({ facilities }) {
         handleRemove={removeFromFilters}
         tags={filters}
       />
-      <div style={{height: "81.4vh"}} className="bg-grey container-lg p-2">
+      <div style={{height: "81.4vh"}} className="container-lg p-2">
         <FilteredFacilities handleSelectEntry={handleSelectEntry} facilities={facilities} filters={filters} />
       </div>
     </>

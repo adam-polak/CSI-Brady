@@ -40,7 +40,7 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
   }
 
   return (
-    <div style={{borderBottom: "2px solid black"}} className="bg-grey">
+    <div style={{borderBottom: "2px solid lightgrey"}} className="bg-grey">
       <FilterBarHeader />
       <div 
         className={tags.length === 0 ? "FilterBarContainer" : ""}
