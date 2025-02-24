@@ -39,23 +39,21 @@ export default function ImageEntry({ image }) {
     }
 
     return (
-        <div style={{width: "90%"}}>
+        <div style={{width: "90vw"}}>
             <Card>
                 <CardBody className="pt-4">
                     <Container fluid>
                         <Row className="mb-2 text-center">
-                            <h2>{image.Date}</h2>
+                            <h2>{image.Date} - {image.TakenBy}</h2>
                         </Row>
-                        <Row>
-                            <h4>Taken by: {image.TakenBy}</h4>
+                        <Row className="d-flex justify-content-center">
+                            <img
+                                style={{height: "50vh", width: "60vh"}}
+                                alt="Violation"
+                                src={image.ImageSrc}
+                            />  
                         </Row>
                     </Container>
-                    <img
-                        height={"300px"}
-                        width={"100%"}
-                        alt="Card cap"
-                        src={image.ImageSrc}
-                    /> 
                 </CardBody>
                 <CardBody>
                     <Accordion flush open={open} toggle={toggle}>

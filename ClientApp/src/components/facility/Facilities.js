@@ -26,7 +26,7 @@ export class Facilities extends Component {
 
     return (
       <div>
-        <h1 style={{ textAlign: "center" }}>Facilities</h1>
+        {/* <h1 style={{ textAlign: "center" }}>Facilities</h1> */}
         <FacilitiesContainer facilities={facilities} />
       </div>
     );
