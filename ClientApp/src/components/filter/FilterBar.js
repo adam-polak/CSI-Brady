@@ -47,7 +47,18 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
       >
         <div className="text-center mt-3" >
           <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="Add filters" style={{marginRight: ".5em", width: "50%", display: "inline-block"}} name="filter" />
+            <input 
+              className="rounded-3 p-2" 
+              type="text" 
+              placeholder="Add filters" 
+              style={{ 
+                border: "0px", 
+                marginRight: ".5em", 
+                height: "2.4em", 
+                width: "50%", 
+                display: "inline-block" 
+              }} 
+              name="filter" />
             <button type="submit" style={{display: "inline-block"}} className="btn btn-success mb-1">+</button>
           </form>
         </div>
