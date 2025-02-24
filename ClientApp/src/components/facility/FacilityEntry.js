@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Button,
   Card,
   CardTitle,
   CardText,
@@ -21,7 +20,7 @@ import {
 export default function FacilityEntry({ facility, onSelectItem }) {
   return (
     <Card>
-      <Button onClick={onSelectItem} style={{ paddingLeft: "0px" }}>
+      <button className="btn" onClick={onSelectItem} style={{ paddingLeft: "0px" }}>
         <Container className="FacilityContainer">
           <Row>
             <Col xs="2" className="d-flex justify-content-center">
@@ -44,7 +43,7 @@ export default function FacilityEntry({ facility, onSelectItem }) {
             </Col>
           </Row>
         </Container>
-      </Button>
+      </button>
     </Card>
   );
 }
