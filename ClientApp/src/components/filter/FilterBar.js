@@ -22,7 +22,7 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
 
   return (
     <div className={tags.length === 0 ? "FilterBarContainer mb-3" : ""}>
-      <div className="FilterSearch">
+      <div className="FilterSearch text-center mt-3 mb-1" >
         <form onSubmit={handleSubmit}>
           <label>
             Filter: <input name="filter" />
@@ -36,21 +36,27 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
         className="TagContainer mb-3"
         style={{
           width: "100%",
+          flex: "row",
+          justifyContent: "center"
+        }}
+      >
+        <div style={{
+          width: "90%",
+          padding: "0 10px",
           overflowX: "auto",
           display: "flex",
           flexWrap: "nowrap",
           gap: "8px",
-          padding: "8px 0",
-        }}
-      >
-        {tags.map((tag, i) => (
-          <div
-            key={`tag-${i}`}
-            style={{ flexShrink: 0 }} // Safeguard to prevent items from shrinking
-          >
-            <FilterTag tag={tag} index={i} onSelectItem={handleRemove}/>
-          </div>
-        ))}
+        }}>
+          {tags.map((tag, i) => (
+            <div
+              key={`tag-${i}`}
+              style={{ flexShrink: 0 }} // Safeguard to prevent items from shrinking
+            >
+              <FilterTag tag={tag} index={i} onSelectItem={handleRemove}/>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
