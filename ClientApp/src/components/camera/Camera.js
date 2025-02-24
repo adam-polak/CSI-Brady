@@ -1,12 +1,24 @@
-import React, { Component } from "react";
-import { CameraView } from "./CameraView";
+import React, { useRef } from "react";
+import Webcam from "react-webcam";
 
+export default function Camera({ handleCapture }) {
+  const webcamRef = useRef();
 
-export class Camera extends Component {
+  function capture() {
+    const imageSrc = webcamRef.current.getScreenshot();
+    handleCapture(imageSrc);
+  }
 
-    render() {
-        return (
-            <CameraView />
-        );
-    }
+  return (
+    <div>
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        width={window.innerWidth}
+        screenshotFormat="image/jpeg"
+        videoConstraints={{ facingMode: "environment" }}
+      />
+      <button onClick={capture}>Capture Photo</button>
+    </div>
+  );
 }
