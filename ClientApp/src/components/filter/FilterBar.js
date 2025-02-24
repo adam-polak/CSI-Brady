@@ -30,7 +30,7 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
     const form = e.target;
 
     // Get input from filter's form
-    const filterInput = form.children[0].children[0];
+    const filterInput = form.children[0];
 
     // Add to filters array
     handleAdd(filterInput.value);
@@ -42,13 +42,11 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
   return (
     <div>
       <FilterBarHeader />
-      <div className={tags.length === 0 ? "FilterBarContainer mb-3" : ""}>
-        <div className="FilterSearch text-center mt-3 mb-1" >
+      <div className={tags.length === 0 ? "FilterBarContainer" : ""}>
+        <div className="text-center mt-3" >
           <form onSubmit={handleSubmit}>
-            <label>
-              Filter: <input name="filter" />
-            </label>
-            <button type="submit">+</button>
+            <input type="text" placeholder="Add filters" style={{marginRight: ".5em", width: "50%", display: "inline-block"}} name="filter" />
+            <button type="submit" style={{display: "inline-block"}} className="btn btn-success mb-1">+</button>
           </form>
         </div>
 

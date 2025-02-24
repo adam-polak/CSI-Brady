@@ -29,7 +29,7 @@ export default function FacilitiesContainer({ facilities }) {
         handleRemove={removeFromFilters}
         tags={filters}
       />
-      <div className="container-lg">
+      <div className="container-lg mt-3">
         {facilities
           .filter(
             (facility) =>
