@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import ImageEntry from '../image/ImageEntry';
-import { Button, Col, Container, Row } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import ArrowLeft from "../icons/Arrow";
+import CameraIcon from "../icons/CameraIcon";
 
 const DashBoardHeader = () => {
     const nav = useNavigate();
 
     return (
-        <Container fluid>
-            <Row className="mt-4">
+        <Container fluid className="header-style bg-brady pt-2 mb-2">
+            <Row>
                 <Col className="d-inline-flex">
-                    <Button onClick={() => nav("/facilities")}>Back</Button>
+                    <button className="dashboard-btn btn bg-brady text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
                 </Col>
                 <Col>
-                    <h1 className="text-center">Dashboard</h1>
+                    <h1 className="text-center text-white">Dashboard</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
-                    <Button>Camera</Button>
+                    <button className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
                 </Col>
             </Row>
         </Container>
@@ -25,7 +27,7 @@ const DashBoardHeader = () => {
 
 export default function ImagesContainer({ images }) {
     return (
-        <Container style={{overflow: "scroll", height: "80vh"}} fluid>
+        <Container style={{overflow: "scroll", height: "85vh"}} fluid>
             {images.map((image, i) => (
                 <Row className="mb-4" key={`image-${i}`}>
                     <Col className="d-inline-flex justify-content-center">
@@ -75,9 +77,9 @@ export class Dashboard extends Component {
         }
 
         return (
-            <div>
+            <div className="bg-grey" style={{height: "100vh"}}>
                 <DashBoardHeader />
-                <hr />
+                <div className="mb-4" />
                 <ImagesContainer images={images} /> 
             </div>
         );
