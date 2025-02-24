@@ -10,14 +10,23 @@ export default function Camera({ handleCapture }) {
   }
 
   return (
-    <div>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        width={window.innerWidth}
-        screenshotFormat="image/jpeg"
-        videoConstraints={{ facingMode: "environment" }}
-      />
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+      }}
+    >
+      <div>
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          width={window.innerWidth}
+          screenshotFormat="image/jpeg"
+          videoConstraints={{ facingMode: "environment" }}
+        />
+      </div>
       <button onClick={capture}>Capture Photo</button>
     </div>
   );

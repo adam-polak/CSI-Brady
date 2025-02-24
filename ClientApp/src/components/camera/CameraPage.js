@@ -6,5 +6,9 @@ export default function CameraPage() {
     console.log(imgText);
   }
 
-  return <Camera handleCapture={storePhoto} />;
+  return (
+    <div>
+      <Camera handleCapture={storePhoto} />
+    </div>
+  );
 }
