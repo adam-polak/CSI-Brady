@@ -1,13 +1,21 @@
 import React from "react";
 import FilterTag from "./FilterTag";
 import "./FilterBar.css";
-import { Container } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
 function FilterBarHeader() {
   return (
     <>
-      <Container fluid className="header-style bg-brady">
-
+      <Container fluid className="header-style bg-brady p-3">
+        <Row>
+          <Col>
+            <img 
+              src="brady-logo.png"
+              alt="Brady logo"
+              height={"30px"}
+            />
+          </Col>
+        </Row>
       </Container>
     </>
   );
