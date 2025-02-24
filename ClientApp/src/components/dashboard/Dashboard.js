@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import ImageEntry from '../image/ImageEntry';
-import { Button, Col, Container, Row } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import ArrowLeft from "../icons/Arrow";
+import CameraIcon from "../icons/CameraIcon";
 
 const DashBoardHeader = () => {
     const nav = useNavigate();
 
     return (
-        <Container fluid className="header-style bg-brady pt-2">
+        <Container fluid className="header-style bg-brady pt-2 mb-2">
             <Row>
                 <Col className="d-inline-flex">
-                    <Button className="bg-white text-brady" onClick={() => nav("/facilities")}><b>Back</b></Button>
+                    <button className="dashboard-btn btn bg-brady text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
                 </Col>
                 <Col>
                     <h1 className="text-center text-white">Dashboard</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
-                    <Button className="bg-white text-brady"><b>Camera</b></Button>
+                    <button className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
                 </Col>
             </Row>
         </Container>
@@ -77,7 +79,6 @@ export class Dashboard extends Component {
         return (
             <div>
                 <DashBoardHeader />
-                <hr />
                 <ImagesContainer images={images} /> 
             </div>
         );

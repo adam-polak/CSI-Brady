@@ -18,7 +18,7 @@ code {
 }
 
 .header-style {
-  height: 6vh;
+  height: 9vh;
 }
 
 .bg-brady {
@@ -27,4 +27,12 @@ code {
 
 .text-brady {
   color: #25336a;
+}
+
+.text-brady:hover {
+  color: #25336a; 
+}
+
+.dashboard-btn:hover {
+  opacity: .9;
 }
