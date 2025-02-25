@@ -31,12 +31,12 @@ export default function Camera({ handleCapture }) {
           onClick={capture}
           style={{
             background: "none",
-            color: "inherit",
             border: "none",
             padding: "0",
-            font: "inherit",
-            cursor: "pointer",
-            outline: "inherit",
+            // If capture photo button appears off screen:
+            // position: "absolute",
+            // top: "85vh",
+            // left: "38%",
           }}
         >
           <CapturePhoto size="64" color="black" />
