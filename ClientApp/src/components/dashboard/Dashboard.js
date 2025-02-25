@@ -56,11 +56,11 @@ function FacilityInfo({ facilityId, facilityAddress }) {
             <div style={{borderBottom: "lightgrey solid 3px", height: "10vh", display: "flex", alignItems: "center", gap: "3px", paddingLeft: "3em", marginBottom: "1px"}} className="bg-grey">
                 <div>
                     <button className="btn" onClick={() => nav("/leaderboard/" + facilityId)}>
-                        <Leaderboard />
+                        <Leaderboard color={"#ffbf00"} />
                     </button>
                 </div>
-                <div className="pt-2">
-                    <h5 className="text-left">{facilityAddress}</h5>
+                <div className="bg-brady rounded-pill px-3 pt-2">
+                    <h5 className="text-white">{facilityAddress}</h5>
                 </div>
             </div>
         </div>
