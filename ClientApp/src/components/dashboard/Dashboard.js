@@ -34,7 +34,7 @@ const DashboardHeader = ({ facilityId, facilityAddress, companyName }) => {
 
 export default function ImagesContainer({ images }) {
     return (
-        <Container style={{overflowY: "scroll", height: "80.6vh", width: "100vw"}} className="p-3" fluid>
+        <Container style={{overflowY: "scroll", height: "78vh", width: "100vw"}} className="p-3" fluid>
             {images.map((image, i) => (
                 <Row className="mb-4" key={`image-${i}`}>
                     <Col className="d-inline-flex justify-content-center">
