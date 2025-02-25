@@ -12,7 +12,7 @@ export function DashboardWrapper() {
     return <Dashboard facilityId={facilityId} companyName={companyName} facilityAddress={facilityAddress} />
 }
 
-const DashboardHeader = ({ facilityId, companyName }) => {
+const DashboardHeader = ({ facilityId, facilityAddress, companyName }) => {
     const nav = useNavigate();
 
     return (
@@ -25,7 +25,7 @@ const DashboardHeader = ({ facilityId, companyName }) => {
                     <h1 className="text-center text-white">{companyName}</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
-                    <button onClick={() => nav("/camera/" + facilityId)} className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
+                    <button onClick={() => nav(`/camera/${facilityId}/${facilityAddress}/${companyName}`)} className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
                 </Col>
             </Row>
         </Container>
@@ -123,7 +123,7 @@ export class Dashboard extends Component {
 
         return (
             <div className="bg-grey" style={{height: "100vh", width: "100vw"}}>
-                <DashboardHeader companyName={companyName} facilityId={facilityId} />
+                <DashboardHeader companyName={companyName} facilityAddress={facilityAddress} facilityId={facilityId} />
                 <FacilityInfo facilityId={facilityId} facilityAddress={facilityAddress} />
                 <ImagesContainer images={images} /> 
             </div>
