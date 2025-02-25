@@ -1,9 +1,10 @@
 import React from "react";
 import Camera from "./Camera";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ArrowLeft from "../icons/Arrow";
 
 export default function CameraPage() {
+  const { facilityId, facilityAddress, companyName } = useParams();
   const nav = useNavigate();
 
   function storePhoto(imgText) {
@@ -14,7 +15,7 @@ export default function CameraPage() {
     <div style={{ position: "relative", height: "100vh" }}>
       <button
         className="dashboard-btn btn text-white"
-        onClick={() => nav("/dashboard")}
+        onClick={() => nav(`/dashboard/${facilityId}/${facilityAddress}/${companyName}`)}
         style={{ position: "absolute" }}
       >
         <ArrowLeft size="48" color="white" />

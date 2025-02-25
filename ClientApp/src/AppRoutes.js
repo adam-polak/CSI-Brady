@@ -18,7 +18,7 @@ const AppRoutes = [
     element: <AuthenticationGuard component={DashboardWrapper} />,
   },
   {
-    path: "/camera/:facilityId",
+    path: "/camera/:facilityId/:facilityAddress/:companyName",
     element: <AuthenticationGuard component={CameraPage} />,
   },
 ];
