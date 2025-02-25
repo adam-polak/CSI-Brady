@@ -14,7 +14,7 @@ const AppRoutes = [
     element: <AuthenticationGuard component={Facilities} />,
   },
   {
-    path: "/dashboard/:facilityId/:facilityAddress",
+    path: "/dashboard/:facilityId/:facilityAddress/:companyName",
     element: <AuthenticationGuard component={DashboardWrapper} />,
   },
   {

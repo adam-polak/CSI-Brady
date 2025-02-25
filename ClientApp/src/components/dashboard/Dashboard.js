@@ -7,12 +7,12 @@ import CameraIcon from "../icons/CameraIcon";
 import Leaderboard from "../icons/Leaderboard";
 
 export function DashboardWrapper() {
-    const { facilityId, facilityAddress } = useParams();
+    const { facilityId, facilityAddress, companyName } = useParams();
 
-    return <Dashboard facilityId={facilityId} facilityAddress={facilityAddress} />
+    return <Dashboard facilityId={facilityId} companyName={companyName} facilityAddress={facilityAddress} />
 }
 
-const DashboardHeader = ({ facilityId }) => {
+const DashboardHeader = ({ facilityId, companyName }) => {
     const nav = useNavigate();
 
     return (
@@ -22,7 +22,7 @@ const DashboardHeader = ({ facilityId }) => {
                     <button className="dashboard-btn btn text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
                 </Col>
                 <Col>
-                    <h1 className="text-center text-white">Dashboard</h1>
+                    <h1 className="text-center text-white">{companyName}</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
                     <button onClick={() => nav("/camera/" + facilityId)} className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
@@ -53,14 +53,14 @@ function FacilityInfo({ facilityId, facilityAddress }) {
 
     return (
         <div>
-            <div style={{borderBottom: "lightgrey solid 3px", height: "10vh", display: "flex", alignItems: "center", gap: "3px", paddingLeft: "3em", marginBottom: "1px"}} className="bg-grey">
+            <div style={{borderBottom: "lightgrey solid 3px", height: "12vh", display: "flex", alignItems: "center", paddingLeft: "2em", marginBottom: "1px"}} className="bg-grey">
                 <div>
                     <button className="btn" onClick={() => nav("/leaderboard/" + facilityId)}>
                         <Leaderboard color={"#ffbf00"} />
                     </button>
                 </div>
-                <div className="bg-brady rounded-pill px-3 pt-2">
-                    <h5 className="text-white">{facilityAddress}</h5>
+                <div className="px-3 pt-2">
+                    <h5>{facilityAddress}</h5>
                 </div>
             </div>
         </div>
@@ -119,11 +119,11 @@ export class Dashboard extends Component {
             images.push(imageObj);
         }
 
-        const { facilityId, facilityAddress } = this.props;
+        const { facilityId, facilityAddress, companyName } = this.props;
 
         return (
             <div className="bg-grey" style={{height: "100vh", width: "100vw"}}>
-                <DashboardHeader facilityAddress={facilityAddress} facilityId={facilityId} />
+                <DashboardHeader companyName={companyName} facilityId={facilityId} />
                 <FacilityInfo facilityId={facilityId} facilityAddress={facilityAddress} />
                 <ImagesContainer images={images} /> 
             </div>
