@@ -15,8 +15,8 @@ export default function CameraPage() {
     <div style={{ position: "relative", height: "100vh" }}>
       <button
         className="dashboard-btn btn text-white"
-        onClick={() => nav(`/dashboard/${facilityId}/${facilityAddress}/${companyName}`)}
-        style={{ position: "absolute" }}
+        onClick={() => {console.log("test"); nav(`/dashboard/${facilityId}/${facilityAddress}/${companyName}`)}}
+        style={{ position: "absolute", zIndex: "1" }}
       >
         <ArrowLeft size="48" color="white" />
       </button>
