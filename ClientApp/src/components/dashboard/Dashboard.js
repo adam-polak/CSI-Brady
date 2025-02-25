@@ -1,24 +1,30 @@
 import React, { Component } from "react";
 import ImageEntry from '../image/ImageEntry';
 import { Col, Container, Row } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ArrowLeft from "../icons/Arrow";
 import CameraIcon from "../icons/CameraIcon";
 
-const DashBoardHeader = () => {
+export function DashboardWrapper() {
+    const { facilityId } = useParams();
+
+    return <Dashboard facilityId={facilityId} />
+}
+
+const DashBoardHeader = ({ facilityId }) => {
     const nav = useNavigate();
 
     return (
         <Container fluid className="header-style bg-brady pt-2 mb-2">
             <Row>
                 <Col className="d-inline-flex">
-                    <button className="dashboard-btn btn bg-brady text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
+                    <button className="dashboard-btn btn text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
                 </Col>
                 <Col>
                     <h1 className="text-center text-white">Dashboard</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
-                    <button onClick={() => nav("/camera")} className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
+                    <button onClick={() => nav("/camera/" + facilityId)} className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
                 </Col>
             </Row>
         </Container>
@@ -42,6 +48,16 @@ export default function ImagesContainer({ images }) {
 }
 
 export class Dashboard extends Component {
+
+    componentDidMount() {
+        const { facilityId } = this.props;
+        this.loadFacility(facilityId);
+    }
+
+    async loadFacility(id) {
+        console.log("Facility: " + id);
+    }
+
     render() {
 
         const product1 = {
@@ -76,9 +92,11 @@ export class Dashboard extends Component {
             images.push(imageObj);
         }
 
+        const { facilityId } = this.props;
+
         return (
             <div className="bg-grey" style={{height: "100vh", width: "100vw"}}>
-                <DashBoardHeader />
+                <DashBoardHeader facilityId={facilityId} />
                 <div className="mb-4" />
                 <ImagesContainer images={images} /> 
             </div>

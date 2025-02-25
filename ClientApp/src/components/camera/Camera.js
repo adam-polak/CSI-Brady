@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import Webcam from "react-webcam";
 import { Button } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Camera({ handleCapture }) {
+  const { facilityId } = useParams();
+
   const nav = useNavigate();
   const webcamRef = useRef();
 
@@ -21,7 +23,7 @@ export default function Camera({ handleCapture }) {
         justifyContent: "space-between",
       }}
     >
-      <Button onClick={() => nav("/dashboard")}>Back</Button>
+      <Button onClick={() => nav("/dashboard/" + facilityId)}>Back</Button>
       <div>
         <Webcam
           audio={false}
