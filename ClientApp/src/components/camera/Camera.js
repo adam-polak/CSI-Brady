@@ -26,7 +26,7 @@ export default function Camera({ handleCapture }) {
         screenshotFormat="image/jpeg"
         videoConstraints={{ facingMode: "environment" }}
       />
-      <div className="text-center">
+      <div>
         <button
           onClick={capture}
           style={{
@@ -34,9 +34,12 @@ export default function Camera({ handleCapture }) {
             border: "none",
             padding: "0",
             // If capture photo button appears off screen:
-            // position: "absolute",
+            position: "absolute",
             // top: "85vh",
-            // left: "38%",
+            // left: "50vw",
+            top: "85%",
+            left: "50%",
+            transform: "translateX(-50%)",
           }}
         >
           <CapturePhoto size="64" color="black" />
