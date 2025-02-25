@@ -45,17 +45,19 @@ export default function ImageEntry({ image }) {
                     <Container fluid>
                         <Row className="mb-2 text-center">
                             <h2>{image.Date} - {image.TakenBy}</h2>
+                            <hr />
                         </Row>
                         <Row className="d-flex justify-content-center">
                             <img
                                 style={{height: "50vh", width: "60vh"}}
                                 alt="Violation"
                                 src={image.ImageSrc}
-                            />  
+                            />
                         </Row>
                     </Container>
                 </CardBody>
                 <CardBody>
+                    <hr className="mt-0" />
                     <Accordion flush open={open} toggle={toggle}>
                         {
                             image.Violations.length === 0

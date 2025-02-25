@@ -1,7 +1,7 @@
 import { AuthenticationGuard } from "./components/AuthenticationGuard";
 import { Home } from "./components/Home";
 import CameraPage from "./components/camera/CameraPage";
-import { Dashboard } from "./components/dashboard/Dashboard";
+import { DashboardWrapper } from "./components/dashboard/Dashboard";
 import { Facilities } from "./components/facility/Facilities";
 
 const AppRoutes = [
@@ -14,11 +14,11 @@ const AppRoutes = [
     element: <AuthenticationGuard component={Facilities} />,
   },
   {
-    path: "/dashboard",
-    element: <AuthenticationGuard component={Dashboard} />,
+    path: "/dashboard/:facilityId/:facilityAddress/:companyName",
+    element: <AuthenticationGuard component={DashboardWrapper} />,
   },
   {
-    path: "/camera",
+    path: "/camera/:facilityId",
     element: <AuthenticationGuard component={CameraPage} />,
   },
 ];

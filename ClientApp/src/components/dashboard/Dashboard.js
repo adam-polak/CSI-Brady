@@ -1,24 +1,31 @@
 import React, { Component } from "react";
 import ImageEntry from '../image/ImageEntry';
 import { Col, Container, Row } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ArrowLeft from "../icons/Arrow";
 import CameraIcon from "../icons/CameraIcon";
+import Leaderboard from "../icons/Leaderboard";
 
-const DashBoardHeader = () => {
+export function DashboardWrapper() {
+    const { facilityId, facilityAddress, companyName } = useParams();
+
+    return <Dashboard facilityId={facilityId} companyName={companyName} facilityAddress={facilityAddress} />
+}
+
+const DashboardHeader = ({ facilityId, companyName }) => {
     const nav = useNavigate();
 
     return (
-        <Container fluid className="header-style bg-brady pt-2 mb-2">
+        <Container fluid className="header-style bg-brady pt-2">
             <Row>
                 <Col className="d-inline-flex">
-                    <button className="dashboard-btn btn bg-brady text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
+                    <button className="dashboard-btn btn text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
                 </Col>
                 <Col>
-                    <h1 className="text-center text-white">Dashboard</h1>
+                    <h1 className="text-center text-white">{companyName}</h1>
                 </Col>
                 <Col className="d-inline-flex justify-content-end">
-                    <button onClick={() => nav("/camera")} className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
+                    <button onClick={() => nav("/camera/" + facilityId)} className="dashboard-btn btn text-white"><CameraIcon color="white" /></button>
                 </Col>
             </Row>
         </Container>
@@ -27,7 +34,7 @@ const DashBoardHeader = () => {
 
 export default function ImagesContainer({ images }) {
     return (
-        <Container style={{overflow: "scroll", height: "85vh", width: "100vw"}} fluid>
+        <Container style={{overflowY: "scroll", height: "80.6vh", width: "100vw"}} className="p-3" fluid>
             {images.map((image, i) => (
                 <Row className="mb-4" key={`image-${i}`}>
                     <Col className="d-inline-flex justify-content-center">
@@ -41,9 +48,45 @@ export default function ImagesContainer({ images }) {
     );
 }
 
-export class Dashboard extends Component {
-    render() {
+function FacilityInfo({ facilityId, facilityAddress }) {
+    const nav = useNavigate();
 
+    return (
+        <div>
+            <div style={{borderBottom: "lightgrey solid 3px", height: "12vh", display: "flex", alignItems: "center", paddingLeft: "2em", marginBottom: "1px"}} className="bg-grey">
+                <div>
+                    <button className="btn" onClick={() => nav("/leaderboard/" + facilityId)}>
+                        <Leaderboard color={"#ffbf00"} />
+                    </button>
+                </div>
+                <div className="px-3 pt-2">
+                    <h5>{facilityAddress}</h5>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export class Dashboard extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = { facility: null };
+    }
+
+    componentDidMount() {
+        this.loadFacility();
+    }
+
+    async loadFacility() {
+        const { facilityId } = this.props;
+        const result = await fetch("/facility/" + facilityId);
+        const facility = JSON.parse(await result.text());
+        this.setState({ facility: facility });
+    }
+
+    render() {
         const product1 = {
             Name: "Brady M710 Label Printer",
             ImageSrc: "https://cdn-01-artemis.media-brady.com/Assets/ImageRoot/WPSAmericasWeb_Name/04/87/M710_Left_Angled_BWI-3d_seton_dam_4800487.jpg",
@@ -76,10 +119,12 @@ export class Dashboard extends Component {
             images.push(imageObj);
         }
 
+        const { facilityId, facilityAddress, companyName } = this.props;
+
         return (
             <div className="bg-grey" style={{height: "100vh", width: "100vw"}}>
-                <DashBoardHeader />
-                <div className="mb-4" />
+                <DashboardHeader companyName={companyName} facilityId={facilityId} />
+                <FacilityInfo facilityId={facilityId} facilityAddress={facilityAddress} />
                 <ImagesContainer images={images} /> 
             </div>
         );

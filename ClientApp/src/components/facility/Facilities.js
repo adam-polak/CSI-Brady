@@ -4,6 +4,7 @@ import FacilitiesContainer from "./FacilitiesContainer";
 export class Facilities extends Component {
   render() {
     const obj1 = {
+      Id: 1,
       Address: "9123 Good Road",
       CompanyName: "Husco",
       CompanyImgLink:
@@ -11,12 +12,14 @@ export class Facilities extends Component {
     };
 
     const obj2 = {
+      Id: 2,
       Address: "4213 Bad Road",
       CompanyName: "Quad",
       CompanyImgLink: "https://static.stocktitan.net/company-logo/quad-lg.webp",
     };
 
     const obj3 = {
+      Id: 3,
       Address: "8543 Spectacular Road, Milwaukee, WI 53534",
       CompanyName: "Brady",
       CompanyImgLink: "https://cdn.worldvectorlogo.com/logos/brady-3.svg",
