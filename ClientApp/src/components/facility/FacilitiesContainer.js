@@ -30,7 +30,7 @@ function FilteredFacilities({handleSelectEntry, facilities, filters}) {
               <FacilityEntry
                 key={`facility-${i}`}
                 facility={facility}
-                onSelectItem={() => handleSelectEntry(facility.Id, facility.Address)}
+                onSelectItem={() => handleSelectEntry(facility.Id, facility.Address, facility.CompanyName)}
               />
             </div>
       ))}
@@ -42,8 +42,8 @@ export default function FacilitiesContainer({ facilities }) {
   const [filters, setFilters] = useState([]);
   const nav = useNavigate();
 
-  const handleSelectEntry = (i, address) => {
-    nav(`/dashboard/${i}/${address}`);
+  const handleSelectEntry = (i, address, company) => {
+    nav(`/dashboard/${i}/${address}/${company}`);
   };
 
   function addToFilters(str) {
