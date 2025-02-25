@@ -55,7 +55,8 @@ export class Dashboard extends Component {
     }
 
     async loadFacility(id) {
-        console.log("Facility: " + id);
+        const result = await fetch("/facility/test/" + id);
+        console.log("Fetched facility: " + await result.text());
     }
 
     render() {
