@@ -13,11 +13,11 @@ export default function CameraPage() {
   return (
     <div style={{ position: "relative", height: "100vh" }}>
       <button
-        className="dashboard-btn btn bg-brady text-white"
+        className="dashboard-btn btn text-white"
         onClick={() => nav("/dashboard")}
         style={{ position: "absolute" }}
       >
-        <ArrowLeft color="white" />
+        <ArrowLeft size="48" color="white" />
       </button>
       <Camera handleCapture={storePhoto} />
     </div>
