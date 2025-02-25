@@ -1,10 +1,8 @@
 import React, { useRef } from "react";
 import Webcam from "react-webcam";
-import { Button } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import CapturePhoto from "../icons/CapturePhoto";
 
 export default function Camera({ handleCapture }) {
-  const nav = useNavigate();
   const webcamRef = useRef();
 
   function capture() {
@@ -21,17 +19,29 @@ export default function Camera({ handleCapture }) {
         justifyContent: "space-between",
       }}
     >
-      <Button onClick={() => nav("/dashboard")}>Back</Button>
-      <div>
-        <Webcam
-          audio={false}
-          ref={webcamRef}
-          width={window.innerWidth}
-          screenshotFormat="image/jpeg"
-          videoConstraints={{ facingMode: "environment" }}
-        />
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        width={window.innerWidth}
+        screenshotFormat="image/jpeg"
+        videoConstraints={{ facingMode: "environment" }}
+      />
+      <div className="text-center">
+        <button
+          onClick={capture}
+          style={{
+            background: "none",
+            color: "inherit",
+            border: "none",
+            padding: "0",
+            font: "inherit",
+            cursor: "pointer",
+            outline: "inherit",
+          }}
+        >
+          <CapturePhoto size="64" color="black" />
+        </button>
       </div>
-      <button onClick={capture}>Capture Photo</button>
     </div>
   );
 }
