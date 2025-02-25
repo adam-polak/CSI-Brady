@@ -4,18 +4,19 @@ import { Col, Container, Row } from "reactstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowLeft from "../icons/Arrow";
 import CameraIcon from "../icons/CameraIcon";
+import Leaderboard from "../icons/Leaderboard";
 
 export function DashboardWrapper() {
-    const { facilityId } = useParams();
+    const { facilityId, facilityAddress } = useParams();
 
-    return <Dashboard facilityId={facilityId} />
+    return <Dashboard facilityId={facilityId} facilityAddress={facilityAddress} />
 }
 
-const DashBoardHeader = ({ facilityId }) => {
+const DashboardHeader = ({ facilityId }) => {
     const nav = useNavigate();
 
     return (
-        <Container fluid className="header-style bg-brady pt-2 mb-2">
+        <Container fluid className="header-style bg-brady pt-2">
             <Row>
                 <Col className="d-inline-flex">
                     <button className="dashboard-btn btn text-white" onClick={() => nav("/facilities")}><ArrowLeft color="white" /></button>
@@ -33,7 +34,7 @@ const DashBoardHeader = ({ facilityId }) => {
 
 export default function ImagesContainer({ images }) {
     return (
-        <Container style={{overflow: "scroll", height: "85vh", width: "100vw"}} fluid>
+        <Container style={{overflowY: "scroll", height: "80.6vh", width: "100vw"}} className="p-3" fluid>
             {images.map((image, i) => (
                 <Row className="mb-4" key={`image-${i}`}>
                     <Col className="d-inline-flex justify-content-center">
@@ -47,20 +48,45 @@ export default function ImagesContainer({ images }) {
     );
 }
 
+function FacilityInfo({ facilityId, facilityAddress }) {
+    const nav = useNavigate();
+
+    return (
+        <div>
+            <div style={{borderBottom: "lightgrey solid 3px", height: "10vh", display: "flex", alignItems: "center", gap: "3px", paddingLeft: "3em", marginBottom: "1px"}} className="bg-grey">
+                <div>
+                    <button className="btn" onClick={() => nav("/leaderboard/" + facilityId)}>
+                        <Leaderboard />
+                    </button>
+                </div>
+                <div className="pt-2">
+                    <h5 className="text-left">{facilityAddress}</h5>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export class Dashboard extends Component {
 
-    componentDidMount() {
-        const { facilityId } = this.props;
-        this.loadFacility(facilityId);
+    constructor(props) {
+        super(props);
+
+        this.state = { facility: null };
     }
 
-    async loadFacility(id) {
-        const result = await fetch("/facility/test/" + id);
-        console.log("Fetched facility: " + await result.text());
+    componentDidMount() {
+        this.loadFacility();
+    }
+
+    async loadFacility() {
+        const { facilityId } = this.props;
+        const result = await fetch("/facility/" + facilityId);
+        const facility = JSON.parse(await result.text());
+        this.setState({ facility: facility });
     }
 
     render() {
-
         const product1 = {
             Name: "Brady M710 Label Printer",
             ImageSrc: "https://cdn-01-artemis.media-brady.com/Assets/ImageRoot/WPSAmericasWeb_Name/04/87/M710_Left_Angled_BWI-3d_seton_dam_4800487.jpg",
@@ -93,12 +119,12 @@ export class Dashboard extends Component {
             images.push(imageObj);
         }
 
-        const { facilityId } = this.props;
+        const { facilityId, facilityAddress } = this.props;
 
         return (
             <div className="bg-grey" style={{height: "100vh", width: "100vw"}}>
-                <DashBoardHeader facilityId={facilityId} />
-                <div className="mb-4" />
+                <DashboardHeader facilityAddress={facilityAddress} facilityId={facilityId} />
+                <FacilityInfo facilityId={facilityId} facilityAddress={facilityAddress} />
                 <ImagesContainer images={images} /> 
             </div>
         );
