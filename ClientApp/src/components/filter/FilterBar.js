@@ -3,24 +3,6 @@ import FilterTag from "./FilterTag";
 import "./FilterBar.css";
 import { Container, Row, Col } from "reactstrap";
 
-function FilterBarHeader() {
-  return (
-    <>
-      <Container fluid className="header-style bg-brady p-3">
-        <Row>
-          <Col>
-            <img 
-              src="brady-logo.png"
-              alt="Brady logo"
-              height={"30px"}
-            />
-          </Col>
-        </Row>
-      </Container>
-    </>
-  );
-}
-
 export default function FilterBar({ handleAdd, handleRemove, tags }) {
   function handleSubmit(e) {
     // Prevent the browser from reloading the page
@@ -41,11 +23,10 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
 
   return (
     <div style={{borderBottom: "2px solid lightgrey"}} className="bg-grey">
-      <FilterBarHeader />
       <div 
         className={tags.length === 0 ? "FilterBarContainer" : ""}
       >
-        <div className="text-center mt-3" >
+        <div className="text-center pt-2" >
           <form onSubmit={handleSubmit}>
             <input 
               className="rounded-3 p-2" 
