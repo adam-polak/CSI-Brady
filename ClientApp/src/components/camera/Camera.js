@@ -22,7 +22,9 @@ export default function Camera({ handleCapture }) {
       <Webcam
         audio={false}
         ref={webcamRef}
+        // style={{height: "100vh", width: "100vw"}}
         width={window.innerWidth}
+        height={window.innerHeight}
         screenshotFormat="image/jpeg"
         videoConstraints={{ facingMode: "environment" }}
       />
@@ -33,13 +35,11 @@ export default function Camera({ handleCapture }) {
             background: "none",
             border: "none",
             padding: "0",
-            // If capture photo button appears off screen:
             position: "absolute",
-            // top: "85vh",
-            // left: "50vw",
             top: "85%",
             left: "50%",
             transform: "translateX(-50%)",
+
           }}
         >
           <CapturePhoto size="64" color="black" />
