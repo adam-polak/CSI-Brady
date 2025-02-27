@@ -6,6 +6,7 @@ export default function Camera() {
   const webcamRef = useRef();
   const [imgSrc, setImgSrc] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(null);
 
 // 10mb = 100,000,000 bytes, images must be <= this size
 const maxImageSize = 100000000;
@@ -42,6 +43,18 @@ const maxImageSize = 100000000;
     setImgSrc(null);
   }
 
+  function confirm() {
+    setLoading("Loading...");
+  }
+
+  if(loading) {
+    return (
+      <div>
+        <h2>{loading}</h2>
+      </div>
+    );
+  }
+
   return (
     <div className="p-2" style={{height: "90%"}}>
       {error ? <h4 className="text-danger">* {error}</h4> : <></>}
@@ -67,8 +80,8 @@ const maxImageSize = 100000000;
               <Button onClick={() => capture()} color="primary" style={{height: "4em", width: "8em"}}>Capture</Button>
               : (
                 <div className="d-flex gap-3">
-                  <Button onClick={() => retry()} color="success" style={{height: "4em", widht: "6em"}}>Confirm</Button>
-                  <Button onClick={() => retry()} color="danger" style={{height: "4em", width: "6em"}}>Retry</Button>
+                  <Button onClick={() => confirm()} color="success" style={{height: "4em", widht: "5.5em"}}>Confirm</Button>
+                  <Button onClick={() => retry()} color="danger" style={{height: "4em", width: "5.5em"}}>Retry</Button>
                 </div>
               )
             }
