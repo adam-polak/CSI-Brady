@@ -1,7 +1,6 @@
 import React from "react";
 import FilterTag from "./FilterTag";
 import "./FilterBar.css";
-import { Container, Row, Col } from "reactstrap";
 
 export default function FilterBar({ handleAdd, handleRemove, tags }) {
   function handleSubmit(e) {
