@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
-import { Container, Row, Col, Button } from "reactstrap";
+import { Row, Col, Button, Spinner } from "reactstrap";
 
 export default function Camera() {
   const webcamRef = useRef();
   const [imgSrc, setImgSrc] = useState(null);
   const [error, setError] = useState(null);
+  const [loadMsg, setLoadMsg] = useState(null);
 
 // 10mb = 100,000,000 bytes, images must be <= this size
 const maxImageSize = 100000000;
@@ -41,9 +42,70 @@ const maxImageSize = 100000000;
     setError(null);
     setImgSrc(null);
   }
+  
+  function loadMsgInfo(msg) {
+    return (
+      <div className="d-flex justify-content-center gap-3">
+        <Spinner className="text-brady" />
+        <h2>{msg}</h2>
+      </div>
+    );
+  }
+
+  function loadMsgError(msg) {
+    return <h2 className="text-danger">*{msg}</h2>
+  }
+
+  function loadMsgFinish(msg) {
+    return <h2 className="text-success">{msg}</h2>
+  }
+
+  function confirm() {
+    setLoadMsg(loadMsgInfo("Loading..."));
+    setupWs();
+  }
+
+  function setupWs() {
+    const loc = window.location;
+    let uri = loc.protocol === "https:" ? "wss:" : "ws:";
+    uri += "//" + loc.host + "/imageapi/upload";
+
+    const ws = new WebSocket(uri);
+
+    ws.onopen = function() {
+      const obj = { AreaId: 1, ImageBase64: imgSrc };
+      ws.send(JSON.stringify(obj));
+    }
+
+    ws.onmessage = function(e) {
+      setLoadMsg(loadMsgInfo(e.data));
+    }
+
+    ws.onclose = function(e) {
+      if(e.reason !== "Successful upload") {
+        setLoadMsg(loadMsgError(e.reason.length === 0 ? "Unexpected error" : e.reason));
+        return;
+      }
+      
+      setLoadMsg(loadMsgFinish(e.reason));
+      // TODO redirect to page to add violations/products
+    }
+
+    ws.onerror = function(e) {
+      setLoadMsg(loadMsgError("Error occurred while uploading"));
+    }
+  }
+
+  if(loadMsg) {
+    return (
+      <div className="pt-4">
+        {loadMsg}
+      </div>
+    );
+  }
 
   return (
-    <Container fluid className="p-2" style={{height: "95%"}}>
+    <div className="p-2" style={{height: "90%"}}>
       {error ? <h4 className="text-danger">* {error}</h4> : <></>}
       <Row className="d-flex justify-content-center mb-2">
         <Col xs="2" />
@@ -51,26 +113,29 @@ const maxImageSize = 100000000;
           {!imgSrc ? <input onChange={(e) => fileUpload(e)} type="file" /> : <></>}
         </Col>
       </Row>
-      <Row className="d-flex justify-content-center">
+      <div className="d-flex flex-column justify-content-center" style={{height: "20%"}}>
           { !imgSrc ?
             <Webcam
               audio={false}
               ref={webcamRef}
-              style={error ? {height : "55vh"} : {height: "63vh"}}
+              style={error ? {maxHeight: "55vh", maxWidth: "85vw"} : {maxHeight: "60vh", maxWidth: "85vw"}}
               screenshotFormat="image/jpeg"
               videoConstraints={{ facingMode: "environment" }}
             />
-            : <img src={imgSrc} style={{maxHeight: "65vh"}} alt="Capture" />
+            : <img src={imgSrc} style={{maxHeight: "65vh", maxWidth: "85vw"}} alt="Capture" />
           }
-          <div className="d-flex justify-content-center mt-2">
-            <Col xs="3">
-              { !imgSrc ?
-                <Button onClick={() => capture()} color="success" style={{height: "4em", width: "8em"}}>Capture</Button>
-                : <Button onClick={() => retry()} color="primary" style={{height: "4em", width: "8em"}}>Retry</Button>
-              }
-            </Col>
+          <div className="mt-3 d-flex justify-content-center">
+            { !imgSrc ?
+              <Button onClick={() => capture()} color="primary" style={{height: "4em", width: "8em"}}>Capture</Button>
+              : (
+                <div className="d-flex gap-3">
+                  <Button onClick={() => confirm()} color="success" style={{height: "4em", widht: "5.5em"}}>Confirm</Button>
+                  <Button onClick={() => retry()} color="danger" style={{height: "4em", width: "5.5em"}}>Retry</Button>
+                </div>
+              )
+            }
           </div>
-      </Row>
-    </Container>
+      </div>
+    </div>
   );
 }

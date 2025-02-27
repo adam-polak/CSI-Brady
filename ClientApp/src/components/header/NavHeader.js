@@ -1,10 +1,9 @@
 import ArrowLeft from "../icons/Arrow";
-import { Container } from 'reactstrap';
 
 export default function NavHeader({ link }) {
     return (
-        <Container fluid className="grey-dashboard p-2">
+        <div className="grey-dashboard px-2 pt-2">
             <ArrowLeft size="48" color="grey" />
-        </Container>
+        </div>
     );
 }

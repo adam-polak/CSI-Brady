@@ -5,7 +5,7 @@ import NavHeader from "../header/NavHeader";
 
 export default function CameraPage() {
   return (
-    <div className="bg-grey" style={{height: "93vh"}}>
+    <div className="bg-grey" style={{height: "94vh"}}>
       <div style={{width: "100%"}}>
         <NavHeader />
       </div>
