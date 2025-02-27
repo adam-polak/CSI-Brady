@@ -30,7 +30,7 @@ export class NavMenu extends Component {
 
   render() {
     return (
-      <header>
+      <header style={{height: "7vh"}}>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm bg-brady">
           <NavbarBrand tag={Link} to="/">
             <img src="brady-logo.png" alt="Brady logo" height={30} />

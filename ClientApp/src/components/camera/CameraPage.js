@@ -1,26 +1,22 @@
 import React from "react";
 import Camera from "./Camera";
-import { useNavigate, useParams } from "react-router-dom";
-import ArrowLeft from "../icons/Arrow";
+import { Container } from "reactstrap";
+import NavHeader from "../header/NavHeader";
 
 export default function CameraPage() {
-  const { facilityId, facilityAddress, companyName } = useParams();
-  const nav = useNavigate();
 
   function storePhoto(imgText) {
     console.log(imgText);
   }
 
   return (
-    <div style={{ position: "relative", height: "100vh" }}>
-      <button
-        className="dashboard-btn btn text-white"
-        onClick={() => nav(`/dashboard/${facilityId}/${facilityAddress}/${companyName}`)}
-        style={{ position: "absolute", zIndex: "1" }}
-      >
-        <ArrowLeft size="48" color="white" />
-      </button>
-      <Camera handleCapture={storePhoto} />
+    <div className="bg-grey" style={{height: "93vh"}}>
+      <div style={{width: "100%"}}>
+        <NavHeader />
+      </div>
+      <Container fluid className="text-center p-2" style={{width: "90%"}}>
+        <Camera handleCapture={storePhoto} />
+      </Container>
     </div>
   );
 }
