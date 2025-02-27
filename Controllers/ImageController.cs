@@ -61,11 +61,18 @@ public class ImageController : ControllerBase
             return;
         }
 
+        logger.Log(LogLevel.Information, "Image received");
         await ws.SendAsync(
             GetBytesFromString("Image received"),
             WebSocketMessageType.Text,
             true,
             CancellationToken.None
+        );
+
+        using HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.PostAsync(
+            "https://csifastai.azurewebsites.net/detect", 
+            new StringContent(receiveImg.ImageBase64)
         );
 
         logger.Log(LogLevel.Information, "Successful upload");
@@ -80,5 +87,11 @@ public class ImageController : ControllerBase
     {
         public required int AreaId { get; set; }
         public required string ImageBase64 { get; set; }
+    }
+
+    private class AiApiResponse
+    {
+        public required string[]? violations { get; set; }
+        public required string[]? detections { get; set; }
     }
 }
