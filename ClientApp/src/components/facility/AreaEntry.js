@@ -1,11 +1,26 @@
-import React from 'react'
-import { Card } from 'reactstrap'
+import React from "react";
+import { Card } from "reactstrap";
+import RightChevron from "../icons/RightChevron";
 
-export default function AreaEntry () {
+/**
+ * products object
+ * {
+ *      Products[]
+ * }
+ */
+
+export default function AreaEntry({ facility }) {
+  console.log(facility);
   return (
-    <Card>
-        Area Entry
+    <Card className="p-4">
+      <div className="d-flex align-items-center justify-content-between">
+        <div className="mx-4" style={{ fontSize: "24px", textDecoration: "underline"}}>
+          {facility.Name}
+        </div>
+        {/* <div>
+          <RightChevron />
+        </div> */}
+      </div>
     </Card>
-  )
+  );
 }
-
