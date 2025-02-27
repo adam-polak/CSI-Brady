@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col, Button, Spinner } from "reactstrap";
 
 export default function Camera() {
   const webcamRef = useRef();
   const [imgSrc, setImgSrc] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loadMsg, setLoadMsg] = useState(null);
 
 // 10mb = 100,000,000 bytes, images must be <= this size
 const maxImageSize = 100000000;
@@ -42,15 +42,64 @@ const maxImageSize = 100000000;
     setError(null);
     setImgSrc(null);
   }
-
-  function confirm() {
-    setLoading("Loading...");
+  
+  function loadMsgInfo(msg) {
+    return (
+      <div className="d-flex justify-content-center gap-3">
+        <Spinner className="text-brady" />
+        <h2>{msg}</h2>
+      </div>
+    );
   }
 
-  if(loading) {
+  function loadMsgError(msg) {
+    return <h2 className="text-danger">*{msg}</h2>
+  }
+
+  function loadMsgFinish(msg) {
+    return <h2 className="text-success">{msg}</h2>
+  }
+
+  function confirm() {
+    setLoadMsg(loadMsgInfo("Loading..."));
+    setupWs();
+  }
+
+  function setupWs() {
+    const loc = window.location;
+    let uri = loc.protocol === "https:" ? "wss:" : "ws:";
+    uri += "//" + loc.host + "/imageapi/upload";
+
+    const ws = new WebSocket(uri);
+
+    ws.onopen = function() {
+      const obj = { AreaId: 1, ImageBase64: imgSrc };
+      ws.send(JSON.stringify(obj));
+    }
+
+    ws.onmessage = function(e) {
+      setLoadMsg(loadMsgInfo(e.data));
+    }
+
+    ws.onclose = function(e) {
+      if(e.reason !== "Successful upload") {
+        setLoadMsg(loadMsgError(e.reason));
+        return;
+      }
+      
+      setLoadMsg(loadMsgFinish(e.reason));
+      // TODO redirect to page to add violations/products
+    }
+
+    ws.onerror = function(e) {
+      setLoadMsg(loadMsgError("Error occurred while uploading"));
+    }
+  }
+
+  if(loadMsg) {
     return (
-      <div>
-        <h2>{loading}</h2>
+      <div className="pt-4">
+        {loadMsg}
       </div>
     );
   }

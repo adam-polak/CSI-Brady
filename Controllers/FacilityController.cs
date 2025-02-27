@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace CSI_Brady.Controllers;
 
-[Route("facility")]
+[Route("facilityapi")]
 public class FacilityController : ControllerBase
 {
     [HttpGet("{id}")]

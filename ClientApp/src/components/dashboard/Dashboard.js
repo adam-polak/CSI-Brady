@@ -81,7 +81,7 @@ export class Dashboard extends Component {
 
     async loadFacility() {
         const { facilityId } = this.props;
-        const result = await fetch("/facility/" + facilityId);
+        const result = await fetch("/facilityapi/" + facilityId);
         const facility = JSON.parse(await result.text());
         this.setState({ facility: facility });
     }
