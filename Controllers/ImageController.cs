@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,13 @@ public class ImageController : ControllerBase
             CancellationToken.None
         );
 
-        logger.Log(LogLevel.Information, "Received image json");
+        logger.Log(LogLevel.Information, "Image received");
+        await ws.SendAsync(
+            GetBytesFromString("Image received"),
+            WebSocketMessageType.Text,
+            true,
+            CancellationToken.None
+        );
 
         string json = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
 
@@ -61,9 +68,9 @@ public class ImageController : ControllerBase
             return;
         }
 
-        logger.Log(LogLevel.Information, "Image received");
+
         await ws.SendAsync(
-            GetBytesFromString("Image received"),
+            GetBytesFromString("Starting AI analysis"),
             WebSocketMessageType.Text,
             true,
             CancellationToken.None
@@ -74,6 +81,25 @@ public class ImageController : ControllerBase
             "https://csifastai.azurewebsites.net/detect", 
             new StringContent(receiveImg.ImageBase64)
         );
+
+        AiApiResponse? aiResp = JsonConvert.DeserializeObject<AiApiResponse>(await response.Content.ReadAsStringAsync());
+        if(aiResp == null || response.StatusCode == HttpStatusCode.OK)
+        {
+            await ws.SendAsync(
+                GetBytesFromString("AI analysis completed successfully"),
+                WebSocketMessageType.Text,
+                true,
+                CancellationToken.None
+            );
+        } else {
+            logger.Log(LogLevel.Error, "AI API status code != 200");
+            await ws.CloseAsync(
+                WebSocketCloseStatus.InternalServerError,
+                "Error occurred while analyzing image",
+                CancellationToken.None
+            );
+            return;
+        }
 
         logger.Log(LogLevel.Information, "Successful upload");
         await ws.CloseAsync(
@@ -91,7 +117,7 @@ public class ImageController : ControllerBase
 
     private class AiApiResponse
     {
-        public required string[]? violations { get; set; }
-        public required string[]? detections { get; set; }
+        public required string[] violations { get; set; }
+        public required string[] detections { get; set; }
     }
 }
