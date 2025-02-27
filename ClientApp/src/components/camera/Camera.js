@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col, Button, Spinner } from "reactstrap";
 
 export default function Camera() {
   const webcamRef = useRef();
   const [imgSrc, setImgSrc] = useState(null);
   const [error, setError] = useState(null);
+  const [loadMsg, setLoadMsg] = useState(null);
 
 // 10mb = 100,000,000 bytes, images must be <= this size
 const maxImageSize = 100000000;
@@ -41,6 +42,67 @@ const maxImageSize = 100000000;
     setError(null);
     setImgSrc(null);
   }
+  
+  function loadMsgInfo(msg) {
+    return (
+      <div className="d-flex justify-content-center gap-3">
+        <Spinner className="text-brady" />
+        <h2>{msg}</h2>
+      </div>
+    );
+  }
+
+  function loadMsgError(msg) {
+    return <h2 className="text-danger">*{msg}</h2>
+  }
+
+  function loadMsgFinish(msg) {
+    return <h2 className="text-success">{msg}</h2>
+  }
+
+  function confirm() {
+    setLoadMsg(loadMsgInfo("Loading..."));
+    setupWs();
+  }
+
+  function setupWs() {
+    const loc = window.location;
+    let uri = loc.protocol === "https:" ? "wss:" : "ws:";
+    uri += "//" + loc.host + "/imageapi/upload";
+
+    const ws = new WebSocket(uri);
+
+    ws.onopen = function() {
+      const obj = { AreaId: 1, ImageBase64: imgSrc };
+      ws.send(JSON.stringify(obj));
+    }
+
+    ws.onmessage = function(e) {
+      setLoadMsg(loadMsgInfo(e.data));
+    }
+
+    ws.onclose = function(e) {
+      if(e.reason !== "Successful upload") {
+        setLoadMsg(loadMsgError(e.reason));
+        return;
+      }
+      
+      setLoadMsg(loadMsgFinish(e.reason));
+      // TODO redirect to page to add violations/products
+    }
+
+    ws.onerror = function(e) {
+      setLoadMsg(loadMsgError("Error occurred while uploading"));
+    }
+  }
+
+  if(loadMsg) {
+    return (
+      <div className="pt-4">
+        {loadMsg}
+      </div>
+    );
+  }
 
   return (
     <div className="p-2" style={{height: "90%"}}>
@@ -67,8 +129,8 @@ const maxImageSize = 100000000;
               <Button onClick={() => capture()} color="primary" style={{height: "4em", width: "8em"}}>Capture</Button>
               : (
                 <div className="d-flex gap-3">
-                  <Button onClick={() => retry()} color="success" style={{height: "4em", widht: "6em"}}>Confirm</Button>
-                  <Button onClick={() => retry()} color="danger" style={{height: "4em", width: "6em"}}>Retry</Button>
+                  <Button onClick={() => confirm()} color="success" style={{height: "4em", widht: "5.5em"}}>Confirm</Button>
+                  <Button onClick={() => retry()} color="danger" style={{height: "4em", width: "5.5em"}}>Retry</Button>
                 </div>
               )
             }
