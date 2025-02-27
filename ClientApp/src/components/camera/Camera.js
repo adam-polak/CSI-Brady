@@ -83,7 +83,7 @@ const maxImageSize = 100000000;
 
     ws.onclose = function(e) {
       if(e.reason !== "Successful upload") {
-        setLoadMsg(loadMsgError(e.reason));
+        setLoadMsg(loadMsgError(e.reason.length === 0 ? "Unexpected error" : e.reason));
         return;
       }
       
