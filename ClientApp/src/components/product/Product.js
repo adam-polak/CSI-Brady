@@ -59,8 +59,6 @@ export default function Product({ product }) {
       </Row>
       {product.Violations.length !== 0 && <hr />}
       {product.Violations.map((violation, i) => {
-        console.log(i);
-        console.log("product.Violations.length = ", product.Violations.length);
         return (
           <>
             <Row>
@@ -79,7 +77,6 @@ export default function Product({ product }) {
               </Col>
             </Row>
             {i !== product.Violations.length - 1 && <hr />}
-            {/* <hr/> */}
           </>
         );
       })}
