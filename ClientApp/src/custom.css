@@ -40,3 +40,8 @@ code {
 .bg-grey {
   background-color: rgba(207, 205, 205, 0.461);
 }
+
+.grey-dashboard {
+  background-color: rgba(207, 205, 205, 0.461);
+  border-bottom: lightgrey solid 3px;
+}
