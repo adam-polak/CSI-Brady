@@ -56,7 +56,20 @@ public class ImageController : ControllerBase
 
         string json = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
 
-        ReceiveImage? receiveImg = JsonConvert.DeserializeObject<ReceiveImage>(json);
+        ReceiveImage? receiveImg;
+        try 
+        {
+            receiveImg = JsonConvert.DeserializeObject<ReceiveImage>(json);
+        } catch {
+            logger.Log(LogLevel.Error, "Error parsing image json");
+            await ws.CloseAsync(
+                WebSocketCloseStatus.InvalidMessageType,
+                "Error reading image upload",
+                CancellationToken.None
+            );
+            return;
+        }
+
         if(receiveImg == null)
         {
             logger.Log(LogLevel.Error, "Invalid upload image json format");
