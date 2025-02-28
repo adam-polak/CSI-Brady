@@ -83,7 +83,7 @@ const maxImageSize = 100000000;
 
     ws.onclose = function(e) {
       if(e.reason !== "Successful upload") {
-        setLoadMsg(loadMsgError(e.reason.length === 0 ? "Unexpected error" : e.reason));
+        setLoadMsg(loadMsgError(e.reason.length == 0 ? "An unexpected error occurred" : e.reason));
         return;
       }
       
@@ -91,7 +91,7 @@ const maxImageSize = 100000000;
       // TODO redirect to page to add violations/products
     }
 
-    ws.onerror = function(e) {
+    ws.onerror = function() {
       setLoadMsg(loadMsgError("Error occurred while uploading"));
     }
   }
