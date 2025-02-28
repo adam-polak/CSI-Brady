@@ -22,4 +22,12 @@ public class FacilityController : DbController
 
         return await DoQueryAsync<AreaModel>(sql, obj);
     }
+
+    public async Task CreateFacility(int companyId, string address)
+    {
+        string sql = "INSERT INTO facility (companyid, address) VALUES (@id, @address);";
+        object[] arr = { new { id = companyId, address = address } };
+
+        await DoCommandAsync(sql, arr);
+    }
 }
