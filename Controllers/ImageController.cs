@@ -58,7 +58,7 @@ public class ImageController : ControllerBase
     private static async Task<AiApiResponse?> GetResponseFromAi(ILogger<ImageController> logger, WebSocket ws, string imgBase64)
     {
         await ws.SendAsync(
-            GetBytesFromString("Starting AI analysis"),
+            GetBytesFromString("Waiting for AI analysis"),
             WebSocketMessageType.Text,
             true,
             CancellationToken.None
