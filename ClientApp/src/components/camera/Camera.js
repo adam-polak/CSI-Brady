@@ -91,7 +91,6 @@ const maxImageSize = 100000000;
       // send meta data
       ws.send(JSON.stringify(obj));
 
-      console.log(imgSrc);
       const data = imgSrc.split(',')[1];
       const binary = base64ToArrayBuffer(data);
       // send image b64

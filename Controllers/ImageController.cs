@@ -66,7 +66,7 @@ public class ImageController : ControllerBase
 
         using HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.PostAsync(
-            "https://csifastai.azurewebsites.net/detect", 
+            "http://localhost:8000/detect", 
             new StringContent(imgBase64)
         );
 
@@ -82,7 +82,7 @@ public class ImageController : ControllerBase
         }
 
         AiApiResponse? aiResp = JsonConvert.DeserializeObject<AiApiResponse>(await response.Content.ReadAsStringAsync());
-        if(aiResp == null)
+        if(aiResp == null || response.StatusCode == HttpStatusCode.OK)
         {
             await ws.SendAsync(
                 GetBytesFromString("AI analysis completed successfully"),
@@ -147,8 +147,6 @@ public class ImageController : ControllerBase
 
         string json = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
 
-        Console.WriteLine(json);
-
         UploadImageData? img;
         try 
         {
@@ -179,7 +177,6 @@ public class ImageController : ControllerBase
         }
 
         string b64 = await GetBase64Img(logger, ws);
-        Console.WriteLine(b64);
 
         AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, b64);
         if(aiResp == null) return;
