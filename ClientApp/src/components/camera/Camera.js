@@ -110,7 +110,7 @@ const maxImageSize = 100000000;
       <Row className="d-flex justify-content-center mb-2">
         <Col xs="2" />
         <Col>
-          {!imgSrc ? <input onChange={(e) => fileUpload(e)} type="file" /> : <></>}
+          {!imgSrc ? <input onChange={(e) => fileUpload(e)} type="file" accept="image/*" /> : <></>}
         </Col>
       </Row>
       <div className="d-flex flex-column justify-content-center" style={{height: "20%"}}>
