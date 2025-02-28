@@ -16,4 +16,13 @@ public class AreaController : DbController
 
         return await DoQueryAsync<ProductModel>(sql, obj);
     }
+
+    public async Task AddProductToArea(int areaId, int productId)
+    {
+        string sql = "INSERT INTO area_to_product (areaid, productid)"
+                    + " VALUES (@area, @product);";
+        object[] parameters = { new { area = areaId, productId } };
+
+        await DoCommandAsync(sql, parameters);
+    }
 }
