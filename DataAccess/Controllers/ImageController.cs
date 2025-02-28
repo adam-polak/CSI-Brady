@@ -5,9 +5,13 @@ namespace CSI_Brady.DataAccess.Controllers;
 
 public class ImageController : DbController
 {
+    public ImageController(IHostEnvironment env) : base(env)
+    {
+    }
+
     /*
-        Returns unique image id
-    */
+   Returns unique image id
+*/
     public async Task<int> CreateImage(int areaId, int userId)
     {
         int id = await GenerateRandomId();

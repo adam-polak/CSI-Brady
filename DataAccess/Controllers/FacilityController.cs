@@ -5,6 +5,10 @@ namespace CSI_Brady.DataAccess.Controllers;
 
 public class FacilityController : DbController
 {
+    public FacilityController(IHostEnvironment env) : base(env)
+    {
+    }
+
     public async Task<List<FacilityModel>> GetFacilities()
     {
         string sql = "SELECT facility.id, facility.address, company.name, company.imgsrc"

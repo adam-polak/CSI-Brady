@@ -11,10 +11,12 @@ namespace CSI_Brady.Controllers;
 public class ImageController : ControllerBase
 {
     private readonly ILogger<ImageController> _logger;
+    private readonly IHostEnvironment _env;
 
-    public ImageController(ILogger<ImageController> logger)
+    public ImageController(ILogger<ImageController> logger, IHostEnvironment env)
     {
         _logger = logger;
+        _env = env;
     }
 
     [Route("upload")]
@@ -29,7 +31,7 @@ public class ImageController : ControllerBase
 
         using WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
 
-        await Echo(webSocket, _logger);
+        await Echo(webSocket, _logger, _env);
     }
 
     private static ArraySegment<Byte> GetBytesFromString(string str)
@@ -37,11 +39,11 @@ public class ImageController : ControllerBase
         return Encoding.UTF8.GetBytes(str);
     }
 
-    private static async Task<int> GetUserId(ILogger<ImageController> logger, string email, string firstName, string lastName)
+    private static async Task<int> GetUserId(ILogger<ImageController> logger, IHostEnvironment env, string email, string firstName, string lastName)
     {
         logger.Log(LogLevel.Information, "Retrieving user");
 
-        UserController userController = new UserController();
+        UserController userController = new UserController(env);
         int userId = await userController.GetUserId(email);
         if(userId == -1)
         {
@@ -159,7 +161,7 @@ public class ImageController : ControllerBase
         return img;
     }
 
-    private static async Task Echo(WebSocket ws, ILogger<ImageController> logger)
+    private static async Task Echo(WebSocket ws, ILogger<ImageController> logger, IHostEnvironment env)
     {
         logger.Log(LogLevel.Information, "Starting websocket connection");
 
@@ -181,7 +183,7 @@ public class ImageController : ControllerBase
         AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, b64);
         if(aiResp == null) return;
 
-        int userId = await GetUserId(logger, img.Email, img.FirstName, img.LastName);
+        int userId = await GetUserId(logger, env, img.Email, img.FirstName, img.LastName);
 
         logger.Log(LogLevel.Information, "Successful upload");
         await ws.CloseAsync(

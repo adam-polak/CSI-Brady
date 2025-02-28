@@ -5,6 +5,10 @@ namespace CSI_Brady.DataAccess.Controllers;
 
 public class UserController : DbController
 {
+    public UserController(IHostEnvironment env) : base(env)
+    {
+    }
+
     public async Task<bool> ContainsUser(string email)
     {
         string sql = "SELECT * FROM user_table WHERE email=@email;";
