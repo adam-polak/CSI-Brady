@@ -21,7 +21,7 @@ public class UserController : DbController
         return (await DoQueryAsync<UserModel>(sql, obj)).FirstOrDefault()?.Id ?? -1;
     }
 
-    public async Task InsertUser(string email, string firstName, string lastName)
+    public async Task CreateUser(string email, string firstName, string lastName)
     {
         string sql = "INSERT INTO user_table (email, firstname, lastname) (@email, @first, @last);";
         object[] parameters = { new { email = email, first = firstName, last = lastName } }; 
