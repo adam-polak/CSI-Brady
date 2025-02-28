@@ -12,4 +12,13 @@ public class ImageController : DbController
 
         await DoCommandAsync(sql, parameters);
     }
+
+    public async Task AddProductToImage(int imgId, int productId)
+    {
+        string sql = "INSERT INTO image_to_product (imageid, productid)"
+                    + " VALUES (@img, @product);";
+        object[] parameters = { new { img = imgId, product = productId } };
+
+        await DoCommandAsync(sql, parameters);
+    }
 }
