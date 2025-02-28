@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { Row, Col, Button, Spinner } from "reactstrap";
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Camera() {
   const webcamRef = useRef();
+  const { user } = useAuth0();
   const [imgSrc, setImgSrc] = useState(null);
   const [error, setError] = useState(null);
   const [loadMsg, setLoadMsg] = useState(null);
@@ -65,6 +67,17 @@ const maxImageSize = 100000000;
     setupWs();
   }
 
+  function base64ToArrayBuffer(b64) {
+    const binaryString = atob(b64);
+    const bytes = new Uint8Array(binaryString.length);
+    
+    for(let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return bytes.buffer;
+  }
+
   function setupWs() {
     const loc = window.location;
     let uri = loc.protocol === "https:" ? "wss:" : "ws:";
@@ -73,8 +86,19 @@ const maxImageSize = 100000000;
     const ws = new WebSocket(uri);
 
     ws.onopen = function() {
-      const obj = { AreaId: 1, ImageBase64: imgSrc };
+      const first = user.name.split(' ')[0];
+      const obj = { Email: user.email, FirstName: first, LastName: user.family_name, AreaId: 1 };
+      // send meta data
       ws.send(JSON.stringify(obj));
+
+      console.log(imgSrc);
+      const data = imgSrc.split(',')[1];
+      const binary = base64ToArrayBuffer(data);
+      // send image b64
+      ws.send(binary);
+
+
+      ws.send("End of image stream");
     }
 
     ws.onmessage = function(e) {
