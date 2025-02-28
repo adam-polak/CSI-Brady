@@ -1,4 +1,3 @@
-using CSI_Brady.DataAccess.Models;
 using CSI_Brady.DataAccess.Util;
 
 namespace CSI_Brady.DataAccess.Controllers;
