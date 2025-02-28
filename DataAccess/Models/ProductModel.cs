@@ -9,6 +9,4 @@ public class ProductModel
     public required string Name { get; set; }
     public required string Link { get; set; }
     public required string ImgSrc { get; set; }
-    public required int ImageCount { get; set; }
-    public ViolationModel[] violations { get; set; } = [];
 }
