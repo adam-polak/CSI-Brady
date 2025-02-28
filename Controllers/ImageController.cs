@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
+using CSI_Brady.DataAccess.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -36,52 +37,26 @@ public class ImageController : ControllerBase
         return Encoding.UTF8.GetBytes(str);
     }
 
-    private static async Task Echo(WebSocket ws, ILogger<ImageController> logger)
+    private static async Task<int> GetUserId(ILogger<ImageController> logger, string email, string firstName, string lastName)
     {
-        logger.Log(LogLevel.Information, "Starting websocket connection");
+        logger.Log(LogLevel.Information, "Retrieving user");
 
-        byte[] buffer = new byte[1000000];
-        WebSocketReceiveResult receiveResult = await ws.ReceiveAsync(
-            new ArraySegment<byte>(buffer),
-            CancellationToken.None
-        );
-
-        logger.Log(LogLevel.Information, "Image received");
-        await ws.SendAsync(
-            GetBytesFromString("Image received"),
-            WebSocketMessageType.Text,
-            true,
-            CancellationToken.None
-        );
-
-        string json = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
-
-        ReceiveImage? receiveImg;
-        try 
+        UserController userController = new UserController();
+        int userId = await userController.GetUserId(email);
+        if(userId == -1)
         {
-            receiveImg = JsonConvert.DeserializeObject<ReceiveImage>(json);
-        } catch {
-            logger.Log(LogLevel.Error, "Error parsing image json");
-            await ws.CloseAsync(
-                WebSocketCloseStatus.InvalidMessageType,
-                "Error reading image upload",
-                CancellationToken.None
-            );
-            return;
+            logger.Log(LogLevel.Information, "Creating user because a user doesn't exist for this email");
+            await userController.CreateUser(email, firstName, lastName);
+            userId = await userController.GetUserId(email);
         }
 
-        if(receiveImg == null)
-        {
-            logger.Log(LogLevel.Error, "Invalid upload image json format");
-            await ws.CloseAsync(
-                WebSocketCloseStatus.InvalidMessageType,
-                "Invalid upload",
-                CancellationToken.None
-            );
-            return;
-        }
+        logger.Log(LogLevel.Information, "User retrieved successfully");
 
+        return userId;
+    }
 
+    private static async Task<AiApiResponse?> GetResponseFromAi(ILogger<ImageController> logger, WebSocket ws, string imgBase64)
+    {
         await ws.SendAsync(
             GetBytesFromString("Starting AI analysis"),
             WebSocketMessageType.Text,
@@ -92,8 +67,19 @@ public class ImageController : ControllerBase
         using HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.PostAsync(
             "https://csifastai.azurewebsites.net/detect", 
-            new StringContent(receiveImg.ImageBase64)
+            new StringContent(imgBase64)
         );
+
+        if(response.StatusCode != HttpStatusCode.OK)
+        {
+            logger.Log(LogLevel.Error, "AI API status code != 200");
+            await ws.CloseAsync(
+                WebSocketCloseStatus.InternalServerError,
+                "Error occurred while analyzing image",
+                CancellationToken.None
+            );
+            return null; 
+        }
 
         AiApiResponse? aiResp = JsonConvert.DeserializeObject<AiApiResponse>(await response.Content.ReadAsStringAsync());
         if(aiResp == null || response.StatusCode == HttpStatusCode.OK)
@@ -111,8 +97,91 @@ public class ImageController : ControllerBase
                 "Error occurred while analyzing image",
                 CancellationToken.None
             );
+            return null;
+        }
+
+        return aiResp;
+    }
+
+    private static async Task<string> GetBase64Img(ILogger<ImageController> logger, WebSocket ws)
+    {
+        WebSocketReceiveResult result;
+        byte[] buffer = new byte[4096];
+
+        MemoryStream imgStream = new MemoryStream();
+
+        logger.Log(LogLevel.Information, "Starting to receive image");
+
+        while((result = await ws.ReceiveAsync(
+            new ArraySegment<byte>(buffer),
+            CancellationToken.None
+        )).MessageType == WebSocketMessageType.Binary)
+        {
+            await imgStream.WriteAsync(buffer, 0, result.Count);
+        }
+
+        logger.Log(LogLevel.Information, "Image read");
+
+        imgStream.Position = 0;
+
+        byte[] imgBytes = imgStream.ToArray();
+
+        return Convert.ToBase64String(imgBytes);
+    }
+
+    private static async Task<UploadImageData?> GetUploadImageData(ILogger<ImageController> logger, WebSocket ws)
+    {
+        byte[] buffer = new byte[4098];
+        WebSocketReceiveResult receiveResult = await ws.ReceiveAsync(
+            new ArraySegment<byte>(buffer),
+            CancellationToken.None
+        );
+
+        logger.Log(LogLevel.Information, "Image received");
+        await ws.SendAsync(
+            GetBytesFromString("Image received"),
+            WebSocketMessageType.Text,
+            true,
+            CancellationToken.None
+        );
+
+        string json = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+
+        UploadImageData? img;
+        try 
+        {
+            img = JsonConvert.DeserializeObject<UploadImageData>(json);
+        } catch {
+            logger.Log(LogLevel.Error, "Error parsing image json");
+            return null;
+        }
+
+        return img;
+    }
+
+    private static async Task Echo(WebSocket ws, ILogger<ImageController> logger)
+    {
+        logger.Log(LogLevel.Information, "Starting websocket connection");
+
+        UploadImageData? img = await GetUploadImageData(logger, ws);
+        if(img == null)
+        {
+            logger.Log(LogLevel.Error, "Invalid upload image json format");
+            await ws.CloseAsync(
+                WebSocketCloseStatus.InvalidMessageType,
+                "Invalid upload",
+                CancellationToken.None
+            );
+
             return;
         }
+
+        string b64 = await GetBase64Img(logger, ws);
+
+        AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, b64);
+        if(aiResp == null) return;
+
+        int userId = await GetUserId(logger, img.Email, img.FirstName, img.LastName);
 
         logger.Log(LogLevel.Information, "Successful upload");
         await ws.CloseAsync(
@@ -122,10 +191,12 @@ public class ImageController : ControllerBase
         );
     }
 
-    private class ReceiveImage
+    private class UploadImageData
     {
+        public required string Email { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
         public required int AreaId { get; set; }
-        public required string ImageBase64 { get; set; }
     }
 
     private class AiApiResponse
