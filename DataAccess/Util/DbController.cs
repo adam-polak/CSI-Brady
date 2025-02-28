@@ -35,6 +35,24 @@ public abstract class DbController
         return list;
     }
 
+    protected List<T> DoQuery<T>(string sql)
+    {
+        _connection.Open();
+        List<T> list = _connection.Query<T>(sql).AsList();
+        _connection.Close();
+        
+        return list;
+    }
+
+    protected async Task<List<T>> DoQueryAsync<T>(string sql)
+    {
+        await _connection.OpenAsync();
+        List<T> list = (await _connection.QueryAsync<T>(sql)).AsList();
+        await _connection.CloseAsync();
+
+        return list;
+    }
+
     protected async Task<List<T>> DoQueryAsync<T>(string sql, object parameters)
     {
         await _connection.OpenAsync();
