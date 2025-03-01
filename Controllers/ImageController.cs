@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
+using CSI_Brady.BlobAccess.Controllers;
 using CSI_Brady.DataAccess.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -180,14 +181,20 @@ public class ImageController : ControllerBase
             return;
         }
 
-        string b64 = await GetBase64Img(logger, ws);
+        string imgB64 = await GetBase64Img(logger, ws);
 
-        AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, b64);
+        AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, imgB64);
         if(aiResp == null) return;
 
+        logger.Log(LogLevel.Information, "Retrieving user id");
         int userId = await GetUserId(logger, env, imgData.Email, imgData.FirstName, imgData.LastName);
         DataAccess.Controllers.ImageController imgController = new DataAccess.Controllers.ImageController(env);
-        await imgController.CreateImage(imgData.AreaId, userId);
+        logger.Log(LogLevel.Information, "Inserting image into database");
+        int imageId = await imgController.CreateImage(imgData.AreaId, userId);
+
+        logger.Log(LogLevel.Information, "Uploading image to blob");
+        BlobFileController blob = new BlobFileController(env);
+        await blob.UploadStringAsync(imgData.AreaId, imageId, imgB64);
 
         logger.Log(LogLevel.Information, "Successful upload");
         await ws.CloseAsync(
