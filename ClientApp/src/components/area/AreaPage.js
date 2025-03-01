@@ -1,6 +1,7 @@
 import React from "react";
 import CameraIcon from "../icons/CameraIcon";
 import Product from "../product/Product";
+import NavHeader from "../header/NavHeader";
 
 /**
  * products object
@@ -34,7 +35,7 @@ const products = []
 
   return (
     <>
-      {/* <NavHeader/> */}
+      <NavHeader />
       <div style={{ height: "93vh" }} className="bg-grey">
         <div className="d-flex align-items-center justify-content-between pt-3 px-3">
           <div></div>

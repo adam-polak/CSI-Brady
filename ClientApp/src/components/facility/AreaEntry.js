@@ -14,12 +14,17 @@ export default function AreaEntry({ facility }) {
   return (
     <Card className="p-4">
       <div className="d-flex align-items-center justify-content-between">
-        <div className="mx-4" style={{ fontSize: "24px", textDecoration: "underline"}}>
-          {facility.Name}
+        <div
+          className="mx-4"
+          style={{ fontSize: "24px", textDecoration: "underline" }}
+        >
+          {facility.Code}
         </div>
-        {/* <div>
-          <RightChevron />
-        </div> */}
+        <div>
+          <button className="btn">
+            <RightChevron />
+          </button>
+        </div>
       </div>
     </Card>
   );
