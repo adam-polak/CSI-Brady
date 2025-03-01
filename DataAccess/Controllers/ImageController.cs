@@ -54,4 +54,13 @@ public class ImageController : DbController
 
         await DoCommandAsync(sql, parameters);
     }
+
+    public async Task AddViolationToImage(int imgId, int violationId)
+    {
+        string sql = "INSERT INTO image_to_violations (imageid, violationid)"
+                    + " VALUES (@img, @vio);";
+        object[] parameters = { new { img = imgId, vio = violationId } };
+
+        await DoCommandAsync(sql, parameters);
+    }
 }

@@ -3,6 +3,7 @@ using System.Net.WebSockets;
 using System.Text;
 using CSI_Brady.BlobAccess.Controllers;
 using CSI_Brady.DataAccess.Controllers;
+using CSI_Brady.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -69,7 +70,8 @@ public class ImageController : ControllerBase
 
         using HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.PostAsync(
-            "https://csifastai.azurewebsites.net/detect", 
+            "http://localhost:8000/detect",
+            // "https://csifastai.azurewebsites.net/detect", 
             new StringContent(imgBase64)
         );
 
@@ -191,6 +193,22 @@ public class ImageController : ControllerBase
         DataAccess.Controllers.ImageController imgController = new DataAccess.Controllers.ImageController(env);
         logger.Log(LogLevel.Information, "Inserting image into database");
         int imageId = await imgController.CreateImage(imgData.AreaId, userId);
+
+        logger.Log(LogLevel.Information, "Adding violations and products to image");
+        ViolationController violationController = new ViolationController(env);
+        ProductController productController = new ProductController(env);
+        for(int i = 0; i < aiResp.violations.Length; i++)
+        {
+            int violationId = await violationController.GetViolationId(aiResp.violations[i]);
+            await imgController.AddViolationToImage(imageId, violationId);
+            List<int> productIds = await productController.GetProductIdsFromViolation(violationId);
+            
+            for(int j = 0; j < productIds.Count; j++)
+            {
+                await imgController.AddProductToImage(imageId, productIds.ElementAt(j));
+            }
+        }
+        logger.Log(LogLevel.Information, "All violations and products added to image");
 
         logger.Log(LogLevel.Information, "Uploading image to blob");
         await ws.SendAsync(
