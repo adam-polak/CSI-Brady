@@ -5,6 +5,10 @@ namespace CSI_Brady.DataAccess.Controllers;
 
 public class UserController : DbController
 {
+    public UserController(IHostEnvironment env) : base(env)
+    {
+    }
+
     public async Task<bool> ContainsUser(string email)
     {
         string sql = "SELECT * FROM user_table WHERE email=@email;";
@@ -23,7 +27,7 @@ public class UserController : DbController
 
     public async Task CreateUser(string email, string firstName, string lastName)
     {
-        string sql = "INSERT INTO user_table (email, firstname, lastname) (@email, @first, @last);";
+        string sql = "INSERT INTO user_table (email, firstname, lastname) VALUES (@email, @first, @last);";
         object[] parameters = { new { email = email, first = firstName, last = lastName } }; 
 
         await DoCommandAsync(sql, parameters);

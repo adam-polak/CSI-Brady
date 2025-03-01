@@ -7,9 +7,9 @@ public abstract class DbController
 {
     private DbConnection _connection;
 
-    public DbController()
+    public DbController(IHostEnvironment env)
     {
-        _connection = DbConnectionFactory.CreateDbConnection();
+        _connection = DbConnectionFactory.CreateDbConnection(env);
     }
 
     protected void DoCommand(string sql, object[] parameters)

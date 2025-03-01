@@ -11,10 +11,12 @@ namespace CSI_Brady.Controllers;
 public class ImageController : ControllerBase
 {
     private readonly ILogger<ImageController> _logger;
+    private readonly IHostEnvironment _env;
 
-    public ImageController(ILogger<ImageController> logger)
+    public ImageController(ILogger<ImageController> logger, IHostEnvironment env)
     {
         _logger = logger;
+        _env = env;
     }
 
     [Route("upload")]
@@ -29,7 +31,7 @@ public class ImageController : ControllerBase
 
         using WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
 
-        await Echo(webSocket, _logger);
+        await Echo(webSocket, _logger, _env);
     }
 
     private static ArraySegment<Byte> GetBytesFromString(string str)
@@ -37,11 +39,11 @@ public class ImageController : ControllerBase
         return Encoding.UTF8.GetBytes(str);
     }
 
-    private static async Task<int> GetUserId(ILogger<ImageController> logger, string email, string firstName, string lastName)
+    private static async Task<int> GetUserId(ILogger<ImageController> logger, IHostEnvironment env, string email, string firstName, string lastName)
     {
         logger.Log(LogLevel.Information, "Retrieving user");
 
-        UserController userController = new UserController();
+        UserController userController = new UserController(env);
         int userId = await userController.GetUserId(email);
         if(userId == -1)
         {
@@ -78,10 +80,12 @@ public class ImageController : ControllerBase
                 "Error occurred while analyzing image",
                 CancellationToken.None
             );
-            return null; 
+            return null;
         }
 
-        AiApiResponse? aiResp = JsonConvert.DeserializeObject<AiApiResponse>(await response.Content.ReadAsStringAsync());
+        string json = await response.Content.ReadAsStringAsync();
+        logger.Log(LogLevel.Information, $"Received response from ai: {json}");
+        AiApiResponse? aiResp = JsonConvert.DeserializeObject<AiApiResponse>(json);
         if(aiResp == null || response.StatusCode == HttpStatusCode.OK)
         {
             await ws.SendAsync(
@@ -159,12 +163,12 @@ public class ImageController : ControllerBase
         return img;
     }
 
-    private static async Task Echo(WebSocket ws, ILogger<ImageController> logger)
+    private static async Task Echo(WebSocket ws, ILogger<ImageController> logger, IHostEnvironment env)
     {
         logger.Log(LogLevel.Information, "Starting websocket connection");
 
-        UploadImageData? img = await GetUploadImageData(logger, ws);
-        if(img == null)
+        UploadImageData? imgData = await GetUploadImageData(logger, ws);
+        if(imgData == null)
         {
             logger.Log(LogLevel.Error, "Invalid upload image json format");
             await ws.CloseAsync(
@@ -181,7 +185,9 @@ public class ImageController : ControllerBase
         AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, b64);
         if(aiResp == null) return;
 
-        int userId = await GetUserId(logger, img.Email, img.FirstName, img.LastName);
+        int userId = await GetUserId(logger, env, imgData.Email, imgData.FirstName, imgData.LastName);
+        DataAccess.Controllers.ImageController imgController = new DataAccess.Controllers.ImageController(env);
+        await imgController.CreateImage(imgData.AreaId, userId);
 
         logger.Log(LogLevel.Information, "Successful upload");
         await ws.CloseAsync(
@@ -202,6 +208,5 @@ public class ImageController : ControllerBase
     private class AiApiResponse
     {
         public required string[] violations { get; set; }
-        public required string[] detections { get; set; }
     }
 }

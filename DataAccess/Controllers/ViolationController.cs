@@ -5,6 +5,10 @@ namespace CSI_Brady.DataAccess.Controllers;
 
 public class ViolationController : DbController
 {
+    public ViolationController(IHostEnvironment env) : base(env)
+    {
+    }
+
     public async Task<List<ViolationModel>> GetViolationsForProduct(int productId)
     {
         string sql = "SELECT violation.name, violation.summary, violation.link"

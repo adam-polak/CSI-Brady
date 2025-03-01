@@ -5,6 +5,10 @@ namespace CSI_Brady.DataAccess.Controllers;
 
 public class AreaController : DbController
 {
+    public AreaController(IHostEnvironment env) : base(env)
+    {
+    }
+
     public async Task<List<ProductModel>> GetProducts(int areaId)
     {
         string sql = "SELECT product.id, product.name, product.link, product.imgsrc"

@@ -5,6 +5,10 @@ namespace CSI_Brady.DataAccess.Controllers;
 
 public class ProductController : DbController
 {
+    public ProductController(IHostEnvironment env) : base(env)
+    {
+    }
+
     public async Task CreateProduct(string name, string link, string imgSrc)
     {
         string sql = "INSERT INTO product (name, link, imgsrc)"
