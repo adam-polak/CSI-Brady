@@ -86,12 +86,13 @@ const maxImageSize = 100000000;
     const ws = new WebSocket(uri);
 
     ws.onopen = function() {
+      const imgArr = imgSrc.split(',');
       const first = user.name.split(' ')[0];
-      const obj = { Email: user.email, FirstName: first, LastName: user.family_name, AreaId: 1 };
+      const obj = { Email: user.email, FirstName: first, LastName: user.family_name, AreaId: 1, ImgTag: imgArr[0] };
       // send meta data
       ws.send(JSON.stringify(obj));
 
-      const data = imgSrc.split(',')[1];
+      const data = imgArr[1];
       const binary = base64ToArrayBuffer(data);
       // send image b64
       ws.send(binary);

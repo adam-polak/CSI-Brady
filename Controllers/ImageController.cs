@@ -181,7 +181,7 @@ public class ImageController : ControllerBase
             return;
         }
 
-        string imgB64 = await GetBase64Img(logger, ws);
+        string imgB64 = $"{imgData.ImgTag},{await GetBase64Img(logger, ws)}";
 
         AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, imgB64);
         if(aiResp == null) return;
@@ -216,6 +216,7 @@ public class ImageController : ControllerBase
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required int AreaId { get; set; }
+        public required string ImgTag { get; set; }
     }
 
     private class AiApiResponse
