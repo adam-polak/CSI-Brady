@@ -43,7 +43,7 @@ export default function Product({ product }) {
     <Card className="mb-3 p-3">
       <Row className="align-items-center">
         <Col xs="auto">
-          <a href={product.Link} className="text-decoration-none text-dark">
+          <a href={product.Link} target="_blank" rel="noreferrer" className="text-decoration-none text-dark">
             <img
               alt="Product"
               src={product.ImgSrc}
@@ -53,7 +53,7 @@ export default function Product({ product }) {
           </a>
         </Col>
         <Col>
-          <a href={product.Link} className=" text-dark">
+          <a href={product.Link} target="_blank" rel="noreferrer" className=" text-dark">
             <h3>{product.Name}</h3>
           </a>
         </Col>
