@@ -3,6 +3,7 @@ import CameraIcon from "../icons/CameraIcon";
 import Product from "../product/Product";
 import NavHeader from "../header/NavHeader";
 import { useParams } from "react-router-dom";
+import { Spinner } from "reactstrap";
 
 /**
  * products object
@@ -20,7 +21,7 @@ export function AreaPageWrapper() {
 export default class AreaPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { products: [] };
+    this.state = { products: [], loading: true };
   }
 
   componentDidMount() {
@@ -33,12 +34,12 @@ export default class AreaPage extends Component {
     const result = await fetch('/areaapi/products/' + areaId);
     const products = JSON.parse(await result.text());
     console.log(products[0].ImgSrc);
-    this.setState({ products: products });
+    this.setState({ products: products, loading: false });
   }
 
   render() {
 
-    const { products } = this.state;
+    const { products, loading } = this.state;
 
     return (
       <>
@@ -57,6 +58,8 @@ export default class AreaPage extends Component {
             </div>
           </div>
           <div style={{ height: "84%", overflowY: "scroll" }}>
+            { loading && <div style={{width: "100%"}} className="pt-4 d-flex justify-content-center gap-3"><Spinner className="text-brady" /><h2>Loading...</h2></div>}
+            { !loading && products.length === 0 && <div style={{width: "100%"}} className="pt-4 d-flex justify-content-center"><h4>* No products to recommend yet: <em>Try adding a photo of the area!</em></h4></div>}
             {products.map((product, i) => (
               <div className="p-4" key={`product-div-${i}`}>
                 <Product key={`product-${i}`} product={product} />
