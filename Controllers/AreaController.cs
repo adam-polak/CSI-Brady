@@ -22,10 +22,14 @@ public class AreaController : ControllerBase
     [HttpGet("products/{areaId}")]
     public async Task<IActionResult> GetProducts(int areaId)
     {
+        _logger.Log(LogLevel.Information, "Retrieving products from database");
         List<ProductModel> productList = await _areaController.GetProducts(areaId);
+        _logger.Log(LogLevel.Information, "Successfully retrieved products");
+
         ProductWebModel[] products = new ProductWebModel[productList.Count];
 
         int i = 0;
+        _logger.Log(LogLevel.Information, "Retrieving associated violations for products");
         foreach(ProductModel p in productList)
         {
             ProductWebModel product = new ProductWebModel()
@@ -41,6 +45,7 @@ public class AreaController : ControllerBase
 
             products[i++] = product;
         }
+        _logger.Log(LogLevel.Information, "Successfully retrieved associated violations for products");
 
         string json = JsonConvert.SerializeObject(products);
 
