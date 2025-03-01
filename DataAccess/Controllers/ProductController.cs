@@ -18,6 +18,16 @@ public class ProductController : DbController
         await DoCommandAsync(sql, parameters);
     }
 
+    public async Task<List<int>> GetProductIdsFromViolation(int violationId)
+    {
+        string sql = "SELECT productid"
+            + " FROM product_to_violation"
+            + " WHERE violationid = @id;";
+        object obj = new { id = violationId };
+        
+        return await DoQueryAsync<int>(sql, obj);
+    }
+
     public async Task<List<ImageModel>> GetImages(int productId)
     {
         string sql = "SELECT image.id, image.date, image.areaid, image.userid FROM image_to_product"

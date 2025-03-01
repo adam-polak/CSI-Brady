@@ -18,4 +18,14 @@ public class ViolationController : DbController
         object obj = new { id = productId };
         return await DoQueryAsync<ViolationModel>(sql, obj);
     }
+
+    public async Task<int> GetViolationId(string name)
+    {
+        string sql = "SELECT id FROM violation WHERE name = @name;";
+        object obj = new { name = name };
+
+        List<int> ids = await DoQueryAsync<int>(sql, obj);
+
+        return ids.First();
+    }
 }
