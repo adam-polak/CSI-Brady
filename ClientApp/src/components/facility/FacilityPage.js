@@ -11,7 +11,6 @@ import NavHeader from "../header/NavHeader";
  * }
  */
 
-
 export function FacilityPage() {
   const area1 = {
     Code: "Floor 1",
@@ -59,11 +58,14 @@ export function FacilityPage() {
           />
         </div>
       </div>
-      <div className="px-4 pb-4 pt-2 d-flex flex-column gap-3 mt-3" style={{ overflowY: "scroll", height: "66%" }}>
+      <div
+        className="px-4 pb-4 pt-2 d-flex flex-column gap-3 mt-3"
+        style={{ overflowY: "scroll", height: "66%" }}
+      >
         {filteredAreas.map((area, i) => (
-          <div>
+          <button className="btn">
             <AreaEntry facility={area}></AreaEntry>
-          </div>
+          </button>
         ))}
       </div>
     </div>
