@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { Row, Col, Button, Spinner } from "reactstrap";
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Camera() {
   const webcamRef = useRef();
+  const { user } = useAuth0();
   const [imgSrc, setImgSrc] = useState(null);
   const [error, setError] = useState(null);
   const [loadMsg, setLoadMsg] = useState(null);
@@ -65,6 +67,17 @@ const maxImageSize = 100000000;
     setupWs();
   }
 
+  function base64ToArrayBuffer(b64) {
+    const binaryString = atob(b64);
+    const bytes = new Uint8Array(binaryString.length);
+    
+    for(let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return bytes.buffer;
+  }
+
   function setupWs() {
     const loc = window.location;
     let uri = loc.protocol === "https:" ? "wss:" : "ws:";
@@ -73,8 +86,18 @@ const maxImageSize = 100000000;
     const ws = new WebSocket(uri);
 
     ws.onopen = function() {
-      const obj = { AreaId: 1, ImageBase64: imgSrc };
+      const first = user.name.split(' ')[0];
+      const obj = { Email: user.email, FirstName: first, LastName: user.family_name, AreaId: 1 };
+      // send meta data
       ws.send(JSON.stringify(obj));
+
+      const data = imgSrc.split(',')[1];
+      const binary = base64ToArrayBuffer(data);
+      // send image b64
+      ws.send(binary);
+
+
+      ws.send("End of image stream");
     }
 
     ws.onmessage = function(e) {
@@ -83,7 +106,7 @@ const maxImageSize = 100000000;
 
     ws.onclose = function(e) {
       if(e.reason !== "Successful upload") {
-        setLoadMsg(loadMsgError(e.reason.length === 0 ? "Unexpected error" : e.reason));
+        setLoadMsg(loadMsgError(e.reason.length === 0 ? "An unexpected error occurred" : e.reason));
         return;
       }
       
@@ -91,7 +114,7 @@ const maxImageSize = 100000000;
       // TODO redirect to page to add violations/products
     }
 
-    ws.onerror = function(e) {
+    ws.onerror = function() {
       setLoadMsg(loadMsgError("Error occurred while uploading"));
     }
   }
@@ -110,7 +133,7 @@ const maxImageSize = 100000000;
       <Row className="d-flex justify-content-center mb-2">
         <Col xs="2" />
         <Col>
-          {!imgSrc ? <input onChange={(e) => fileUpload(e)} type="file" /> : <></>}
+          {!imgSrc ? <input onChange={(e) => fileUpload(e)} type="file" accept="image/*" /> : <></>}
         </Col>
       </Row>
       <div className="d-flex flex-column justify-content-center" style={{height: "20%"}}>
