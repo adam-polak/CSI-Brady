@@ -57,7 +57,7 @@ export default class AreaPage extends Component {
               </button>
             </div>
           </div>
-          <div style={{ height: "84%", overflowY: "scroll" }}>
+          <div style={{ height: "80%", overflowY: "scroll" }}>
             { loading && <div style={{width: "100%"}} className="pt-4 d-flex justify-content-center gap-3"><Spinner className="text-brady" /><h2>Loading...</h2></div>}
             { !loading && products.length === 0 && <div style={{width: "100%"}} className="pt-4 d-flex justify-content-center"><h4>* No products to recommend yet: <em>Try adding a photo of the area!</em></h4></div>}
             {products.map((product, i) => (
