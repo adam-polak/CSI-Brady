@@ -65,10 +65,10 @@ export default function Product({ product }) {
               <Col>
                 <Accordion flush open={open} toggle={toggle}>
                   <AccordionItem>
-                    <AccordionHeader targetId={i}>
+                    <AccordionHeader targetId={"" + i}>
                       {violation.Name}
                     </AccordionHeader>
-                    <AccordionBody accordionId={i}>
+                    <AccordionBody accordionId={"" + i}>
                       {violation.Summary}{" "}
                       <a href={violation.Link}>More Information</a>
                     </AccordionBody>

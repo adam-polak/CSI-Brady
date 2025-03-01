@@ -3,6 +3,7 @@ import { Home } from "./components/Home";
 import CameraPage from "./components/camera/CameraPage";
 import { DashboardWrapper } from "./components/dashboard/Dashboard";
 import { Facilities } from "./components/facility/Facilities";
+import AreaPage from './components/area/AreaPage';
 
 const AppRoutes = [
   {
@@ -21,6 +22,10 @@ const AppRoutes = [
     path: "/camera/:facilityId/:facilityAddress/:companyName",
     element: <AuthenticationGuard component={CameraPage} />,
   },
+  {
+    path: "/area/:facilityId",
+    element: <AuthenticationGuard component={AreaPage} />
+  }
 ];
 
 export default AppRoutes;
