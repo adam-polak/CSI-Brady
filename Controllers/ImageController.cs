@@ -70,8 +70,7 @@ public class ImageController : ControllerBase
 
         using HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.PostAsync(
-            "http://localhost:8000/detect",
-            // "https://csifastai.azurewebsites.net/detect", 
+            "https://csifastai.azurewebsites.net/detect", 
             new StringContent(imgBase64)
         );
 
