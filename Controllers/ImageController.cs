@@ -193,6 +193,12 @@ public class ImageController : ControllerBase
         int imageId = await imgController.CreateImage(imgData.AreaId, userId);
 
         logger.Log(LogLevel.Information, "Uploading image to blob");
+        await ws.SendAsync(
+            GetBytesFromString("Saving image..."),
+            WebSocketMessageType.Text,
+            true,
+            CancellationToken.None
+        );
         BlobFileController blob = new BlobFileController(env);
         await blob.UploadStringAsync(imgData.AreaId, imageId, imgB64);
 
