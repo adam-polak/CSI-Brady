@@ -4,6 +4,7 @@ import CameraPage from "./components/camera/CameraPage";
 import { DashboardWrapper } from "./components/dashboard/Dashboard";
 import { Facilities } from "./components/facility/Facilities";
 import { AreaPageWrapper } from './components/area/AreaPage';
+import { FacilityPageWrapper } from "./components/facility/FacilityPage";
 
 const AppRoutes = [
   {
@@ -25,6 +26,10 @@ const AppRoutes = [
   {
     path: "/area/:areaId",
     element: <AuthenticationGuard component={AreaPageWrapper} />
+  },
+  {
+    path: "facility/:facilityId",
+    element: <AuthenticationGuard component={FacilityPageWrapper} />
   }
 ];
 

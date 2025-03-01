@@ -31,10 +31,8 @@ export default class AreaPage extends Component {
 
   async loadProducts() {
     const { areaId } = this.props;
-    console.log(areaId);
-    const result = await fetch("/areaapi/products/" + areaId);
+    const result = await fetch('/areaapi/products/' + areaId);
     const products = JSON.parse(await result.text());
-    console.log(products[0].ImgSrc);
     this.setState({ products: products, loading: false });
   }
 

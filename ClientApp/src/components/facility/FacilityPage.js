@@ -1,74 +1,90 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import AreaEntry from "./AreaEntry";
 import Leaderboard from "../icons/Leaderboard";
-import { Input } from "reactstrap";
+import { Input, Spinner } from "reactstrap";
 import NavHeader from "../header/NavHeader";
+import { useNavigate, useParams } from "react-router-dom";
 
 /**
  * area object
  * {
+ *      Id,
  *      Code
  * }
  */
 
-export function FacilityPage() {
-  const area1 = {
-    Code: "Floor 1",
-  };
+export function FacilityPageWrapper() {
+  const { facilityId } = useParams();
+  const nav = useNavigate();
 
-  const area2 = {
-    Code: "Floor 2",
-  };
+  return <FacilityPage facilityId={facilityId} nav={nav} />
+}
 
-  const area3 = {
-    Code: "Room 31B",
-  };
+export class FacilityPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { searchTerm: "", areas: [], isLoading: true };
+  }
 
-  const facility = {
-    Areas: [area1, area2, area3, area1, area2, area3, area1, area2, area3],
-  };
+  componentDidMount() {
+    this.loadAreas();
+  }
 
-  const [searchTerm, setSearchTerm] = useState("");
+  async loadAreas() {
+    const { facilityId } = this.props;
+    const result = await fetch('/facilityapi/areas/' + facilityId);
+    const areas = JSON.parse(await result.text());
+    this.setState({ areas: areas, isLoading: false });
+  }
 
-  const filteredAreas = facility.Areas.filter((area) =>
-    area.Code.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  render() {
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+    const { nav } = this.props;
+    const { searchTerm, areas, isLoading } = this.state;
 
-  return (
-    <div style={{ height: "94vh" }} className="bg-grey pt-3">
-      <NavHeader />
-      <div className="d-flex pt-4 px-5 pb-2 gap-5 align-items-end">
-        <div style={{ fontSize: "18px" }}>9123 Good Road, Milwaukee WI 53534</div>
-        <div>
-          <button className="btn">
-            <Leaderboard />
-          </button>
+    const filteredAreas = isLoading 
+      ? [] 
+      : areas.filter((area) =>
+        area.Code.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+    const handleSearchChange = (e) => {
+      this.setState({ searchTerm: e.target.value });
+    };
+
+    return (
+      <div style={{ height: "94vh" }} className="bg-grey">
+        <NavHeader />
+        <div className="d-flex pt-4 px-5 pb-2 gap-5 align-items-center justify-content-start">
+          <div style={{ fontSize: "18px" }}>9123 Good Road, Milwaukee WI 53534</div>
+          <div>
+            <button className="btn">
+              <Leaderboard />
+            </button>
+          </div>
+        </div>
+        <div className="">
+          <div className="px-5">
+            <Input
+              placeholder="Search..."
+              onChange={handleSearchChange}
+              value={searchTerm}
+            />
+          </div>
+          <hr className="mx-4"/>
+        </div>
+        <div
+          className="px-4 pb-4 pt-2 d-flex flex-column gap-3 mt-3"
+          style={{ overflowY: "scroll", height: "57%" }}
+        >
+          {isLoading && <div className="d-flex justify-content-center gap-3" style={{width: "100%"}}><Spinner className="text-brady" /><h2>Loading...</h2></div>}
+          {filteredAreas.map((area, i) => (
+            <button onClick={() => nav(`/area/${area.Id}`)} key={`area-btn-${i}`} className="btn">
+              <AreaEntry key={`area-entry-${i}`} facility={area} />
+            </button>
+          ))}
         </div>
       </div>
-      <div className="">
-        <div className="px-5">
-          <Input
-            placeholder="Search..."
-            onChange={handleSearchChange}
-            value={searchTerm}
-          />
-        </div>
-        <hr className="mx-4"/>
-      </div>
-      <div
-        className="px-4 pb-4 pt-2 d-flex flex-column gap-3 mt-3"
-        style={{ overflowY: "scroll", height: "57%" }}
-      >
-        {filteredAreas.map((area, i) => (
-          <button className="btn">
-            <AreaEntry facility={area}></AreaEntry>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+    );
+  }
 }
