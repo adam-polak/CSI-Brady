@@ -181,7 +181,7 @@ public class ImageController : ControllerBase
             return;
         }
 
-        string imgB64 = await GetBase64Img(logger, ws);
+        string imgB64 = $"{imgData.ImgTag},{await GetBase64Img(logger, ws)}";
 
         AiApiResponse? aiResp = await GetResponseFromAi(logger, ws, imgB64);
         if(aiResp == null) return;
@@ -190,7 +190,7 @@ public class ImageController : ControllerBase
         int userId = await GetUserId(logger, env, imgData.Email, imgData.FirstName, imgData.LastName);
         DataAccess.Controllers.ImageController imgController = new DataAccess.Controllers.ImageController(env);
         logger.Log(LogLevel.Information, "Inserting image into database");
-        int imageId = await imgController.CreateImage(imgData.AreaId, userId, imgData.ImgTag);
+        int imageId = await imgController.CreateImage(imgData.AreaId, userId);
 
         logger.Log(LogLevel.Information, "Uploading image to blob");
         await ws.SendAsync(
