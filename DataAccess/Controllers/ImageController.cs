@@ -12,13 +12,13 @@ public class ImageController : DbController
     /*
    Returns unique image id
 */
-    public async Task<int> CreateImage(int areaId, int userId)
+    public async Task<int> CreateImage(int areaId, int userId, string imgTag)
     {
         int id = await GenerateRandomId();
         string date = DateTime.Now.ToShortDateString();
-        string sql = "INSERT INTO image (id, date, areaid, userid)"
-                    + " VALUES (@id, @date, @area, @user);";
-        object[] parameters = { new { id = id, date = date, area = areaId, user = userId } };
+        string sql = "INSERT INTO image (id, date, areaid, userid, imgtag)"
+                    + " VALUES (@id, @date, @area, @user, @tag);";
+        object[] parameters = { new { id = id, date = date, area = areaId, user = userId, tag = imgTag } };
 
         await DoCommandAsync(sql, parameters);
 

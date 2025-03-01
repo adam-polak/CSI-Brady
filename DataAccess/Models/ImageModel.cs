@@ -6,4 +6,5 @@ public class ImageModel
     public required string Date { get; set; }
     public required int AreaId { get; set; }
     public required int UserId { get; set; }
+    public required string ImgTag { get; set; }
 }

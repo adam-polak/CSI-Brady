@@ -190,7 +190,7 @@ public class ImageController : ControllerBase
         int userId = await GetUserId(logger, env, imgData.Email, imgData.FirstName, imgData.LastName);
         DataAccess.Controllers.ImageController imgController = new DataAccess.Controllers.ImageController(env);
         logger.Log(LogLevel.Information, "Inserting image into database");
-        int imageId = await imgController.CreateImage(imgData.AreaId, userId);
+        int imageId = await imgController.CreateImage(imgData.AreaId, userId, imgData.ImgTag);
 
         logger.Log(LogLevel.Information, "Uploading image to blob");
         await ws.SendAsync(
@@ -216,6 +216,7 @@ public class ImageController : ControllerBase
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required int AreaId { get; set; }
+        public required string ImgTag { get; set; }
     }
 
     private class AiApiResponse
