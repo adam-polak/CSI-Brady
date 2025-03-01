@@ -26,7 +26,7 @@ function FilteredFacilities({handleSelectEntry, facilities, filters}) {
       {arr.length === 0 
       ? <p className="text-center">*No facilities to display</p>
       : arr.map((facility, i) => (
-            <div className="mb-3">
+            <div className="mb-3" key={`facility-div-${i}`}>
               <FacilityEntry
                 key={`facility-${i}`}
                 facility={facility}

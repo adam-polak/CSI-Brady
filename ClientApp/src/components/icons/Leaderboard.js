@@ -5,7 +5,7 @@ const Leaderboard = ({ size = 45 }) => (
         width={size}
         height={size}
         alt="Leaderboard"
-        src="leaderboard.svg"
+        src="podium.png"
     />
 );
 
