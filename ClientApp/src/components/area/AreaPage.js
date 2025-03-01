@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CameraIcon from "../icons/CameraIcon";
 import Product from "../product/Product";
 import NavHeader from "../header/NavHeader";
+import { useParams } from "react-router-dom";
 
 /**
  * products object
@@ -10,9 +11,16 @@ import NavHeader from "../header/NavHeader";
  * }
  */
 
+export function AreaPageWrapper() {
+  const { areaId } = useParams();
+
+  return <AreaPage areaId={areaId} />
+}
+
 export default class AreaPage extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.state = { products: [] };
   }
 

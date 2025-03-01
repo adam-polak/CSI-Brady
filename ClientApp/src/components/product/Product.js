@@ -12,6 +12,7 @@ import {
 /**
  * Product object
  * {
+ *      Id,
  *      Name,
  *      ImageSrc,
  *      Link,

@@ -13,7 +13,7 @@ public class AreaController : DbController
     {
         string sql = "SELECT product.id, product.name, product.link, product.imgsrc"
                     + " FROM area_to_product"
-                    + " RIGHT JOIN product"
+                    + " JOIN product"
                     + " ON area_to_product.productid = product.id"
                     + " WHERE area_to_product.areaid = @id;";
         object obj = new { id = areaId };
