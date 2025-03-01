@@ -12,8 +12,9 @@ import {
 /**
  * Product object
  * {
+ *      Id,
  *      Name,
- *      ImageSrc,
+ *      ImgSrc,
  *      Link,
  *      Violations[]
  * }
@@ -42,17 +43,17 @@ export default function Product({ product }) {
     <Card className="mb-3 p-3">
       <Row className="align-items-center">
         <Col xs="auto">
-          <a href={product.Link} className="text-decoration-none text-dark">
+          <a href={product.Link} target="_blank" rel="noreferrer" className="text-decoration-none text-dark">
             <img
               alt="Product"
-              src={product.ImageSrc}
+              src={product.ImgSrc}
               className="img-fluid"
               style={{ maxHeight: "100px", width: "auto" }}
             />
           </a>
         </Col>
         <Col>
-          <a href={product.Link} className=" text-dark">
+          <a href={product.Link} target="_blank" rel="noreferrer" className=" text-dark">
             <h3>{product.Name}</h3>
           </a>
         </Col>
@@ -65,12 +66,12 @@ export default function Product({ product }) {
               <Col>
                 <Accordion flush open={open} toggle={toggle}>
                   <AccordionItem>
-                    <AccordionHeader targetId={i}>
+                    <AccordionHeader targetId={"" + i}>
                       {violation.Name}
                     </AccordionHeader>
-                    <AccordionBody accordionId={i}>
+                    <AccordionBody accordionId={"" + i}>
                       {violation.Summary}{" "}
-                      <a href={violation.Link}>More Information</a>
+                      <a target="_blank" rel="noreferrer" href={violation.Link}>More Information</a>
                     </AccordionBody>
                   </AccordionItem>
                 </Accordion>
