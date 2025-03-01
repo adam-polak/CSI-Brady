@@ -41,8 +41,8 @@ export function FacilityPage() {
   return (
     <div style={{ height: "94vh" }} className="bg-grey pt-3">
       <NavHeader />
-      <div className="d-flex pt-4 px-4 pb-2 gap-5 align-items-end">
-        <div style={{ fontSize: "36px" }}>Facility Name</div>
+      <div className="d-flex pt-4 px-5 pb-2 gap-5 align-items-end">
+        <div style={{ fontSize: "18px" }}>9123 Good Road, Milwaukee WI 53534</div>
         <div>
           <button className="btn">
             <Leaderboard />
@@ -50,17 +50,18 @@ export function FacilityPage() {
         </div>
       </div>
       <div className="">
-        <div className="px-4">
+        <div className="px-5">
           <Input
             placeholder="Search..."
             onChange={handleSearchChange}
             value={searchTerm}
           />
         </div>
+        <hr className="mx-4"/>
       </div>
       <div
         className="px-4 pb-4 pt-2 d-flex flex-column gap-3 mt-3"
-        style={{ overflowY: "scroll", height: "66%" }}
+        style={{ overflowY: "scroll", height: "57%" }}
       >
         {filteredAreas.map((area, i) => (
           <button className="btn">

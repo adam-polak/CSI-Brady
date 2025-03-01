@@ -21,9 +21,7 @@ export default function AreaEntry({ facility }) {
           {facility.Code}
         </div>
         <div>
-          <button className="btn">
-            <RightChevron />
-          </button>
+          <RightChevron />
         </div>
       </div>
     </Card>
