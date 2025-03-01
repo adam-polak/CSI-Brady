@@ -3,9 +3,9 @@ using CSI_Brady.Util;
 
 namespace CSI_Brady.BlobAccess.Util;
 
-public static class BlobConnectionFactory
+public static class BlobClientFactory
 {
-    public static BlobContainerClient CreateBlobConnection(IHostEnvironment env)
+    public static BlobContainerClient CreateBlobClient(IHostEnvironment env)
     {
         string? connectionString;
         string? containerName;
