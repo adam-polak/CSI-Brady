@@ -14,7 +14,7 @@ import {
  * {
  *      Id,
  *      Name,
- *      ImageSrc,
+ *      ImgSrc,
  *      Link,
  *      Violations[]
  * }
@@ -46,7 +46,7 @@ export default function Product({ product }) {
           <a href={product.Link} className="text-decoration-none text-dark">
             <img
               alt="Product"
-              src={product.ImageSrc}
+              src={product.ImgSrc}
               className="img-fluid"
               style={{ maxHeight: "100px", width: "auto" }}
             />
@@ -71,7 +71,7 @@ export default function Product({ product }) {
                     </AccordionHeader>
                     <AccordionBody accordionId={"" + i}>
                       {violation.Summary}{" "}
-                      <a href={violation.Link}>More Information</a>
+                      <a target="_blank" rel="noreferrer" href={violation.Link}>More Information</a>
                     </AccordionBody>
                   </AccordionItem>
                 </Accordion>

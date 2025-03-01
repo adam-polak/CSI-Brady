@@ -3,7 +3,7 @@ import { Home } from "./components/Home";
 import CameraPage from "./components/camera/CameraPage";
 import { DashboardWrapper } from "./components/dashboard/Dashboard";
 import { Facilities } from "./components/facility/Facilities";
-import AreaPage from './components/area/AreaPage';
+import { AreaPageWrapper } from './components/area/AreaPage';
 
 const AppRoutes = [
   {
@@ -23,8 +23,8 @@ const AppRoutes = [
     element: <AuthenticationGuard component={CameraPage} />,
   },
   {
-    path: "/area/:facilityId",
-    element: <AuthenticationGuard component={AreaPage} />
+    path: "/area/:areaId",
+    element: <AuthenticationGuard component={AreaPageWrapper} />
   }
 ];
 

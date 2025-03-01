@@ -23,8 +23,9 @@ public class AreaController : ControllerBase
     public async Task<IActionResult> GetProducts(int areaId)
     {
         List<ProductModel> productList = await _areaController.GetProducts(areaId);
-        ProductWebModel[] products = [];
+        ProductWebModel[] products = new ProductWebModel[productList.Count];
 
+        int i = 0;
         foreach(ProductModel p in productList)
         {
             ProductWebModel product = new ProductWebModel()
@@ -37,6 +38,8 @@ public class AreaController : ControllerBase
             };
 
             product.Violations = (await _violationController.GetViolationsForProduct(product.Id)).ToArray();
+
+            products[i++] = product;
         }
 
         string json = JsonConvert.SerializeObject(products);
