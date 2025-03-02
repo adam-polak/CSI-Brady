@@ -1,9 +1,48 @@
-import ArrowLeft from "../icons/Arrow";
+import { useNavigate } from 'react-router-dom';
 
-export default function NavHeader({ link }) {
+export default function NavHeader() {
+    const nav = useNavigate();
+
+    const pageName = window.location.pathname.split('/')[1];
+
+    const routes = [
+        'Home',
+        'Facility',
+        'Area',
+        'Camera'
+    ];
+
+    let curIndex = 0;
+    for(let i = 0; i < routes.length; i++) {
+        if(routes[i].toLowerCase() === pageName.toLowerCase()) {
+            curIndex = i;
+            break;
+        }
+    }
+
+    const filteredRoutes = routes.filter((_, i) => {
+        return i <= curIndex;
+    });
+
     return (
-        <div className="grey-dashboard px-2 pt-2">
-            <ArrowLeft size="48" color="grey" />
+        <div className="grey-dashboard px-2 pt-4 d-flex gap-1">
+            {filteredRoutes.map((value, i) => {
+                if(i !== curIndex) {
+                    return (
+                        <div key={`route-${i}`} className="fs-4 d-flex align-content-center">
+                            <button style={{color: "rgb(0, 0, 238)"}} onClick={() => nav(i - curIndex)} className="btn fs-4 text-decoration-underline">{value}</button>
+                            <div className="pt-2">/</div>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div className="fs-4 pt-2 d-flex">
+                            <div style={{width: ".3em"}} />
+                            <div>{value}</div>
+                        </div>
+                    );
+                }
+            })}
         </div>
     );
 }

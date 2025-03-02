@@ -14,7 +14,6 @@ export class Facilities extends Component {
   async loadFacilities() {
     const result = await fetch('/facilityapi/facilities');
     const facilities = JSON.parse(await result.text());
-    console.log(facilities[0].CompanyImgSrc)
     this.setState({ facilities: facilities, loading: false });
   }
 
