@@ -2,34 +2,28 @@ import React, { Component } from "react";
 import FacilitiesContainer from "./FacilitiesContainer";
 
 export class Facilities extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { facilities: [], loading: true };
+  }
+
+  componentDidMount() {
+    this.loadFacilities();
+  }
+
+  async loadFacilities() {
+    const result = await fetch('/facilityapi/facilities');
+    const facilities = JSON.parse(await result.text());
+    console.log(facilities[0].CompanyImgSrc)
+    this.setState({ facilities: facilities, loading: false });
+  }
+
   render() {
-    const obj1 = {
-      Id: 1,
-      Address: "9123 Good Road",
-      CompanyName: "Husco",
-      CompanyImgLink:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR03ByQHEPHqOZVAbAVZFa1kFWDz7lcocGSSA&s",
-    };
-
-    const obj2 = {
-      Id: 2,
-      Address: "4213 Bad Road",
-      CompanyName: "Quad",
-      CompanyImgLink: "https://static.stocktitan.net/company-logo/quad-lg.webp",
-    };
-
-    const obj3 = {
-      Id: 3,
-      Address: "8543 Spectacular Road, Milwaukee, WI 53534",
-      CompanyName: "Brady",
-      CompanyImgLink: "https://cdn.worldvectorlogo.com/logos/brady-3.svg",
-    };
-
-    const facilities = [obj1, obj2, obj3];
+    const { facilities, loading } = this.state;
 
     return (
-      <div className="bg-grey">
-        <FacilitiesContainer facilities={facilities} />
+      <div className="bg-grey" style={{height: "94vh"}}>
+        <FacilitiesContainer loading={loading} facilities={facilities} />
       </div>
     );
   }

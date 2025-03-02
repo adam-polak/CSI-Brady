@@ -26,7 +26,7 @@ export default function FacilityEntry({ facility, onSelectItem }) {
             <Col xs="2" className="d-flex justify-content-center">
               <img
                 alt={facility.CompanyName + " Logo"}
-                src={facility.CompanyImgLink}
+                src={facility.CompanyImgSrc}
                 width="50px"
                 style={{ alignItems: "center" }}
               />

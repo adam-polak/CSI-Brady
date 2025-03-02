@@ -36,7 +36,7 @@ public class ImageController : ControllerBase
         await Echo(webSocket, _logger, _env);
     }
 
-    private static ArraySegment<Byte> GetBytesFromString(string str)
+    private static ArraySegment<byte> GetBytesFromString(string str)
     {
         return Encoding.UTF8.GetBytes(str);
     }

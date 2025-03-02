@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import AreaEntry from "./AreaEntry";
 import Leaderboard from "../icons/Leaderboard";
-import { Input, Spinner } from "reactstrap";
+import { Input } from "reactstrap";
 import NavHeader from "../header/NavHeader";
 import { useNavigate, useParams } from "react-router-dom";
+import { LoadingSpinner } from "../loading/Loading";
 
 /**
  * area object
@@ -14,10 +15,10 @@ import { useNavigate, useParams } from "react-router-dom";
  */
 
 export function FacilityPageWrapper() {
-  const { facilityId } = useParams();
+  const { facilityId, address } = useParams();
   const nav = useNavigate();
 
-  return <FacilityPage facilityId={facilityId} nav={nav} />
+  return <FacilityPage address={address} facilityId={facilityId} nav={nav} />
 }
 
 export class FacilityPage extends Component {
@@ -39,7 +40,7 @@ export class FacilityPage extends Component {
 
   render() {
 
-    const { nav } = this.props;
+    const { nav, address } = this.props;
     const { searchTerm, areas, isLoading } = this.state;
 
     const filteredAreas = isLoading 
@@ -56,7 +57,7 @@ export class FacilityPage extends Component {
       <div style={{ height: "94vh" }} className="bg-grey">
         <NavHeader />
         <div className="d-flex pt-4 px-5 pb-2 gap-5 align-items-center justify-content-start">
-          <div style={{ fontSize: "18px" }}>9123 Good Road, Milwaukee WI 53534</div>
+          <div style={{ fontSize: "18px" }}>{address}</div>
           <div>
             <button className="btn">
               <Leaderboard />
@@ -77,7 +78,7 @@ export class FacilityPage extends Component {
           className="px-4 pb-4 pt-2 d-flex flex-column gap-3 mt-3"
           style={{ overflowY: "scroll", height: "57%" }}
         >
-          {isLoading && <div className="d-flex justify-content-center gap-3" style={{width: "100%"}}><Spinner className="text-brady" /><h2>Loading...</h2></div>}
+          {isLoading && <LoadingSpinner />}
           {filteredAreas.map((area, i) => (
             <button onClick={() => nav(`/area/${area.Id}`)} key={`area-btn-${i}`} className="btn">
               <AreaEntry key={`area-entry-${i}`} facility={area} />

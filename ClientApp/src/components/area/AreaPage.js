@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import CameraIcon from "../icons/CameraIcon";
 import Product from "../product/Product";
 import NavHeader from "../header/NavHeader";
-import { useParams } from "react-router-dom";
-import { Card, Spinner } from "reactstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { LoadingSpinner } from "../loading/Loading";
+import { Card } from "reactstrap";
 import ProductViolations from "../product/ProductViolations";
 
 /**
@@ -15,8 +16,9 @@ import ProductViolations from "../product/ProductViolations";
 
 export function AreaPageWrapper() {
   const { areaId } = useParams();
+  const nav = useNavigate();
 
-  return <AreaPage areaId={areaId} />;
+  return <AreaPage nav={nav} areaId={areaId} />
 }
 
 export default class AreaPage extends Component {
@@ -37,6 +39,7 @@ export default class AreaPage extends Component {
   }
 
   render() {
+    const { nav, areaId } = this.props;
     const { products, loading } = this.state;
 
     return (
@@ -47,7 +50,7 @@ export default class AreaPage extends Component {
             <div></div>
             <div style={{ fontSize: "36px" }}>Products</div>
             <div>
-              <button className="btn bg-success">
+              <button className="btn bg-success" onClick={() => nav("/camera/" + areaId)}>
                 <div className="d-flex align-items-center gap-2">
                   <div
                     style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}
@@ -60,15 +63,7 @@ export default class AreaPage extends Component {
             </div>
           </div>
           <div className="mt-3" style={{ height: "74%", overflowY: "scroll" }}>
-            {loading && (
-              <div
-                style={{ width: "100%" }}
-                className="pt-4 d-flex justify-content-center gap-3"
-              >
-                <Spinner className="text-brady" />
-                <h2>Loading...</h2>
-              </div>
-            )}
+            { loading && <LoadingSpinner /> }
             {!loading && products.length === 0 && (
               <div
                 style={{ width: "100%" }}
