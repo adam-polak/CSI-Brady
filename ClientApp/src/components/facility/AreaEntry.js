@@ -4,15 +4,15 @@ import RightChevron from "../icons/RightChevron";
 
 export default function AreaEntry({ facility }) {
   return (
-    <Card className="p-4">
+    <Card className="p-4 bg-white">
       <div className="d-flex align-items-center justify-content-between">
-        <div
-          className="mx-4"
-          style={{ fontSize: "24px", textDecoration: "underline" }}
-        >
+        <div className="fs-3 fw-bold text-dark text-uppercase letter-spacing-1">
           {facility.Code}
         </div>
-        <div>
+        <div className="fs-5 text-secondary">
+          <span className="fw-4 text-danger">Violations:</span> {facility.ViolationCount}
+        </div>
+        <div className="text-muted">
           <RightChevron />
         </div>
       </div>

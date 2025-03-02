@@ -31,7 +31,7 @@ public class FacilityController : DbController
 
     public async Task<List<AreaModel>> GetAreas(int facilityId)
     {
-        string sql = "SELECT area.id, area.code FROM area"
+        string sql = "SELECT * FROM area"
                     + " WHERE facilityid = @id";
         object obj = new { id = facilityId };
 
