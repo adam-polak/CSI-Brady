@@ -1,10 +1,8 @@
 import React from "react";
 import {
-  Button,
   Card,
   CardBody,
   Container,
-  List,
   ListGroup,
   ListGroupItem,
 } from "reactstrap";
@@ -74,7 +72,7 @@ export default function SubmissionPage() {
     <div style={{ height: "94vh" }} className="bg-grey pt-4 px-3">
       <div className="d-flex">
         <div>
-          <img src="54272.png" style={{ maxWidth: "150px" }} />
+          <img src="54272.png" alt="Capture" style={{ maxWidth: "150px" }} />
         </div>
         <Container fluid className="px-3">
           <h2>Detected Violations:</h2>

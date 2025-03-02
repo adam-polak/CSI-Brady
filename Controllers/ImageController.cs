@@ -3,7 +3,6 @@ using System.Net.WebSockets;
 using System.Text;
 using CSI_Brady.BlobAccess.Controllers;
 using CSI_Brady.DataAccess.Controllers;
-using CSI_Brady.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -196,9 +195,20 @@ public class ImageController : ControllerBase
         logger.Log(LogLevel.Information, "Adding violations and products to image");
         ViolationController violationController = new ViolationController(env);
         ProductController productController = new ProductController(env);
+        DataAccess.Controllers.AreaController areaController = new DataAccess.Controllers.AreaController(env);
+
+        int validViolationCount = 0;
         for(int i = 0; i < aiResp.violations.Length; i++)
         {
-            int violationId = await violationController.GetViolationId(aiResp.violations[i]);
+            int violationId;
+            try {
+                violationId = await violationController.GetViolationId(aiResp.violations[i]);
+            } catch {
+                // violation doesn't exist
+                continue;
+            }
+
+            validViolationCount++;
             await imgController.AddViolationToImage(imageId, violationId);
             List<int> productIds = await productController.GetProductIdsFromViolation(violationId);
             
@@ -207,6 +217,12 @@ public class ImageController : ControllerBase
                 await imgController.AddProductToImage(imageId, productIds.ElementAt(j));
             }
         }
+
+        if(validViolationCount != 0)
+        {
+            await areaController.AddToViolationCount(imgData.AreaId, validViolationCount);
+        }
+
         logger.Log(LogLevel.Information, "All violations and products added to image");
 
         logger.Log(LogLevel.Information, "Uploading image to blob");
