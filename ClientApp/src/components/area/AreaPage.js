@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner } from "../loading/Loading";
 import { Card } from "reactstrap";
 import ProductViolations from "../product/ProductViolations";
+import ImageIcon from "../icons/ImageIcon";
 
 /**
  * products object
@@ -78,7 +79,12 @@ export default class AreaPage extends Component {
             {products.map((product, i) => (
               <div className="px-4 py-2" key={`product-div-${i}`}>
                 <Card className="mb-1 p-3">
-                  <Product key={`product-${i}`} product={product} />
+                  <div className="d-flex align-items-center justify-content-between">
+                    <Product key={`product-${i}`} product={product} />
+                    <button onClick={() => nav(`/images/${areaId}/${product.Id}`)} className="btn">
+                      <ImageIcon size={"30px"} />
+                    </button>
+                  </div>
                   <ProductViolations violations={product.Violations} />
                 </Card>
               </div>
