@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FacilityEntry from "./FacilityEntry";
 import FilterBar from "../filter/FilterBar";
+import { LoadingSpinner } from "../loading/Loading";
 
 function FilteredFacilities({handleSelectEntry, facilities, filters}) {
   const arr = facilities.filter((f) => {
@@ -38,12 +39,12 @@ function FilteredFacilities({handleSelectEntry, facilities, filters}) {
   );
 }
 
-export default function FacilitiesContainer({ facilities }) {
+export default function FacilitiesContainer({ facilities, loading }) {
   const [filters, setFilters] = useState([]);
   const nav = useNavigate();
 
-  const handleSelectEntry = (i, address, company) => {
-    nav(`/dashboard/${i}/${address}/${company}`);
+  const handleSelectEntry = (i, address) => {
+    nav(`/facility/${i}/${address}`);
   };
 
   function addToFilters(str) {
@@ -58,15 +59,16 @@ export default function FacilitiesContainer({ facilities }) {
   }
 
   return (
-    <>
+    <div>
       <FilterBar
         handleAdd={addToFilters}
         handleRemove={removeFromFilters}
         tags={filters}
       />
-      <div style={{height: "81.4vh"}} className="container-lg p-2">
-        <FilteredFacilities handleSelectEntry={handleSelectEntry} facilities={facilities} filters={filters} />
+      <div style={{height: "80%"}} className="container-lg p-2">
+        {loading && <LoadingSpinner />}
+        {!loading && <FilteredFacilities handleSelectEntry={handleSelectEntry} facilities={facilities} filters={filters} />}
       </div>
-    </>
+    </div>
   );
 }

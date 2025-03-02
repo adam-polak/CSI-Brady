@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import {
-  Collapse,
   Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  NavItem,
-  NavLink,
+  NavbarBrand
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./NavMenu.css";
@@ -35,33 +31,6 @@ export class NavMenu extends Component {
           <NavbarBrand tag={Link} to="/">
             <img src="brady-logo.png" alt="Brady logo" height={30} />
           </NavbarBrand>
-          <NavbarToggler
-            onClick={this.toggleNavbar}
-            className="mr-2 navbar-dark"
-          />
-          <Collapse
-            className="d-sm-inline-flex flex-sm-row-reverse"
-            isOpen={!this.state.collapsed}
-            navbar
-          >
-            <ul className="navbar-nav flex-grow">
-              <NavItem>
-                <NavLink tag={Link} className="text-white" to="/facilities">
-                  Home
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-white" to="/area/1">
-                  Profile
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-white" to="/facility/1">
-                  Logout
-                </NavLink>
-              </NavItem>
-            </ul>
-          </Collapse>
         </Navbar>
       </header>
     );

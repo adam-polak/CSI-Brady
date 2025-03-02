@@ -21,6 +21,14 @@ public class AreaController : DbController
         return await DoQueryAsync<ProductModel>(sql, obj);
     }
 
+    public async Task AddToViolationCount(int areaId, int amt)
+    {
+        string sql = $"UPDATE area SET violationcount = violationcount + @amt WHERE id = @id;";
+        object[] obj = { new { id = areaId, amt = amt } };
+
+        await DoCommandAsync(sql, obj);
+    }
+
     public async Task AddProductToArea(int areaId, int productId)
     {
         string sql = "INSERT INTO area_to_product (areaid, productid)"
