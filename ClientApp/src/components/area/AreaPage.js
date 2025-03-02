@@ -63,7 +63,7 @@ export default class AreaPage extends Component {
               </button>
             </div>
           </div>
-          <div className="mt-3" style={{ height: "74%", overflowY: "scroll" }}>
+          <div className="mt-3" style={{ height: "72%", overflowY: "scroll" }}>
             { loading && <LoadingSpinner /> }
             {!loading && products.length === 0 && (
               <div
