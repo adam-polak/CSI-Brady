@@ -26,6 +26,20 @@ public abstract class DbController
         await _connection.CloseAsync();
     }
 
+    protected async Task DoCommandAsync(string sql)
+    {
+        await _connection.OpenAsync();
+        await _connection.ExecuteAsync(sql);
+        await _connection.CloseAsync();
+    }
+
+    protected async Task DoCommandAsync(string sql, object parameters)
+    {
+        await _connection.OpenAsync();
+        await _connection.ExecuteAsync(sql, parameters);
+        await _connection.CloseAsync();
+    }
+
     protected List<T> DoQuery<T>(string sql, object parameters)
     {
         _connection.Open();
