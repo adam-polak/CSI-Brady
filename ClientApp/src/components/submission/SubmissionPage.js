@@ -89,7 +89,6 @@ export default function SubmissionPage() {
   };
 
   const handleAdd = () => {
-    console.log("Selected product:", selectedProduct);
     if (selectedProduct == null) return;
     setQuery("");
     setSuggestions([]);
