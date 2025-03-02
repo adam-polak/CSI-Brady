@@ -2,8 +2,10 @@ import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { Row, Col, Button, Spinner } from "reactstrap";
 import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from "react-router-dom";
 
 export default function Camera({ areaId }) {
+  const nav = useNavigate();
   const webcamRef = useRef();
   const { user } = useAuth0();
   const [imgSrc, setImgSrc] = useState(null);
@@ -106,13 +108,16 @@ const maxImageSize = 100000000;
     }
 
     ws.onclose = function(e) {
-      if(e.reason !== "Successful upload") {
+      const n = parseInt(e.reason);
+
+      if(isNaN(n)) {
         setLoadMsg(loadMsgError(e.reason.length === 0 ? "An unexpected error occurred" : e.reason));
         return;
       }
       
-      setLoadMsg(loadMsgFinish(e.reason));
-      // TODO redirect to page to add violations/products
+      setLoadMsg(loadMsgFinish("Successful upload"));
+
+      nav('/submission/' + areaId + '/' + n);
     }
 
     ws.onerror = function() {

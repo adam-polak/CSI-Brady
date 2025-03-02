@@ -1,8 +1,9 @@
 using System.Net;
 using System.Net.WebSockets;
-using System.Text;
 using CSI_Brady.BlobAccess.Controllers;
 using CSI_Brady.DataAccess.Controllers;
+using CSI_Brady.DataAccess.Models;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,11 +14,15 @@ public class ImageController : ControllerBase
 {
     private readonly ILogger<ImageController> _logger;
     private readonly IHostEnvironment _env;
+    private DataAccess.Controllers.ImageController _imageController;
+    private BlobFileController _blobController;
 
     public ImageController(ILogger<ImageController> logger, IHostEnvironment env)
     {
         _logger = logger;
         _env = env;
+        _imageController = new DataAccess.Controllers.ImageController(env);
+        _blobController = new BlobFileController(env);
     }
 
     [Route("upload")]
@@ -35,9 +40,66 @@ public class ImageController : ControllerBase
         await Echo(webSocket, _logger, _env);
     }
 
+    [HttpGet("violations/{imageId}")]
+    public async Task<IActionResult> GetViolations(int imageId)
+    {
+        List<ViolationModel> violations = await _imageController.GetViolationsForImage(imageId);
+
+        string json = JsonConvert.SerializeObject(violations);
+
+        return Ok(json);
+    }
+
+    [HttpGet("products/{imageId}")]
+    public async Task<IActionResult> GetProducts(int imageId)
+    {
+        List<ProductModel> products = await _imageController.GetProductsForImage(imageId);
+
+        string json = JsonConvert.SerializeObject(products);
+
+        return Ok(json);
+    }
+
+    [HttpGet("image/{areaId}/{imageId}")]
+    public async Task<IActionResult> GetImage(int areaId, int imageId)
+    {
+        return Ok(await _blobController.GetContentsAsString(areaId, imageId));
+    }
+
+    [HttpPost("setproducts/{imageId}")]
+    public async Task<IActionResult> SetProductsForImage(int imageId)
+    {
+        StreamReader reader = new StreamReader(Request.Body);
+        string body = await reader.ReadToEndAsync();
+        int[]? productIds = JsonConvert.DeserializeObject<int[]>(body);
+        if(productIds == null) {
+            return BadRequest();
+        }
+
+        List<ProductModel> products = await _imageController.GetProductsForImage(imageId);
+        List<int> ids = productIds.AsList();
+        for(int i = 0; i < products.Count; i++)
+        {
+            int id = products.ElementAt(i).Id;
+            if(!productIds.Contains(id))
+            {
+                await _imageController.RemoveProductFromImage(imageId, id);
+            } else {
+                ids.Remove(id);
+            }
+        }
+
+        for(int i = 0; i < ids.Count; i++) 
+        {
+            await _imageController.AddProductToImage(imageId, ids.ElementAt(i));
+        }
+        
+        return Ok();
+    }
+
     private static ArraySegment<byte> GetBytesFromString(string str)
     {
-        return Encoding.UTF8.GetBytes(str);
+        return System.Text.Encoding.UTF8.GetBytes(str);
     }
 
     private static async Task<int> GetUserId(ILogger<ImageController> logger, IHostEnvironment env, string email, string firstName, string lastName)
@@ -69,7 +131,7 @@ public class ImageController : ControllerBase
 
         using HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.PostAsync(
-            "https://csifastai.azurewebsites.net/detect", 
+            "https://csifastai.azurewebsites.net/llm-detect", 
             new StringContent(imgBase64)
         );
 
@@ -150,7 +212,7 @@ public class ImageController : ControllerBase
             CancellationToken.None
         );
 
-        string json = Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
+        string json = System.Text.Encoding.UTF8.GetString(buffer, 0, receiveResult.Count);
 
         UploadImageData? img;
         try 
@@ -194,7 +256,7 @@ public class ImageController : ControllerBase
 
         logger.Log(LogLevel.Information, "Adding violations and products to image");
         ViolationController violationController = new ViolationController(env);
-        ProductController productController = new ProductController(env);
+        DataAccess.Controllers.ProductController productController = new DataAccess.Controllers.ProductController(env);
         DataAccess.Controllers.AreaController areaController = new DataAccess.Controllers.AreaController(env);
 
         int validViolationCount = 0;
@@ -238,7 +300,7 @@ public class ImageController : ControllerBase
         logger.Log(LogLevel.Information, "Successful upload");
         await ws.CloseAsync(
             WebSocketCloseStatus.NormalClosure,
-            "Successful upload",
+            $"{imageId}",
             CancellationToken.None
         );
     }

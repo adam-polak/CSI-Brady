@@ -1,5 +1,6 @@
 using CSI_Brady.DataAccess.Models;
 using CSI_Brady.DataAccess.Util;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 
 namespace CSI_Brady.DataAccess.Controllers;
 
@@ -55,6 +56,14 @@ public class ImageController : DbController
         await DoCommandAsync(sql, parameters);
     }
 
+    public async Task RemoveProductFromImage(int imageId, int productId)
+    {
+        string sql = "DELETE FROM image_to_product WHERE imageid = @img AND productid = @prod;";
+        object[] parameters = { new { img = imageId, prod = productId } };
+
+        await DoCommandAsync(sql, parameters);
+    }
+
     public async Task AddViolationToImage(int imgId, int violationId)
     {
         string sql = "INSERT INTO image_to_violations (imageid, violationid)"
@@ -62,5 +71,25 @@ public class ImageController : DbController
         object[] parameters = { new { img = imgId, vio = violationId } };
 
         await DoCommandAsync(sql, parameters);
+    }
+
+    public async Task<List<ViolationModel>> GetViolationsForImage(int imageId)
+    {
+        string sql = "SELECT violation.Name, violation.Summary, violation.Link FROM image_to_violations"
+                    + " JOIN violation ON image_to_violations.violationid = violation.id"
+                    + " WHERE image_to_violations.imageid = @id;";
+        object obj = new { id = imageId };
+
+        return await DoQueryAsync<ViolationModel>(sql, obj);
+    }
+
+    public async Task<List<ProductModel>> GetProductsForImage(int imageId)
+    {
+        string sql = "SELECT product.Id, product.Name FROM image_to_product"
+                    + " JOIN product ON image_to_product.productid = product.id"
+                    + " WHERE image_to_product.imageid = @id;";
+        object obj = new { id = imageId };
+
+        return await DoQueryAsync<ProductModel>(sql, obj);
     }
 }

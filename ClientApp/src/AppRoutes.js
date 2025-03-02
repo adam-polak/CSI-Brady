@@ -6,6 +6,7 @@ import { AreaPageWrapper } from './components/area/AreaPage';
 import { FacilityPageWrapper } from "./components/facility/FacilityPage";
 import { ImagesPageWrapper } from "./components/image/ImagesPage";
 import { LeaderboardPageWrapper } from "./components/leaderboard/LeaderboardPage";
+import { SubmissionPageWrapper } from "./components/submission/SubmissionPage";
 
 const AppRoutes = [
   {
@@ -35,6 +36,10 @@ const AppRoutes = [
   {
     path: "leaderboard/:facilityId",
     element: <AuthenticationGuard component={LeaderboardPageWrapper} />
+  },
+  {
+    path: "submission/:areaId/:imageId",
+    element: <AuthenticationGuard component={SubmissionPageWrapper} />
   }
 ];
 

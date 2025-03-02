@@ -18,6 +18,13 @@ public class ProductController : DbController
         await DoCommandAsync(sql, parameters);
     }
 
+    public async Task<List<ProductModel>> GetAllProducts()
+    {
+        string sql = "SELECT * FROM product;";
+
+        return await DoQueryAsync<ProductModel>(sql);
+    }
+
     public async Task<List<int>> GetProductIdsFromViolation(int violationId)
     {
         string sql = "SELECT productid"
