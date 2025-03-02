@@ -87,7 +87,7 @@ export class FacilityPage extends Component {
               {fixedAddress}
           </div>
           <div>
-            <button className="btn">
+            <button onClick={() => nav(`/leaderboard/${facility.Id}`)} className="btn">
               <Leaderboard />
             </button>
           </div>

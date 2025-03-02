@@ -36,16 +36,16 @@ export default function NavHeader() {
     }
 
     const filteredRoutes = curPath.filter((_, i) => {
-        return i <= curIndex;
+        return i <= curIndex + nestedIndex;
     });
 
     return (
         <div className="grey-dashboard px-2 pt-4 d-flex gap-1">
             {filteredRoutes.map((value, i) => {
-                if(i !== curIndex) {
+                if(i !== curIndex + nestedIndex) {
                     return (
                         <div key={`route-${i}`} className="fs-4 d-flex align-content-center">
-                            <button style={{color: "rgb(0, 0, 238)"}} onClick={() => nav(i - curIndex)} className="btn fs-4 text-decoration-underline">{value}</button>
+                            <button style={{color: "rgb(0, 0, 238)"}} onClick={() => nav(i - (curIndex + nestedIndex))} className="btn fs-4 text-decoration-underline">{value}</button>
                             <div className="pt-2">/</div>
                         </div>
                     );

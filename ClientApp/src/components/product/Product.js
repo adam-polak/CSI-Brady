@@ -29,7 +29,6 @@ export default function Product({ product }) {
           href={product.Link}
           target="_blank"
           rel="noreferrer"
-          className="text-decoration-none text-dark"
         >
           <img
             alt="Product"
@@ -44,7 +43,6 @@ export default function Product({ product }) {
           href={product.Link}
           target="_blank"
           rel="noreferrer"
-          className=" text-dark"
         >
           <h3>{product.Name}</h3>
         </a>
