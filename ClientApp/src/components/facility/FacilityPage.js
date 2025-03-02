@@ -24,11 +24,19 @@ export function FacilityPageWrapper() {
 export class FacilityPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { searchTerm: "", areas: [], isLoading: true };
+    this.state = { facility: null, searchTerm: "", areas: [], isLoading: true };
   }
 
   componentDidMount() {
+    this.loadFacility();
     this.loadAreas();
+  }
+
+  async loadFacility() {
+    const { facilityId } = this.props;
+    const result = await fetch('facilityapi/facility/' + facilityId);
+    const facility = JSON.parse(await result.text());
+    this.setState({ facility: facility });
   }
 
   async loadAreas() {
@@ -41,7 +49,7 @@ export class FacilityPage extends Component {
   render() {
 
     const { nav, address } = this.props;
-    const { searchTerm, areas, isLoading } = this.state;
+    const { searchTerm, areas, isLoading, facility } = this.state;
 
     const filteredAreas = isLoading 
       ? [] 
@@ -53,11 +61,31 @@ export class FacilityPage extends Component {
       this.setState({ searchTerm: e.target.value });
     };
 
+    function streetAndCity() {
+      const arr = address.split(',');
+
+      return `${arr[0]}, ${arr[1]}`;
+    }
+
+    const fixedAddress = streetAndCity();
+
     return (
       <div style={{ height: "94vh" }} className="bg-grey">
         <NavHeader />
-        <div className="d-flex pt-4 px-5 pb-2 gap-5 align-items-center justify-content-start">
-          <div style={{ fontSize: "18px" }}>{address}</div>
+        <div className="d-flex pt-4 px-5 pb-2 gap-1 align-items-center justify-content-start">
+          <div style={{width: "25%"}}>
+            {
+              facility && <img
+                  alt={facility.CompanyName + " Logo"}
+                  src={facility.CompanyImgSrc}
+                  width="50px"
+                  style={{ alignItems: "center" }}
+                />
+            }
+          </div>
+          <div style={{ fontSize: "18px", width: "80%" }}>
+              {fixedAddress}
+          </div>
           <div>
             <button className="btn">
               <Leaderboard />

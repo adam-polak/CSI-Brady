@@ -18,6 +18,17 @@ public class FacilityController : DbController
         return await DoQueryAsync<FacilityModel>(sql);
     }
 
+    public async Task<FacilityModel> GetFacility(int facilityId)
+    {
+        string sql = "SELECT facility.id, facility.address, company.name as CompanyName, company.imgsrc as CompanyImgSrc"
+                    + " FROM facility JOIN company"
+                    + " ON facility.companyid = company.id"
+                    + " WHERE facility.id = @id;";
+        object obj = new { id = facilityId };
+
+        return (await DoQueryAsync<FacilityModel>(sql, obj)).First();
+    }
+
     public async Task<List<AreaModel>> GetAreas(int facilityId)
     {
         string sql = "SELECT area.id, area.code FROM area"

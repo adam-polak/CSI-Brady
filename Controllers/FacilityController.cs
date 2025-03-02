@@ -26,8 +26,18 @@ public class FacilityController : ControllerBase
         return Ok(json);
     }
 
-    [HttpGet("areas/{facilityId}")]
+    [HttpGet("facility/{facilityId}")]
     public async Task<IActionResult> GetFacility(int facilityId)
+    {
+        FacilityModel facility = await _facilityController.GetFacility(facilityId);
+
+        string json = JsonConvert.SerializeObject(facility);
+
+        return Ok(json);
+    }
+
+    [HttpGet("areas/{facilityId}")]
+    public async Task<IActionResult> GetFacilityAreas(int facilityId)
     {
         AreaModel[] areas = (await _facilityController.GetAreas(facilityId)).ToArray();
 
