@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import {
   Card,
   CardBody,
@@ -6,9 +6,12 @@ import {
   ListGroup,
   ListGroupItem,
   Input,
+  Button
 } from "reactstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import XClose from "../icons/XClose";
 import Product from "../product/Product";
+import { LoadingSpinner } from "../loading/Loading";
 
 /**
  * violation object
@@ -27,165 +30,201 @@ import Product from "../product/Product";
  * }
  */
 
-const violation1 = {
-  Name: "OSHA 1913.2",
-};
+export function SubmissionPageWrapper() {
+  const { areaId, imageId } = useParams();
+  const nav = useNavigate();
 
-const violation2 = {
-  Name: "ANSI 102.5",
-};
+  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} />
+}
 
-const Violations = [
-  violation1,
-  violation2,
-  violation1,
-  violation2,
-  violation1,
-  violation2,
-];
+export class SubmissionPage extends Component {
 
-const product1 = {
-  Id: 1,
-  Name: "S3700 Pipe Marker Label and Printer Kit with Software",
-  ImgSrc: "54272.png",
-};
+  constructor(props) {
+    super(props);
 
-const product2 = {
-  Id: 1,
-  Name: "S3700 Pipe ",
-  ImgSrc: "54272.png",
-};
-
-const bradyProducts = [product1, product2];
-
-const detectedProducts = [product1];
-
-export default function SubmissionPage() {
-  const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [addedProducts, setAddedProducts] = useState(detectedProducts);
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-    if (value.trim() !== "") {
-      const filtered = bradyProducts
-        .filter((product) =>
-          product.Name.toLowerCase().includes(value.toLowerCase())
-        )
-        .filter((product) => !addedProducts.includes(product));
-      setSelectedProduct(filtered[0]);
-      setSuggestions(filtered);
-    } else {
-      setSuggestions([]);
+    this.state = { 
+      imgSrc: "",
+      query: "", 
+      violations: [],
+      suggestions: [],
+      bradyProducts: [], 
+      selectedProduct: null, 
+      addedProducts: [], 
+      violationsLoading: true,
+      productsLoading: true
     }
-  };
+  }
 
-  const handleSelect = (product) => {
-    setQuery(product.Name);
-    setSelectedProduct(product);
-    setSuggestions([]);
-  };
+  componentDidMount() {
+    this.loadImgSrc();
+    this.loadViolations();
+    this.loadImageProducts();
+    this.loadProducts();
+  }
 
-  const handleAdd = () => {
-    if (selectedProduct == null) return;
-    setQuery("");
-    setSuggestions([]);
-    setSelectedProduct(null);
-    setAddedProducts([...addedProducts, selectedProduct]);
-  };
+  async loadImgSrc() {
+    const { areaId, imageId } = this.props;
+    const result = await fetch(`/imageapi/image/${areaId}/${imageId}`);
+    const imgSrc = await result.text();
+    this.setState({ imgSrc: imgSrc });
+  }
 
-  const handleRemove = (product) => {
-    const index = addedProducts.indexOf(product);
-    if (index > -1) {
-      addedProducts.splice(index, 1);
+  async loadProducts() {
+    const result = await fetch('/productapi/products');
+    const products = JSON.parse(await result.text());
+    this.setState({ bradyProducts: products });
+  }
+
+  async loadViolations() {
+    const { imageId } = this.props;
+    const result = await fetch('/imageapi/violations/' + imageId);
+    const violations = JSON.parse(await result.text());
+    this.setState({ violations: violations, violationsLoading: false });
+  }
+
+  async loadImageProducts() {
+    const { imageId } = this.props;
+    const result = await fetch('/imageapi/products/' + imageId);
+    const products = JSON.parse(await result.text());
+    this.setState({ addedProducts: products, productsLoading: false });
+  }
+
+  render() {
+    const { nav, imageId } = this.props;
+    const { imgSrc, query, bradyProducts, violations, suggestions, selectedProduct, addedProducts, violationsLoading, productsLoading } = this.state;
+
+    const handleChange = (e) => {
+      const value = e.target.value;
+      this.setState({ query: value });
+      if (value.trim() !== "") {
+        const filtered = bradyProducts
+          .filter((product) =>
+            product.Name.toLowerCase().includes(value.toLowerCase())
+          )
+          .filter((product) => !addedProducts.includes(product));
+        this.setState({ selectedProduct: filtered[0], suggestions: filtered });
+      } else {
+        this.setState({ suggestions: [] });
+      }
+    };
+
+    const handleSelect = (product) => {
+      this.setState({ query: product.Name, selectedProduct: product, suggestions: [] });
+      handleAdd();
+    };
+
+    const handleAdd = () => {
+      if (selectedProduct == null) return;
+      this.setState({ query: "", suggestions: [], selectedProduct: null, addedProducts: [...addedProducts, selectedProduct] });
+    };
+
+    const handleRemove = (product) => {
+      const index = addedProducts.indexOf(product);
+      if (index > -1) {
+        addedProducts.splice(index, 1);
+      }
+
+      this.setState({ addedProducts: [...addedProducts] });
+    };
+
+    async function confirm() {
+      await fetch('/imageapi/setproducts/' + imageId,
+        {
+          method: "POST",
+          body: JSON.stringify(addedProducts.map(p => p.Id))
+        }
+      );
+
+      nav(-2); // Go back to area page
     }
-    setAddedProducts([...addedProducts]);
-  };
 
-  return (
-    <div style={{ height: "94vh" }} className="bg-grey pt-4 px-3">
-      <div className="d-flex">
-        <div>
-          <img src="54272.png" alt="Uploaded" style={{ maxWidth: "150px" }} />
-        </div>
-        <Container fluid className="px-3">
-          <h2>Violations Found:</h2>
-          <div style={{ maxHeight: "95px", overflowY: "auto" }}>
-            <ListGroup>
-              {Violations.map((violation, i) => (
-                <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
-              ))}
-            </ListGroup>
+    return (
+      <div style={{ height: "94vh" }} className="bg-grey pt-4 px-3">
+        <div className="d-flex">
+          <div>
+            <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
           </div>
-        </Container>
-      </div>
-      <div className="d-flex gap-3 mx-3 mt-3">
-        <div className="position-relative w-100">
-          <Input
-            onKeyUp={(e) => {
-              if (e.key === "Enter") handleAdd();
-            }}
-            type="text"
-            placeholder="Search Brady..."
-            value={query}
-            onChange={handleChange}
-            bsSize="lg"
-            onBlur={() => setTimeout(() => setSuggestions([]), 100)}
-          />
-          {suggestions.length > 0 && (
-            <ListGroup
-              className="position-absolute w-100 bg-white border shadow"
-              style={{
-                maxHeight: "245px",
-                overflowY: "auto",
-                zIndex: 10,
+          <Container fluid className="px-3">
+            { violations.length !== 0 && <h2>Violations Found:</h2> }
+            { violations.length === 0 && !violationsLoading && <h2>* No violations detected</h2>}
+            { violationsLoading && <LoadingSpinner /> }
+            <div style={{ maxHeight: "95px", overflowY: "auto" }}>
+              <ListGroup>
+                {violations.map((violation, i) => (
+                  <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
+                ))}
+              </ListGroup>
+            </div>
+          </Container>
+        </div>
+        <div className="d-flex gap-3 mx-3 mt-3">
+          <div className="position-relative w-100">
+            <Input
+              onKeyUp={(e) => {
+                if (e.key === "Enter") handleAdd();
               }}
+              type="text"
+              placeholder="Search Brady..."
+              value={query}
+              onChange={handleChange}
+              bsSize="lg"
+              onBlur={() => setTimeout(() => this.setState({ suggestions: [] }), 100)}
+            />
+            {suggestions.length > 0 && (
+              <ListGroup
+                className="position-absolute w-100 bg-white border shadow"
+                style={{
+                  maxHeight: "245px",
+                  overflowY: "auto",
+                  zIndex: 10,
+                }}
+              >
+                {suggestions.map((product, i) => (
+                  <ListGroupItem
+                    key={i}
+                    onClick={() => handleSelect(product)}
+                    className="cursor-pointer"
+                  >
+                    {product.Name}
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
+            )}
+          </div>
+          <button className="btn bg-success" onClick={handleAdd}>
+            <div
+              className="d-flex align-items-center gap-2 px-2"
+              style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}
             >
-              {suggestions.map((product, i) => (
-                <ListGroupItem
-                  key={i}
-                  onClick={() => handleSelect(product)}
-                  className="cursor-pointer"
-                >
-                  {product.Name}
-                </ListGroupItem>
-              ))}
-            </ListGroup>
-          )}
+              +
+            </div>
+          </button>
         </div>
-        <button className="btn bg-success" onClick={handleAdd}>
-          <div
-            className="d-flex align-items-center gap-2 px-2"
-            style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}
-          >
-            +
-          </div>
-        </button>
+        <hr className="mx-3" />
+        <div className="px-3" style={{ height: "45%", overflowY: "scroll" }}>
+          {productsLoading && <LoadingSpinner />}
+          {addedProducts.length === 0 && !productsLoading && <h2 className="text-center">* No products added</h2>}
+          {addedProducts.map((product, i) => (
+            <Card className="mt-2" key={i}>
+              <CardBody className="d-flex justify-content-between align-items-center gap-2">
+                <div>
+                  <Product product={product} />
+                </div>
+                <button className="btn" onClick={() => handleRemove(product)}>
+                  <XClose size={36} className="mx-4" />
+                </button>
+              </CardBody>
+            </Card>
+          ))}
+        </div>
+        <div className="d-flex justify-content-center text-white">
+          <Button onClick={() => confirm()} color="primary" className="text-white mt-4" style={{ width: "90vw" }}>
+            <div style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}>
+              Confirm
+            </div>
+          </Button>
+        </div>
       </div>
-      <hr className="mx-3" />
-      <div className="px-3" style={{ height: "45%", overflowY: "scroll" }}>
-        {addedProducts.map((product, i) => (
-          <Card className="mt-2" key={i}>
-            <CardBody className="d-flex justify-content-between align-items-center gap-2">
-              <div>
-                <Product product={product} />
-              </div>
-              <button className="btn" onClick={() => handleRemove(product)}>
-                <XClose size={36} className="mx-4" />
-              </button>
-            </CardBody>
-          </Card>
-        ))}
-      </div>
-      <div className="d-flex justify-content-center">
-        <button className="btn bg-primary mt-4" style={{ width: "90vw" }}>
-          <div style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}>
-            Confirm
-          </div>
-        </button>
-      </div>
-    </div>
-  );
+    );
+  }
 }
