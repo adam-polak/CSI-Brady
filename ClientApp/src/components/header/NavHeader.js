@@ -6,21 +6,36 @@ export default function NavHeader() {
     const pageName = window.location.pathname.split('/')[1];
 
     const routes = [
-        'Home',
-        'Facility',
-        'Area',
-        'Camera'
+        ['Home'],
+        ['Facility', 'Leaderboard'],
+        ['Area', 'Images'],
+        ['Camera']
     ];
 
-    let curIndex = 0;
+    const curPath = [];
+    let curIndex = -1;
+    let nestedIndex = 0;
     for(let i = 0; i < routes.length; i++) {
-        if(routes[i].toLowerCase() === pageName.toLowerCase()) {
-            curIndex = i;
+        for(let j = 0; j < routes[i].length; j++) {
+            if(pageName.toLowerCase() === routes[i][j].toLowerCase()) {
+                curIndex = i;
+                nestedIndex = j;
+                break;
+            } else if(j === routes[i].length - 1) {
+                curPath.push(routes[i][0]);
+            }
+        }
+
+        if(curIndex !== -1) {
+            for(let x = 0; x < nestedIndex + 1; x++) {
+                curPath.push(routes[curIndex][x]);
+            }
+
             break;
         }
     }
 
-    const filteredRoutes = routes.filter((_, i) => {
+    const filteredRoutes = curPath.filter((_, i) => {
         return i <= curIndex;
     });
 
