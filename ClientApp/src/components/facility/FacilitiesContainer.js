@@ -67,7 +67,7 @@ export default function FacilitiesContainer({ facilities, loading }) {
       />
       <div style={{height: "80%"}} className="container-lg p-2">
         {loading && <LoadingSpinner />}
-        <FilteredFacilities handleSelectEntry={handleSelectEntry} facilities={facilities} filters={filters} />
+        {!loading && <FilteredFacilities handleSelectEntry={handleSelectEntry} facilities={facilities} filters={filters} />}
       </div>
     </div>
   );
