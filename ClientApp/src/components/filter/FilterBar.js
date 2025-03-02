@@ -1,6 +1,5 @@
 import React from "react";
 import FilterTag from "./FilterTag";
-import "./FilterBar.css";
 
 export default function FilterBar({ handleAdd, handleRemove, tags }) {
   function handleSubmit(e) {
@@ -21,11 +20,9 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
   }
 
   return (
-    <div style={{borderBottom: "2px solid lightgrey"}} className="bg-grey">
-      <div 
-        className={tags.length === 0 ? "FilterBarContainer" : ""}
-      >
-        <div className="text-center pt-2" >
+    <div style={{borderBottom: "2px solid lightgrey"}} className="pt-4 bg-grey">
+      <div>
+        <div className="text-center">
           <form onSubmit={handleSubmit}>
             <input 
               className="rounded-3 p-2" 
@@ -45,7 +42,7 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
 
         {/* Horizontal Scroll Container */}
         <div
-          className="TagContainer mb-3"
+          className="d-flex justify-content-center mb-1"
           style={{
             width: "100%",
             flex: "row",

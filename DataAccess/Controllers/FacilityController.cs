@@ -11,8 +11,8 @@ public class FacilityController : DbController
 
     public async Task<List<FacilityModel>> GetFacilities()
     {
-        string sql = "SELECT facility.id, facility.address, company.name, company.imgsrc"
-                    + " FROM facility FULL JOIN company"
+        string sql = "SELECT facility.id, facility.address, company.name as CompanyName, company.imgsrc as CompanyImgSrc"
+                    + " FROM facility JOIN company"
                     + " ON facility.companyid = company.id;";
         
         return await DoQueryAsync<FacilityModel>(sql);

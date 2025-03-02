@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 import { Row, Col, Button, Spinner } from "reactstrap";
 import { useAuth0 } from '@auth0/auth0-react';
 
-export default function Camera() {
+export default function Camera({ areaId }) {
   const webcamRef = useRef();
   const { user } = useAuth0();
   const [imgSrc, setImgSrc] = useState(null);
@@ -88,7 +88,7 @@ const maxImageSize = 100000000;
     ws.onopen = function() {
       const imgArr = imgSrc.split(',');
       const first = user.name.split(' ')[0];
-      const obj = { Email: user.email, FirstName: first, LastName: user.family_name, AreaId: 1, ImgTag: imgArr[0] };
+      const obj = { Email: user.email, FirstName: first, LastName: user.family_name, AreaId: areaId, ImgTag: imgArr[0] };
       // send meta data
       ws.send(JSON.stringify(obj));
 

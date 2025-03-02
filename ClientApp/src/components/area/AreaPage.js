@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import CameraIcon from "../icons/CameraIcon";
 import Product from "../product/Product";
 import NavHeader from "../header/NavHeader";
-import { useParams } from "react-router-dom";
-import { Spinner } from "reactstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { LoadingSpinner } from "../loading/Loading";
 
 /**
  * products object
@@ -14,8 +14,9 @@ import { Spinner } from "reactstrap";
 
 export function AreaPageWrapper() {
   const { areaId } = useParams();
+  const nav = useNavigate();
 
-  return <AreaPage areaId={areaId} />
+  return <AreaPage nav={nav} areaId={areaId} />
 }
 
 export default class AreaPage extends Component {
@@ -36,7 +37,7 @@ export default class AreaPage extends Component {
   }
 
   render() {
-
+    const { nav, areaId } = this.props;
     const { products, loading } = this.state;
 
     return (
@@ -48,6 +49,7 @@ export default class AreaPage extends Component {
             <div style={{ fontSize: "36px" }}>Products</div>
             <div>
               <button
+                onClick={() => nav("/camera/" + areaId)}
                 className="btn"
                 style={{ color: "black", background: "rgb(90, 184, 73)" }}
               >
@@ -56,7 +58,7 @@ export default class AreaPage extends Component {
             </div>
           </div>
           <div style={{ height: "80%", overflowY: "scroll" }}>
-            { loading && <div style={{width: "100%"}} className="pt-4 d-flex justify-content-center gap-3"><Spinner className="text-brady" /><h2>Loading...</h2></div>}
+            { loading && <LoadingSpinner /> }
             { !loading && products.length === 0 && <div style={{width: "100%"}} className="pt-4 d-flex justify-content-center"><h4>* No products to recommend yet: <em>Try adding a photo of the area!</em></h4></div>}
             {products.map((product, i) => (
               <div className="p-4" key={`product-div-${i}`}>
