@@ -4,8 +4,6 @@ using CSI_Brady.BlobAccess.Controllers;
 using CSI_Brady.DataAccess.Controllers;
 using CSI_Brady.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.ObjectPool;
-using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 
 namespace CSI_Brady.Controllers;
