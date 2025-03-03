@@ -13,6 +13,7 @@ import XClose from "../icons/XClose";
 import Product from "../product/Product";
 import { LoadingSpinner } from "../loading/Loading";
 import NavHeader from "../header/NavHeader";
+import { AddNoteModal } from "./AddNoteModal";
 
 /**
  * violation object
@@ -35,7 +36,7 @@ export function SubmissionPageWrapper() {
   const { areaId, imageId } = useParams();
   const nav = useNavigate();
 
-  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} />;
+  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} isFromImage={false} />;
 }
 
 export class SubmissionPage extends Component {
@@ -56,9 +57,13 @@ export class SubmissionPage extends Component {
   }
 
   componentDidMount() {
-    this.loadImgSrc();
-    this.loadViolations();
-    this.loadImageProducts();
+    const { isFromImage } = this.props;
+    if(isFromImage) {
+      this.loadImgSrc();
+      this.loadViolations();
+      this.loadImageProducts();
+    }
+
     this.loadProducts();
   }
 
@@ -90,7 +95,7 @@ export class SubmissionPage extends Component {
   }
 
   render() {
-    const { nav, areaId, imageId } = this.props;
+    const { nav, areaId, imageId, isFromImage } = this.props;
     const {
       imgSrc,
       query,
@@ -106,16 +111,12 @@ export class SubmissionPage extends Component {
     const handleChange = (e) => {
       const value = e.target.value;
       this.setState({ query: value });
-      if (value.trim() !== "") {
-        const filtered = bradyProducts
-          .filter((product) =>
-            product.Name.toLowerCase().includes(value.toLowerCase())
-          )
-          .filter((product) => !addedProducts.includes(product));
-        this.setState({ selectedProduct: filtered[0], suggestions: filtered });
-      } else {
-        this.setState({ suggestions: [] });
-      }
+      const filtered = bradyProducts
+        .filter((product) =>
+          product.Name.toLowerCase().includes(value.toLowerCase())
+        )
+        .filter((product) => !addedProducts.includes(product));
+      this.setState({ selectedProduct: filtered[0], suggestions: filtered });
     };
 
     const handleSelect = (product) => {
@@ -147,38 +148,45 @@ export class SubmissionPage extends Component {
     };
 
     async function confirm() {
-      await fetch(`/imageapi/setproducts/${areaId}/${imageId}`, {
-        method: "POST",
-        body: JSON.stringify(addedProducts.map((p) => p.Id)),
-      });
+      if(isFromImage) {
+        await fetch(`/imageapi/setproducts/${areaId}/${imageId}`, {
+          method: "POST",
+          body: JSON.stringify(addedProducts.map((p) => p.Id)),
+        });
+      } else {
+        await fetch(`/areaapi/setproducts/${areaId}`, {
+          method: "POST",
+          body: JSON.stringify(addedProducts.map((p) => p.Id))
+        })
+      }
 
-      nav(-2); // Go back to area page
+      nav(isFromImage ? -2 : -1); // Go back to area page
     }
-
-    function addNote() {}
 
     return (
       <div style={{ height: "94vh" }} className="bg-grey">
         <NavHeader />
-        <div className="d-flex py-3 px-3">
-          <div>
-            <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
-          </div>
-          <Container className="px-3">
-            {violations.length !== 0 && <h2>Violations Found:</h2>}
-            {violations.length === 0 && !violationsLoading && (
-              <h2>* No violations detected</h2>
-            )}
-            {violationsLoading && <LoadingSpinner />}
-            <div style={{ maxHeight: "95px", overflowY: "auto" }}>
-              <ListGroup>
-                {violations.map((violation, i) => (
-                  <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
-                ))}
-              </ListGroup>
+        {isFromImage &&
+          <div className="d-flex py-3 px-3">
+            <div>
+              <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
             </div>
-          </Container>
-        </div>
+            <Container className="px-3">
+              {violations.length !== 0 && <h2>Violations Found:</h2>}
+              {violations.length === 0 && !violationsLoading && (
+                <h2>* No violations detected</h2>
+              )}
+              {violationsLoading && <LoadingSpinner />}
+              <div style={{ maxHeight: "95px", overflowY: "auto" }}>
+                <ListGroup>
+                  {violations.map((violation, i) => (
+                    <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
+                  ))}
+                </ListGroup>
+              </div>
+            </Container>
+          </div>
+        }
         <div className="d-flex gap-3 mx-3 mt-3">
           <div className="position-relative w-100">
             <Input
@@ -189,6 +197,7 @@ export class SubmissionPage extends Component {
               placeholder="Search Brady..."
               value={query}
               onChange={handleChange}
+              onClick={handleChange}
               bsSize="lg"
               onBlur={() =>
                 setTimeout(() => this.setState({ suggestions: [] }), 100)
@@ -225,9 +234,9 @@ export class SubmissionPage extends Component {
           </button>
         </div>
         <hr className="mx-3" />
-        <div className="px-3" style={{ height: "35%", overflowY: "scroll" }}>
-          {productsLoading && <LoadingSpinner />}
-          {addedProducts.length === 0 && !productsLoading && (
+        <div className="px-3" style={{ height: "25%", overflowY: "scroll" }}>
+          {isFromImage && productsLoading && <LoadingSpinner />}
+          {addedProducts.length === 0 && (!isFromImage || !productsLoading) && (
             <h2 className="text-center">* No products added</h2>
           )}
           {addedProducts.map((product, i) => (
@@ -242,19 +251,8 @@ export class SubmissionPage extends Component {
                   </button>
                 </div>
                 <div className="d-flex align-items-center pe-4">
-                  <button
-                    onClick={() => addNote()}
-                    color="primary"
-                    className="btn"
-                  >
-                    <img
-                      width="40px"
-                      height="40px"
-                      alt="add note"
-                      src="add-note.svg"
-                    />
-                  </button>
-                  <Product product={product} />
+                  <AddNoteModal areaId={areaId} product={product} note={product.Note} />
+                  <Product areaId={areaId} product={product} />
                 </div>
               </CardBody>
             </Card>

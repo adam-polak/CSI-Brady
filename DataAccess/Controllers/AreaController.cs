@@ -1,5 +1,6 @@
 using CSI_Brady.DataAccess.Models;
 using CSI_Brady.DataAccess.Util;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CSI_Brady.DataAccess.Controllers;
 
@@ -59,6 +60,15 @@ public class AreaController : DbController
         await DoCommandAsync(sql, parameters);
     }
 
+    public async Task UpdateProductNote(int areaId, int productId, string note)
+    {
+        string sql = "UPDATE area_to_product SET note = @note"
+                    + " WHERE areaid = @aid AND productid = @pid;";
+        object[] arr = { new { note = note, aid = areaId, pid = productId } };
+
+        await DoCommandAsync(sql, arr);
+    }
+    
     public async Task AddToProductCount(int areaId, int productId, int amt)
     {
         string sql = "UPDATE area_to_product SET count = count + @amt"

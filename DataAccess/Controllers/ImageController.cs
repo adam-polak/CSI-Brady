@@ -85,7 +85,7 @@ public class ImageController : DbController
 
     public async Task<List<ProductModel>> GetProductsForImage(int imageId)
     {
-        string sql = "SELECT product.Id, product.Name FROM image_to_product"
+        string sql = "SELECT product.Id, product.Name, product.Link, product.ImgSrc FROM image_to_product"
                     + " JOIN product ON image_to_product.productid = product.id"
                     + " WHERE image_to_product.imageid = @id;";
         object obj = new { id = imageId };
