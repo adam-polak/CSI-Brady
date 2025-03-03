@@ -6,13 +6,13 @@ import {
   ListGroup,
   ListGroupItem,
   Input,
-  Button
+  Button,
 } from "reactstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import XClose from "../icons/XClose";
 import Product from "../product/Product";
 import { LoadingSpinner } from "../loading/Loading";
-import NavHeader from '../header/NavHeader';
+import NavHeader from "../header/NavHeader";
 
 /**
  * violation object
@@ -35,25 +35,24 @@ export function SubmissionPageWrapper() {
   const { areaId, imageId } = useParams();
   const nav = useNavigate();
 
-  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} />
+  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} />;
 }
 
 export class SubmissionPage extends Component {
-
   constructor(props) {
     super(props);
 
-    this.state = { 
+    this.state = {
       imgSrc: "",
-      query: "", 
+      query: "",
       violations: [],
       suggestions: [],
-      bradyProducts: [], 
-      selectedProduct: null, 
-      addedProducts: [], 
+      bradyProducts: [],
+      selectedProduct: null,
+      addedProducts: [],
       violationsLoading: true,
-      productsLoading: true
-    }
+      productsLoading: true,
+    };
   }
 
   componentDidMount() {
@@ -71,28 +70,38 @@ export class SubmissionPage extends Component {
   }
 
   async loadProducts() {
-    const result = await fetch('/productapi/products');
+    const result = await fetch("/productapi/products");
     const products = JSON.parse(await result.text());
     this.setState({ bradyProducts: products });
   }
 
   async loadViolations() {
     const { imageId } = this.props;
-    const result = await fetch('/imageapi/violations/' + imageId);
+    const result = await fetch("/imageapi/violations/" + imageId);
     const violations = JSON.parse(await result.text());
     this.setState({ violations: violations, violationsLoading: false });
   }
 
   async loadImageProducts() {
     const { imageId } = this.props;
-    const result = await fetch('/imageapi/products/' + imageId);
+    const result = await fetch("/imageapi/products/" + imageId);
     const products = JSON.parse(await result.text());
     this.setState({ addedProducts: products, productsLoading: false });
   }
 
   render() {
     const { nav, areaId, imageId } = this.props;
-    const { imgSrc, query, bradyProducts, violations, suggestions, selectedProduct, addedProducts, violationsLoading, productsLoading } = this.state;
+    const {
+      imgSrc,
+      query,
+      bradyProducts,
+      violations,
+      suggestions,
+      selectedProduct,
+      addedProducts,
+      violationsLoading,
+      productsLoading,
+    } = this.state;
 
     const handleChange = (e) => {
       const value = e.target.value;
@@ -110,13 +119,22 @@ export class SubmissionPage extends Component {
     };
 
     const handleSelect = (product) => {
-      this.setState({ query: product.Name, selectedProduct: product, suggestions: [] });
+      this.setState({
+        query: product.Name,
+        selectedProduct: product,
+        suggestions: [],
+      });
       handleAdd();
     };
 
     const handleAdd = () => {
       if (selectedProduct == null) return;
-      this.setState({ query: "", suggestions: [], selectedProduct: null, addedProducts: [...addedProducts, selectedProduct] });
+      this.setState({
+        query: "",
+        suggestions: [],
+        selectedProduct: null,
+        addedProducts: [...addedProducts, selectedProduct],
+      });
     };
 
     const handleRemove = (product) => {
@@ -129,15 +147,15 @@ export class SubmissionPage extends Component {
     };
 
     async function confirm() {
-      await fetch(`/imageapi/setproducts/${areaId}/${imageId}`,
-        {
-          method: "POST",
-          body: JSON.stringify(addedProducts.map(p => p.Id))
-        }
-      );
+      await fetch(`/imageapi/setproducts/${areaId}/${imageId}`, {
+        method: "POST",
+        body: JSON.stringify(addedProducts.map((p) => p.Id)),
+      });
 
       nav(-2); // Go back to area page
     }
+
+    function addNote() {}
 
     return (
       <div style={{ height: "94vh" }} className="bg-grey">
@@ -147,9 +165,11 @@ export class SubmissionPage extends Component {
             <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
           </div>
           <Container className="px-3">
-            { violations.length !== 0 && <h2>Violations Found:</h2> }
-            { violations.length === 0 && !violationsLoading && <h2>* No violations detected</h2>}
-            { violationsLoading && <LoadingSpinner /> }
+            {violations.length !== 0 && <h2>Violations Found:</h2>}
+            {violations.length === 0 && !violationsLoading && (
+              <h2>* No violations detected</h2>
+            )}
+            {violationsLoading && <LoadingSpinner />}
             <div style={{ maxHeight: "95px", overflowY: "auto" }}>
               <ListGroup>
                 {violations.map((violation, i) => (
@@ -170,7 +190,9 @@ export class SubmissionPage extends Component {
               value={query}
               onChange={handleChange}
               bsSize="lg"
-              onBlur={() => setTimeout(() => this.setState({ suggestions: [] }), 100)}
+              onBlur={() =>
+                setTimeout(() => this.setState({ suggestions: [] }), 100)
+              }
             />
             {suggestions.length > 0 && (
               <ListGroup
@@ -205,7 +227,9 @@ export class SubmissionPage extends Component {
         <hr className="mx-3" />
         <div className="px-3" style={{ height: "35%", overflowY: "scroll" }}>
           {productsLoading && <LoadingSpinner />}
-          {addedProducts.length === 0 && !productsLoading && <h2 className="text-center">* No products added</h2>}
+          {addedProducts.length === 0 && !productsLoading && (
+            <h2 className="text-center">* No products added</h2>
+          )}
           {addedProducts.map((product, i) => (
             <Card className="mt-2" key={i}>
               <CardBody className="d-flex justify-content-between align-items-center gap-2">
@@ -219,12 +243,35 @@ export class SubmissionPage extends Component {
             </Card>
           ))}
         </div>
-        <div className="d-flex justify-content-center text-white">
-          <Button onClick={() => confirm()} color="primary" className="text-white mt-4" style={{ width: "90vw" }}>
+
+        <div className="d-flex justify-content-center text-white gap-5 px-5">
+          <Button
+            onClick={() => addNote()}
+            color="primary"
+            className="text-white mt-4"
+            style={{ width: "90vw" }}
+          >
+            <div style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}>
+              Add Note
+              <img
+                width="28px"
+                height="28px"
+                alt="Leaderboard"
+                src="add-note.svg"
+                color="white"
+              />
+            </div>
+          </Button>
+          <button
+            onClick={() => confirm()}
+            color="primary"
+            className="btn bg-success text-white mt-4"
+            style={{ width: "90vw" }}
+          >
             <div style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}>
               Confirm
             </div>
-          </Button>
+          </button>
         </div>
       </div>
     );

@@ -41,24 +41,26 @@ export default function NavHeader() {
     });
 
     return (
-        <div className="grey-dashboard px-2 pt-4 d-flex gap-1">
-            {filteredRoutes.map((value, i) => {
-                if(i !== curIndex + nestedIndex) {
-                    return (
-                        <div key={`route-${i}`} className="fs-4 d-flex align-content-center">
-                            <button style={{color: "rgb(0, 0, 238)"}} onClick={() => nav(i - (curIndex + nestedIndex))} className="btn fs-4 text-decoration-underline">{value}</button>
-                            <div className="pt-2">/</div>
-                        </div>
-                    );
-                } else {
-                    return (
-                        <div className="fs-4 pt-2 d-flex">
-                            <div style={{width: ".3em"}} />
-                            <div>{value}</div>
-                        </div>
-                    );
-                }
-            })}
+        <div className="grey-dashboard pt-4 d-flex justify-content-center">
+            <div className='d-flex gap-1' style={{overflowY: "scroll", width: "95%"}}>
+                {filteredRoutes.map((value, i) => {
+                    if(i !== curIndex + nestedIndex) {
+                        return (
+                            <div key={`route-${i}`} className="fs-4 d-flex align-content-center">
+                                <button style={{color: "rgb(0, 0, 238)"}} onClick={() => nav(i - (curIndex + nestedIndex))} className="btn fs-4 text-decoration-underline">{value}</button>
+                                <div className="pt-2">/</div>
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div className="fs-4 pt-2 d-flex">
+                                <div style={{width: ".3em"}} />
+                                <div>{value}</div>
+                            </div>
+                        );
+                    }
+                })}
+            </div>
         </div>
     );
 }
