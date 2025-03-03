@@ -25,18 +25,12 @@ export default function Product({ product }) {
   return (
     <Row className="align-items-center">
       <Col xs="auto">
-        <a
-          href={product.Link}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <img
-            alt="Product"
-            src={product.ImgSrc}
-            className="img-fluid"
-            style={{ maxHeight: "100px", width: "auto" }}
-          />
-        </a>
+        <img
+          alt="Product"
+          src={product.ImgSrc}
+          className="img-fluid"
+          style={{ maxHeight: "100px", width: "auto" }}
+        />
       </Col>
       <Col>
         <a

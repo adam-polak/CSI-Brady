@@ -19,7 +19,7 @@ export default function Image({ image }) {
 
   return (
     <Card className="p-3">
-      <div className="d-flex gap-1" style={{ fontStyle: "italic" }}>
+      <div className="d-flex gap-1 mb-1" style={{ fontStyle: "italic", fontSize: "20px" }}>
         <div>Taken By:</div>
         <div>{`${image.FirstName} ${image.LastName}`},</div>
         <div>{image.Date}</div>
@@ -44,10 +44,11 @@ export default function Image({ image }) {
                 {violation.Name}
               </AccordionHeader>
               <AccordionBody accordionId={"" + i}>
-                {violation.Summary}
-                <a target="_blank" rel="noreferrer" href={violation.Link}>
-                  More Information
-                </a>
+                  <p>{violation.Summary} <span />
+                  <a target="_blank" rel="noreferrer" href={violation.Link}>
+                    More Information
+                  </a>
+                  </p>
               </AccordionBody>
             </AccordionItem>
           );
