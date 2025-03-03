@@ -29,15 +29,11 @@ export default function Product({ product }) {
           alt="Product"
           src={product.ImgSrc}
           className="img-fluid"
-          style={{ maxHeight: "100px", width: "auto" }}
+          style={{ maxHeight: "75px", width: "auto" }}
         />
       </Col>
       <Col>
-        <a
-          href={product.Link}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={product.Link} target="_blank" rel="noreferrer">
           <h3>{product.Name}</h3>
         </a>
       </Col>
