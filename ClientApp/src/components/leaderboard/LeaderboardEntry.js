@@ -7,7 +7,7 @@ export default function LeaderboardEntry({ user, imgLink }) {
     <div className="d-flex justify-content-between me-3">
       <div className="d-flex gap-4 ms-3 align-items-center">
         {imgLink < 3 ? (
-          <img src={medals[imgLink]} style={{ maxHeight: "30px" }} />
+          <img alt="Medal" src={medals[imgLink]} style={{ maxHeight: "30px" }} />
         ) : (
           <div className="ms-4">{imgLink + 1}.</div>
         )}
