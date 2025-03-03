@@ -3,8 +3,9 @@ using System.Net.WebSockets;
 using CSI_Brady.BlobAccess.Controllers;
 using CSI_Brady.DataAccess.Controllers;
 using CSI_Brady.DataAccess.Models;
-using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.ObjectPool;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 
 namespace CSI_Brady.Controllers;
@@ -106,26 +107,39 @@ public class ImageController : ControllerBase
     {
         StreamReader reader = new StreamReader(Request.Body);
         string body = await reader.ReadToEndAsync();
-        int[]? productIds = JsonConvert.DeserializeObject<int[]>(body);
+        List<int>? productIds = JsonConvert.DeserializeObject<List<int>>(body);
         if(productIds == null) {
             return BadRequest();
         }
 
-        List<ProductModel> products = await _imageController.GetProductsForImage(imageId);
-        List<int> ids = productIds.AsList();
-        for(int i = 0; i < products.Count; i++)
+        List<int> curProductIds = await _imageController.GetProductIdsForImage(imageId);
+        List<int> areaProductIds = await _areaController.GetProductIds(areaId);
+        
+        for(int i = 0; i < curProductIds.Count; i++)
         {
-            int id = products.ElementAt(i).Id;
+            int id = curProductIds.ElementAt(i);
+
             if(!productIds.Contains(id))
             {
                 await _imageController.RemoveProductFromImage(imageId, id);
             }
         }
 
-        for(int i = 0; i < ids.Count; i++) 
+        for(int i = 0; i < productIds.Count; i++)
         {
-            await _imageController.AddProductToImage(imageId, ids.ElementAt(i));
-            await _areaController.AddProductToArea(areaId, ids.ElementAt(i));
+            int id = productIds.ElementAt(i);
+
+            if(areaProductIds.Contains(id))
+            {
+                await _areaController.AddToProductCount(areaId, id, 1);
+            } else {
+                await _areaController.AddProductToArea(areaId, id);
+            }
+
+            if(!curProductIds.Contains(productIds[i]))
+            {
+                await _imageController.AddProductToImage(imageId, id);
+            }
         }
         
         return Ok();
@@ -294,6 +308,7 @@ public class ImageController : ControllerBase
         DataAccess.Controllers.AreaController areaController = new DataAccess.Controllers.AreaController(env);
 
         int validViolationCount = 0;
+        HashSet<int> prodsAdded = [];
         for(int i = 0; i < aiResp.violations.Length; i++)
         {
             int violationId;
@@ -307,9 +322,13 @@ public class ImageController : ControllerBase
             validViolationCount++;
             await imgController.AddViolationToImage(imageId, violationId);
             List<int> productIds = await productController.GetProductIdsFromViolation(violationId);
-            
+
+            // add product to image if it is unique
             for(int j = 0; j < productIds.Count; j++)
             {
+                if(prodsAdded.Contains(productIds.ElementAt(j))) continue;
+
+                prodsAdded.Add(productIds.ElementAt(j));
                 await imgController.AddProductToImage(imageId, productIds.ElementAt(j));
             }
         }
