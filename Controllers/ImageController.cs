@@ -101,8 +101,8 @@ public class ImageController : ControllerBase
         public required ViolationModel[] Violations { get; set; }
     }
 
-    [HttpPost("setproducts/{imageId}")]
-    public async Task<IActionResult> SetProductsForImage(int imageId)
+    [HttpPost("setproducts/{areaId}/{imageId}")]
+    public async Task<IActionResult> SetProductsForImage(int areaId, int imageId)
     {
         StreamReader reader = new StreamReader(Request.Body);
         string body = await reader.ReadToEndAsync();
@@ -119,14 +119,13 @@ public class ImageController : ControllerBase
             if(!productIds.Contains(id))
             {
                 await _imageController.RemoveProductFromImage(imageId, id);
-            } else {
-                ids.Remove(id);
             }
         }
 
         for(int i = 0; i < ids.Count; i++) 
         {
             await _imageController.AddProductToImage(imageId, ids.ElementAt(i));
+            await _areaController.AddProductToArea(areaId, ids.ElementAt(i));
         }
         
         return Ok();

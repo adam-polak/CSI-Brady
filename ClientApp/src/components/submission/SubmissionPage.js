@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import XClose from "../icons/XClose";
 import Product from "../product/Product";
 import { LoadingSpinner } from "../loading/Loading";
+import NavHeader from '../header/NavHeader';
 
 /**
  * violation object
@@ -90,7 +91,7 @@ export class SubmissionPage extends Component {
   }
 
   render() {
-    const { nav, imageId } = this.props;
+    const { nav, areaId, imageId } = this.props;
     const { imgSrc, query, bradyProducts, violations, suggestions, selectedProduct, addedProducts, violationsLoading, productsLoading } = this.state;
 
     const handleChange = (e) => {
@@ -128,7 +129,7 @@ export class SubmissionPage extends Component {
     };
 
     async function confirm() {
-      await fetch('/imageapi/setproducts/' + imageId,
+      await fetch(`/imageapi/setproducts/${areaId}/${imageId}`,
         {
           method: "POST",
           body: JSON.stringify(addedProducts.map(p => p.Id))
@@ -139,12 +140,13 @@ export class SubmissionPage extends Component {
     }
 
     return (
-      <div style={{ height: "94vh" }} className="bg-grey pt-4 px-3">
-        <div className="d-flex">
+      <div style={{ height: "94vh" }} className="bg-grey">
+        <NavHeader />
+        <div className="d-flex py-3 px-3">
           <div>
             <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
           </div>
-          <Container fluid className="px-3">
+          <Container className="px-3">
             { violations.length !== 0 && <h2>Violations Found:</h2> }
             { violations.length === 0 && !violationsLoading && <h2>* No violations detected</h2>}
             { violationsLoading && <LoadingSpinner /> }
@@ -201,7 +203,7 @@ export class SubmissionPage extends Component {
           </button>
         </div>
         <hr className="mx-3" />
-        <div className="px-3" style={{ height: "45%", overflowY: "scroll" }}>
+        <div className="px-3" style={{ height: "35%", overflowY: "scroll" }}>
           {productsLoading && <LoadingSpinner />}
           {addedProducts.length === 0 && !productsLoading && <h2 className="text-center">* No products added</h2>}
           {addedProducts.map((product, i) => (
