@@ -21,12 +21,12 @@ export default function Image({ image }) {
     <Card className="p-3">
       <div className="d-flex gap-1" style={{ fontStyle: "italic" }}>
         <div>Taken By:</div>
-        <div>{image.TakenBy},</div>
+        <div>{`${image.FirstName} ${image.LastName}`},</div>
         <div>{image.Date}</div>
       </div>
       <img
         src={image.ImageSrc}
-        alt={`Taken by ${image.TakenBy}`}
+        alt={`Taken by ${image.FirstName} ${image.LastName}`}
         style={{
           width: "100%",
           maxWidth: "100%",

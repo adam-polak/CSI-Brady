@@ -21,6 +21,17 @@ public class AreaController : DbController
         return await DoQueryAsync<ProductModel>(sql, obj);
     }
 
+    public async Task<List<ImageTakenByModel>> GetImages(int productId)
+    {
+        string sql = "SELECT  image.id, image.date, user_table.firstname, user_table.lastname FROM image_to_product"
+                    + " JOIN image ON image_to_product.imageid = image.id"
+                    + " JOIN user_table ON image.userid = user_table.id"
+                    + " WHERE image_to_product.productid = @id;";
+        object obj = new { id = productId };
+
+        return await DoQueryAsync<ImageTakenByModel>(sql, obj);
+    }
+
     public async Task AddToViolationCount(int areaId, int amt)
     {
         string sql = $"UPDATE area SET violationcount = violationcount + @amt WHERE id = @id;";
