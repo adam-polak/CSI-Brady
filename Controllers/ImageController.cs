@@ -16,6 +16,7 @@ public class ImageController : ControllerBase
     private readonly IHostEnvironment _env;
     private DataAccess.Controllers.ImageController _imageController;
     private BlobFileController _blobController;
+    private DataAccess.Controllers.AreaController _areaController;
 
     public ImageController(ILogger<ImageController> logger, IHostEnvironment env)
     {
@@ -23,6 +24,7 @@ public class ImageController : ControllerBase
         _env = env;
         _imageController = new DataAccess.Controllers.ImageController(env);
         _blobController = new BlobFileController(env);
+        _areaController = new DataAccess.Controllers.AreaController(env);
     }
 
     [Route("upload")]
@@ -64,6 +66,39 @@ public class ImageController : ControllerBase
     public async Task<IActionResult> GetImage(int areaId, int imageId)
     {
         return Ok(await _blobController.GetContentsAsString(areaId, imageId));
+    }
+
+    [HttpGet("product/{productId}")]
+    public async Task<IActionResult> GetImages(int productId)
+    {
+        List<ImageTakenByModel> images = await _areaController.GetImages(productId);
+        List<ImageWebModel> webImages = [];
+        foreach(ImageTakenByModel m in images)
+        {
+            ImageWebModel web = new ImageWebModel()
+            {
+                Id = m.Id,
+                Date = m.Date,
+                FirstName = m.FirstName,
+                LastName = m.LastName,
+                Violations = (await _imageController.GetViolationsForImage(m.Id)).ToArray()
+            };
+
+            webImages.Add(web);
+        }
+
+        string json = JsonConvert.SerializeObject(webImages);
+
+        return Ok(json);
+    }
+
+    private class ImageWebModel
+    {
+        public required int Id { get; set; }
+        public required string Date { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required ViolationModel[] Violations { get; set; }
     }
 
     [HttpPost("setproducts/{imageId}")]
