@@ -23,7 +23,7 @@ function FilteredFacilities({handleSelectEntry, facilities, filters}) {
   });
 
   return (
-    <div style={{overflowY: "scroll"}}>
+    <div style={{overflowY: "scroll", height: "76vh"}}>
       {arr.length === 0 
       ? <p className="text-center">*No facilities to display</p>
       : arr.map((facility, i) => (
