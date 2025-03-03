@@ -9,16 +9,26 @@ public class AreaController : DbController
     {
     }
 
-    public async Task<List<ProductModel>> GetProducts(int areaId)
+    public async Task<List<AreaProductModel>> GetProducts(int areaId)
     {
-        string sql = "SELECT product.id, product.name, product.link, product.imgsrc"
+        string sql = "SELECT product.id, product.name, product.link, product.imgsrc, area_to_product.count, area_to_product.note"
                     + " FROM area_to_product"
                     + " JOIN product"
                     + " ON area_to_product.productid = product.id"
                     + " WHERE area_to_product.areaid = @id;";
         object obj = new { id = areaId };
 
-        return await DoQueryAsync<ProductModel>(sql, obj);
+        return await DoQueryAsync<AreaProductModel>(sql, obj);
+    }
+
+    public async Task<List<int>> GetProductIds(int areaId)
+    {
+        string sql = "SELECT product.id FROM area_to_product"
+                    + " JOIN product ON area_to_product.productid = product.id"
+                    + " WHERE area_to_product.areaid = @id;";
+        object obj = new { id = areaId };
+
+        return await DoQueryAsync<int>(sql, obj);
     }
 
     public async Task<List<ImageTakenByModel>> GetImages(int productId)
@@ -47,5 +57,14 @@ public class AreaController : DbController
         object[] parameters = { new { area = areaId, product = productId } };
 
         await DoCommandAsync(sql, parameters);
+    }
+
+    public async Task AddToProductCount(int areaId, int productId, int amt)
+    {
+        string sql = "UPDATE area_to_product SET count = count + @amt"
+                    + " WHERE areaid = @aid AND productid = @pid;";
+        object[] arr = { new { amt = amt, aid = areaId, pid = productId } };
+
+        await DoCommandAsync(sql, arr);
     }
 }

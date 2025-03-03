@@ -23,31 +23,10 @@ public class AreaController : ControllerBase
     public async Task<IActionResult> GetProducts(int areaId)
     {
         _logger.Log(LogLevel.Information, "Retrieving products from database");
-        List<ProductModel> productList = await _areaController.GetProducts(areaId);
+        List<AreaProductModel> productList = await _areaController.GetProducts(areaId);
         _logger.Log(LogLevel.Information, "Successfully retrieved products");
 
-        ProductWebModel[] products = new ProductWebModel[productList.Count];
-
-        int i = 0;
-        _logger.Log(LogLevel.Information, "Retrieving associated violations for products");
-        foreach(ProductModel p in productList)
-        {
-            ProductWebModel product = new ProductWebModel()
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Link = p.Link,
-                ImgSrc = p.ImgSrc,
-                Violations = []
-            };
-
-            product.Violations = (await _violationController.GetViolationsForProduct(product.Id)).ToArray();
-
-            products[i++] = product;
-        }
-        _logger.Log(LogLevel.Information, "Successfully retrieved associated violations for products");
-
-        string json = JsonConvert.SerializeObject(products);
+        string json = JsonConvert.SerializeObject(productList);
 
         return Ok(json);
     }

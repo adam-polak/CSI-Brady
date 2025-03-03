@@ -38,7 +38,7 @@ public class ProductController : DbController
     public async Task<List<ImageModel>> GetImages(int productId)
     {
         string sql = "SELECT image.id, image.date, image.areaid, image.userid FROM image_to_product"
-                    + " RIGHT JOIN image_to_product.imageid = image.id"
+                    + " JOIN image_to_product.imageid = image.id"
                     + " WHERE image_to_product.productid = @id;";
         object obj = new { id = productId };
 

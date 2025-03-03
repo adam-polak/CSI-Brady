@@ -19,8 +19,8 @@ import {
 
 export default function FacilityEntry({ facility, onSelectItem }) {
   return (
-    <Card>
-      <button className="btn" onClick={onSelectItem} style={{ paddingLeft: "0px" }}>
+    <Card style={{width: "100%"}}>
+      <button className="btn" onClick={onSelectItem}>
         <Container className="FacilityContainer">
           <Row>
             <Col xs="2" className="d-flex justify-content-center">
