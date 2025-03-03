@@ -9,7 +9,8 @@ export default function NavHeader() {
         ['Home'],
         ['Facility', 'Leaderboard'],
         ['Area', 'Images'],
-        ['Camera']
+        ['Camera'],
+        ['Submission']
     ];
 
     const curPath = [];

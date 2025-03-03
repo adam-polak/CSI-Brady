@@ -44,7 +44,7 @@ public class AreaController : DbController
     {
         string sql = "INSERT INTO area_to_product (areaid, productid)"
                     + " VALUES (@area, @product);";
-        object[] parameters = { new { area = areaId, productId } };
+        object[] parameters = { new { area = areaId, product = productId } };
 
         await DoCommandAsync(sql, parameters);
     }
