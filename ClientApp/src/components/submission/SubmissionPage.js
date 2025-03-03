@@ -232,46 +232,45 @@ export class SubmissionPage extends Component {
           )}
           {addedProducts.map((product, i) => (
             <Card className="mt-2" key={i}>
-              <CardBody className="d-flex justify-content-between align-items-center gap-2">
-                <div>
+              <CardBody className="position-relative">
+                <div className="position-absolute top-0 end-0 p-2">
+                  <button
+                    className="btn p-0"
+                    onClick={() => handleRemove(product)}
+                  >
+                    <XClose size={36} />
+                  </button>
+                </div>
+                <div className="d-flex align-items-center pe-4">
+                  <button
+                    onClick={() => addNote()}
+                    color="primary"
+                    className="btn"
+                  >
+                    <img
+                      width="40px"
+                      height="40px"
+                      alt="add note"
+                      src="add-note.svg"
+                    />
+                  </button>
                   <Product product={product} />
                 </div>
-                <button className="btn" onClick={() => handleRemove(product)}>
-                  <XClose size={36} className="mx-4" />
-                </button>
               </CardBody>
             </Card>
           ))}
         </div>
-
-        <div className="d-flex justify-content-center text-white gap-5 px-5">
+        <div className="d-flex justify-content-center text-white">
           <Button
-            onClick={() => addNote()}
+            onClick={() => confirm()}
             color="primary"
             className="text-white mt-4"
             style={{ width: "90vw" }}
           >
             <div style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}>
-              Add Note
-              <img
-                width="28px"
-                height="28px"
-                alt="Leaderboard"
-                src="add-note.svg"
-                color="white"
-              />
-            </div>
-          </Button>
-          <button
-            onClick={() => confirm()}
-            color="primary"
-            className="btn bg-success text-white mt-4"
-            style={{ width: "90vw" }}
-          >
-            <div style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}>
               Confirm
             </div>
-          </button>
+          </Button>
         </div>
       </div>
     );
