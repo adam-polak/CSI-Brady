@@ -40,25 +40,18 @@ Visual Workspace Safety is an application designed to enhance workplace safety b
 ### Cloning the Repository
 
 ```sh
-git clone https://github.com/your-repo-url/VisualWorkspaceSafety.git
-cd VisualWorkspaceSafety
+git clone https://github.com/adam-polak/CSI-Brady
+cd CSI-Brady
 ```
 
 ### Backend Setup
-
-1. Navigate to the backend project directory:
-
-```sh
-cd Backend
-```
-
-2. Restore .NET dependencies:
+1. Restore .NET dependencies:
 
 ```sh
 dotnet restore
 ```
 
-3. Build and run the backend:
+2. Build and run the backend:
 
 ```sh
 dotnet run
@@ -84,22 +77,23 @@ npm install
 npm start
 ```
 
-### Database Setup
-
-1. Configure the connection string in `appsettings.json`.
-2. Apply migrations:
-
-```sh
-dotnet ef database update
-```
-
 ### Environment Variables
 
-Set the necessary environment variables for Azure services and API keys.
+Store sensitive information in a `secrets.json` file located at the root of the repository. The file should contain the following parameters:
+
+```json
+{
+  "DatabaseConnectionString": "your-database-connection-string",
+  "BlobConnectionString": "your-blob-connection-string",
+  "BlobContainerName": "your-blob-container-name"
+}
+```
+
+Ensure your application is configured to read these secrets during runtime.
 
 ## Running the Application
 
-Once both the backend and frontend are running, you can access the application in your browser at `http://localhost:3000` (or your configured port).
+Once both the backend and frontend are running, you can access the application in your browser at `http://localhost:5274` (or your configured port).
 
 ## Conclusion
 
