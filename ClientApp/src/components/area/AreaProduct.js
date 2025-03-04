@@ -7,6 +7,8 @@ import ImageIcon from "../icons/ImageIcon";
 export function AreaProduct({ areaId, product }) {
     const nav = useNavigate();
     const [count, setCount] = useState(product.Count);
+    const [inputText, setInputText] = useState(false);
+    const [note, setNote] = useState(product.Note || "");
 
     async function add() {
         setCount(count + 1);
@@ -27,6 +29,19 @@ export function AreaProduct({ areaId, product }) {
         await fetch(`/productapi/decrement/${areaId}/${product.Id}`, { method: "POST" });
     }
 
+    const handleChange = (e) => {
+        setNote(e.target.value);
+    }
+
+    async function save() {
+        await fetch(`/areaapi/note/${areaId}/${product.Id}`, {
+            method: "POST",
+            body: note
+        });
+
+        setInputText(false);
+    }
+
     return (
         <div className="px-4 py-2">
             <Card className="mb-1 p-3">
@@ -44,13 +59,26 @@ export function AreaProduct({ areaId, product }) {
                 </button>
                 </div>
                 {
-                    product.Note.length !== 0
+                    (inputText || (note && note.length !== 0))
                     && 
                     <div className="p-3">
                         <h3>Notes:</h3>
-                        <div className="bg-grey p-2 rounded" style={{maxHeight: "20vh", overflowY: "scroll"}}>
-                            <p>{product.Note && product.Note.split("\n").map(x => <p>{x}</p>)}</p>
-                        </div>
+                        {!inputText ?
+                            <div onClick={() => setInputText(true)} className="bg-grey p-2 rounded" style={{height: "20vh", overflowY: "scroll"}}>
+                                <p>{note && note.split("\n").map(x => <p>{x}</p>)}</p>
+                            </div>
+                            : 
+                            <div className="d-flex flex-column align-items-end gap-2">
+                                <textarea onChange={handleChange} className="bg-grey p-2 rounded" value={note} style={{height: "20vh", width: "100%"}} />
+                                <button className="btn btn-success" onClick={() => save()}>Save</button>
+                            </div>
+                        }
+                    </div>
+                }
+                {
+                    !inputText && (!note || note.length === 0) &&
+                    <div className="d-flex justify-content-end">
+                        <button onClick={() => setInputText(true)} className="btn btn-success">Add Note</button>
                     </div>
                 }
             </Card>

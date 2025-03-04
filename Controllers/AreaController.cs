@@ -45,7 +45,7 @@ public class AreaController : ControllerBase
 
         string old = (await _areaController.GetProduct(areaId, productId)).Note;
 
-        string appendedNote = old + $"\n\n---------------{DateTime.Now.ToShortDateString()}---------------\n\n" + note;
+        string appendedNote = old + $"\n\n- {DateTime.Now.ToShortDateString()}\n\n" + note;
 
         await _areaController.UpdateProductNote(areaId, productId, appendedNote);
 
