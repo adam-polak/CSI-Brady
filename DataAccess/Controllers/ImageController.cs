@@ -92,4 +92,14 @@ public class ImageController : DbController
 
         return await DoQueryAsync<ProductModel>(sql, obj);
     }
+
+    public async Task<List<int>> GetProductIdsForImage(int imageId)
+    {
+        string sql = "SELECT product.Id FROM image_to_product"
+                    + " JOIN product ON image_to_product.productid = product.id"
+                    + " WHERE image_to_product.imageid = @id;";
+        object obj = new { id = imageId };
+
+        return await DoQueryAsync<int>(sql, obj);
+    }
 }
