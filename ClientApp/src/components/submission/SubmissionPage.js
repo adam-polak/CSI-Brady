@@ -36,7 +36,7 @@ export function SubmissionPageWrapper() {
   const { areaId, imageId } = useParams();
   const nav = useNavigate();
 
-  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} isFromCamera={true} />;
+  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} isFromCamera={imageId} />;
 }
 
 export class SubmissionPage extends Component {
