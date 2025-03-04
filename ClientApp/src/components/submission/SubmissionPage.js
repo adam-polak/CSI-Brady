@@ -13,6 +13,7 @@ import XClose from "../icons/XClose";
 import Product from "../product/Product";
 import { LoadingSpinner } from "../loading/Loading";
 import NavHeader from "../header/NavHeader";
+import { AddNoteModal } from "./AddNoteModal";
 
 /**
  * violation object
@@ -35,7 +36,7 @@ export function SubmissionPageWrapper() {
   const { areaId, imageId } = useParams();
   const nav = useNavigate();
 
-  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} />;
+  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} isFromCamera={imageId} />;
 }
 
 export class SubmissionPage extends Component {
@@ -56,9 +57,15 @@ export class SubmissionPage extends Component {
   }
 
   componentDidMount() {
-    this.loadImgSrc();
-    this.loadViolations();
-    this.loadImageProducts();
+    const { isFromCamera } = this.props;
+    if(isFromCamera) {
+      this.loadImgSrc();
+      this.loadViolations();
+      this.loadImageProducts();
+    } else {
+      this.setState({ productsLoading: false });
+    }
+
     this.loadProducts();
   }
 
@@ -71,7 +78,7 @@ export class SubmissionPage extends Component {
 
   async loadProducts() {
     const result = await fetch("/productapi/products");
-    const products = JSON.parse(await result.text());
+    let products = JSON.parse(await result.text());
     this.setState({ bradyProducts: products });
   }
 
@@ -83,14 +90,14 @@ export class SubmissionPage extends Component {
   }
 
   async loadImageProducts() {
-    const { imageId } = this.props;
-    const result = await fetch("/imageapi/products/" + imageId);
+    const { areaId, imageId } = this.props;
+    const result = await fetch(`/imageapi/products/${areaId}/${imageId}`);
     const products = JSON.parse(await result.text());
     this.setState({ addedProducts: products, productsLoading: false });
   }
 
   render() {
-    const { nav, areaId, imageId } = this.props;
+    const { nav, areaId, imageId, isFromCamera } = this.props;
     const {
       imgSrc,
       query,
@@ -100,22 +107,18 @@ export class SubmissionPage extends Component {
       selectedProduct,
       addedProducts,
       violationsLoading,
-      productsLoading,
+      productsLoading
     } = this.state;
 
     const handleChange = (e) => {
       const value = e.target.value;
       this.setState({ query: value });
-      if (value.trim() !== "") {
-        const filtered = bradyProducts
-          .filter((product) =>
-            product.Name.toLowerCase().includes(value.toLowerCase())
-          )
-          .filter((product) => !addedProducts.includes(product));
-        this.setState({ selectedProduct: filtered[0], suggestions: filtered });
-      } else {
-        this.setState({ suggestions: [] });
-      }
+      const filtered = bradyProducts
+        .filter((product) =>
+          product.Name.toLowerCase().includes(value.toLowerCase())
+        )
+        .filter((product) => !addedProducts.includes(product));
+      this.setState({ selectedProduct: filtered[0], suggestions: filtered });
     };
 
     const handleSelect = (product) => {
@@ -147,38 +150,61 @@ export class SubmissionPage extends Component {
     };
 
     async function confirm() {
-      await fetch(`/imageapi/setproducts/${areaId}/${imageId}`, {
-        method: "POST",
-        body: JSON.stringify(addedProducts.map((p) => p.Id)),
-      });
+      if(isFromCamera) {
+        for(let i = 0; i < addedProducts.length; i++) {
+          if((addedProducts[i].Note || addedProducts[i].Note !== "") && addedProducts[i].changed) {
+            await fetch(`/areaapi/note/append/${areaId}/${addedProducts[i].Id}`, {
+              method: "POST",
+              body: addedProducts[i].Note
+            });
+          }
+        }
 
-      nav(-2); // Go back to area page
+        await fetch(`/imageapi/setproducts/${areaId}/${imageId}`, {
+          method: "POST",
+          body: JSON.stringify(addedProducts.map((p) => p.Id)),
+        });
+      } else {
+        await fetch(`/areaapi/setproducts/${areaId}`, {
+          method: "POST",
+          body: JSON.stringify(addedProducts.map((p) => p.Id))
+        })
+      }
+
+      nav(isFromCamera ? -2 : -1); // Go back to area page
     }
 
-    function addNote() {}
+    const setProduct = (index, product) => {
+      product.changed = true;
+      const arr = addedProducts;
+      arr[index] = product;
+      this.setState({ addedProducts: [...arr] });
+    }
 
     return (
       <div style={{ height: "94vh" }} className="bg-grey">
         <NavHeader />
-        <div className="d-flex py-3 px-3">
-          <div>
-            <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
-          </div>
-          <Container className="px-3">
-            {violations.length !== 0 && <h2>Violations Found:</h2>}
-            {violations.length === 0 && !violationsLoading && (
-              <h2>* No violations detected</h2>
-            )}
-            {violationsLoading && <LoadingSpinner />}
-            <div style={{ maxHeight: "95px", overflowY: "auto" }}>
-              <ListGroup>
-                {violations.map((violation, i) => (
-                  <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
-                ))}
-              </ListGroup>
+        {isFromCamera &&
+          <div className="d-flex py-3 px-3">
+            <div>
+              <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
             </div>
-          </Container>
-        </div>
+            <Container className="px-3">
+              {violations.length !== 0 && <h2>Violations Found:</h2>}
+              {violations.length === 0 && !violationsLoading && (
+                <h2>* No violations detected</h2>
+              )}
+              {violationsLoading && <LoadingSpinner />}
+              <div style={{ maxHeight: "95px", overflowY: "auto" }}>
+                <ListGroup>
+                  {violations.map((violation, i) => (
+                    <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
+                  ))}
+                </ListGroup>
+              </div>
+            </Container>
+          </div>
+        }
         <div className="d-flex gap-3 mx-3 mt-3">
           <div className="position-relative w-100">
             <Input
@@ -189,6 +215,7 @@ export class SubmissionPage extends Component {
               placeholder="Search Brady..."
               value={query}
               onChange={handleChange}
+              onClick={handleChange}
               bsSize="lg"
               onBlur={() =>
                 setTimeout(() => this.setState({ suggestions: [] }), 100)
@@ -218,14 +245,14 @@ export class SubmissionPage extends Component {
           <button className="btn bg-success" onClick={handleAdd}>
             <div
               className="d-flex align-items-center gap-2 px-2"
-              style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}
+              style={{ fontSize: "18px", color: "rgb(255, 255, 255)" }}
             >
               +
             </div>
           </button>
         </div>
         <hr className="mx-3" />
-        <div className="px-3" style={{ height: "35%", overflowY: "scroll" }}>
+        <div className="px-3" style={{ height: isFromCamera ? "25%" : "55%", overflowY: "scroll" }}>
           {productsLoading && <LoadingSpinner />}
           {addedProducts.length === 0 && !productsLoading && (
             <h2 className="text-center">* No products added</h2>
@@ -242,19 +269,8 @@ export class SubmissionPage extends Component {
                   </button>
                 </div>
                 <div className="d-flex align-items-center pe-4">
-                  <button
-                    onClick={() => addNote()}
-                    color="primary"
-                    className="btn"
-                  >
-                    <img
-                      width="40px"
-                      height="40px"
-                      alt="add note"
-                      src="add-note.svg"
-                    />
-                  </button>
-                  <Product product={product} />
+                  <AddNoteModal changeAddedProduct={(p) => setProduct(i, p)} isFromCamera={isFromCamera} areaId={areaId} product={product} note={product.Note} />
+                  <Product areaId={areaId} product={product} />
                 </div>
               </CardBody>
             </Card>
