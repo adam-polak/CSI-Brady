@@ -49,7 +49,7 @@ export function AreaProduct({ areaId, product }) {
                     <div className="p-3">
                         <h3>Notes:</h3>
                         <div className="bg-grey p-2 rounded" style={{maxHeight: "20vh", overflowY: "scroll"}}>
-                            <p>{product.Note}</p>
+                            <p>{product.Note && product.Note.split("\n").map(x => <p>{x}</p>)}</p>
                         </div>
                     </div>
                 }

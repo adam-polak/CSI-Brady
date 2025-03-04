@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, ModalBody } from "reactstrap";
 import Product from "../product/Product";
 
-export function AddNoteModal({ areaId, product }) {
+export function AddNoteModal({ changeAddedProduct, areaId, product, isFromCamera }) {
     const [modal, setModal] = useState(false);
     const [p, setProduct] = useState(product);
     const [noteText, setNoteText] = useState(p.Note || "");
@@ -17,14 +17,20 @@ export function AddNoteModal({ areaId, product }) {
         const noteText = document.getElementById("note-text");
         const text = noteText.value;
 
-        await fetch(`/areaapi/note/${areaId}/${product.Id}`, {
-            method: "POST",
-            body: text
-        });
+        if(!isFromCamera) {
+            await fetch(`/areaapi/note/${areaId}/${product.Id}`, {
+                method: "POST",
+                body: text
+            });
+        }
 
         product.Note = text;
         setProduct(product);
         setNoteText(text);
+
+        if(isFromCamera) {
+            changeAddedProduct(product);
+        }
 
         toggle();
     }

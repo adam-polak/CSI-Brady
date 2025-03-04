@@ -1,7 +1,5 @@
-using CSI_Brady.DataAccess.Controllers;
 using CSI_Brady.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.ObjectPool;
 using Newtonsoft.Json;
 
 namespace CSI_Brady.Controllers;
@@ -11,13 +9,11 @@ public class AreaController : ControllerBase
 {
     private ILogger<AreaController> _logger;
     private DataAccess.Controllers.AreaController _areaController;
-    private ViolationController _violationController;
 
     public AreaController(ILogger<AreaController> logger, IHostEnvironment env)
     {
         _logger = logger;
         _areaController = new DataAccess.Controllers.AreaController(env);
-        _violationController = new ViolationController(env);
     }
 
     [HttpGet("products/{areaId}")]
@@ -42,6 +38,20 @@ public class AreaController : ControllerBase
         return Ok();
     }
 
+    [HttpPost("note/append/{areaId}/{productId}")]
+    public async Task<IActionResult> AppendNoteToProduct(int areaId, int productId)
+    {
+        string note = await new StreamReader(Request.Body).ReadToEndAsync();
+
+        string old = (await _areaController.GetProduct(areaId, productId)).Note;
+
+        string appendedNote = old + $"\n\n---------------{DateTime.Now.ToShortDateString()}---------------\n\n" + note;
+
+        await _areaController.UpdateProductNote(areaId, productId, appendedNote);
+
+        return Ok();
+    }
+
     [HttpPost("setproducts/{areaId}")]
     public async Task<IActionResult> AddProducts(int areaId)
     {
@@ -56,7 +66,10 @@ public class AreaController : ControllerBase
 
         for(int i = 0; i < productIds.Count; i++)
         {
-            if(addedProducts.Contains(productIds.ElementAt(i))) continue;
+            if(addedProducts.Contains(productIds.ElementAt(i))) {
+                await _areaController.AddToProductCount(areaId, productIds.ElementAt(i), 1);
+                continue;
+            }
 
             await _areaController.AddProductToArea(areaId, productIds.ElementAt(i));
         }

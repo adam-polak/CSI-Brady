@@ -3,6 +3,7 @@ using System.Net.WebSockets;
 using CSI_Brady.BlobAccess.Controllers;
 using CSI_Brady.DataAccess.Controllers;
 using CSI_Brady.DataAccess.Models;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -51,8 +52,8 @@ public class ImageController : ControllerBase
         return Ok(json);
     }
 
-    [HttpGet("products/{imageId}")]
-    public async Task<IActionResult> GetProducts(int imageId)
+    [HttpGet("products/{areaId}/{imageId}")]
+    public async Task<IActionResult> GetProducts(int areaId, int imageId)
     {
         List<ProductModel> products = await _imageController.GetProductsForImage(imageId);
 

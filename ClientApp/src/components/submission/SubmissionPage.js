@@ -36,7 +36,7 @@ export function SubmissionPageWrapper() {
   const { areaId, imageId } = useParams();
   const nav = useNavigate();
 
-  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} isFromImage={true} />;
+  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} isFromCamera={false} />;
 }
 
 export class SubmissionPage extends Component {
@@ -57,11 +57,13 @@ export class SubmissionPage extends Component {
   }
 
   componentDidMount() {
-    const { isFromImage } = this.props;
-    if(isFromImage) {
+    const { isFromCamera } = this.props;
+    if(isFromCamera) {
       this.loadImgSrc();
       this.loadViolations();
       this.loadImageProducts();
+    } else {
+      this.setState({ productsLoading: false });
     }
 
     this.loadProducts();
@@ -76,7 +78,7 @@ export class SubmissionPage extends Component {
 
   async loadProducts() {
     const result = await fetch("/productapi/products");
-    const products = JSON.parse(await result.text());
+    let products = JSON.parse(await result.text());
     this.setState({ bradyProducts: products });
   }
 
@@ -88,14 +90,14 @@ export class SubmissionPage extends Component {
   }
 
   async loadImageProducts() {
-    const { imageId } = this.props;
-    const result = await fetch("/imageapi/products/" + imageId);
+    const { areaId, imageId } = this.props;
+    const result = await fetch(`/imageapi/products/${areaId}/${imageId}`);
     const products = JSON.parse(await result.text());
     this.setState({ addedProducts: products, productsLoading: false });
   }
 
   render() {
-    const { nav, areaId, imageId, isFromImage } = this.props;
+    const { nav, areaId, imageId, isFromCamera } = this.props;
     const {
       imgSrc,
       query,
@@ -105,7 +107,7 @@ export class SubmissionPage extends Component {
       selectedProduct,
       addedProducts,
       violationsLoading,
-      productsLoading,
+      productsLoading
     } = this.state;
 
     const handleChange = (e) => {
@@ -148,7 +150,16 @@ export class SubmissionPage extends Component {
     };
 
     async function confirm() {
-      if(isFromImage) {
+      if(isFromCamera) {
+        for(let i = 0; i < addedProducts.length; i++) {
+          if((addedProducts[i].Note || addedProducts[i].Note !== "") && addedProducts[i].changed) {
+            await fetch(`/areaapi/note/append/${areaId}/${addedProducts[i].Id}`, {
+              method: "POST",
+              body: addedProducts[i].Note
+            });
+          }
+        }
+
         await fetch(`/imageapi/setproducts/${areaId}/${imageId}`, {
           method: "POST",
           body: JSON.stringify(addedProducts.map((p) => p.Id)),
@@ -160,13 +171,20 @@ export class SubmissionPage extends Component {
         })
       }
 
-      nav(isFromImage ? -2 : -1); // Go back to area page
+      nav(isFromCamera ? -2 : -1); // Go back to area page
+    }
+
+    const setProduct = (index, product) => {
+      product.changed = true;
+      const arr = addedProducts;
+      arr[index] = product;
+      this.setState({ addedProducts: [...arr] });
     }
 
     return (
       <div style={{ height: "94vh" }} className="bg-grey">
         <NavHeader />
-        {isFromImage &&
+        {isFromCamera &&
           <div className="d-flex py-3 px-3">
             <div>
               <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
@@ -227,16 +245,16 @@ export class SubmissionPage extends Component {
           <button className="btn bg-success" onClick={handleAdd}>
             <div
               className="d-flex align-items-center gap-2 px-2"
-              style={{ fontSize: "18px", color: "rgb(228, 227, 227)" }}
+              style={{ fontSize: "18px", color: "rgb(255, 255, 255)" }}
             >
               +
             </div>
           </button>
         </div>
         <hr className="mx-3" />
-        <div className="px-3" style={{ height: "25%", overflowY: "scroll" }}>
-          {isFromImage && productsLoading && <LoadingSpinner />}
-          {addedProducts.length === 0 && (!isFromImage || !productsLoading) && (
+        <div className="px-3" style={{ height: isFromCamera ? "25%" : "55%", overflowY: "scroll" }}>
+          {productsLoading && <LoadingSpinner />}
+          {addedProducts.length === 0 && !productsLoading && (
             <h2 className="text-center">* No products added</h2>
           )}
           {addedProducts.map((product, i) => (
@@ -251,7 +269,7 @@ export class SubmissionPage extends Component {
                   </button>
                 </div>
                 <div className="d-flex align-items-center pe-4">
-                  <AddNoteModal areaId={areaId} product={product} note={product.Note} />
+                  <AddNoteModal changeAddedProduct={(p) => setProduct(i, p)} isFromCamera={isFromCamera} areaId={areaId} product={product} note={product.Note} />
                   <Product areaId={areaId} product={product} />
                 </div>
               </CardBody>

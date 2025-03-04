@@ -68,6 +68,18 @@ public class AreaController : DbController
 
         await DoCommandAsync(sql, arr);
     }
+
+    public async Task<AreaProductModel> GetProduct(int areaId, int productId)
+    {
+        string sql = "SELECT product.id, product.name, product.link, product.imgsrc, area_to_product.count, area_to_product.note"
+                    + " FROM area_to_product"
+                    + " JOIN product"
+                    + " ON area_to_product.productid = product.id"
+                    + " WHERE area_to_product.areaid = @aid AND area_to_product.productid = @pid;";
+        object obj = new { aid = areaId, pid = productId };
+
+        return (await DoQueryAsync<AreaProductModel>(sql, obj)).First();
+    }
     
     public async Task AddToProductCount(int areaId, int productId, int amt)
     {
