@@ -3,7 +3,7 @@
 ## Overview
 Visual Workspace Safety is an application designed to enhance workplace safety by leveraging AI to detect OSHA and ANSI violations from user-uploaded images. The app features a C# backend built with ASP.NET and a frontend developed in React.
 
-Access on our website [here]([https://github.com/your-repository](https://github.com/adam-polak/CSI-Brady))!
+Access on our website [here](https://github.com/adam-polak/CSI-Brady)!
 
 ## Architecture
 
