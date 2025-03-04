@@ -34,7 +34,7 @@ const AppRoutes = [
     element: <AuthenticationGuard component={ImagesPageWrapper} />
   },
   {
-    path: "leaderboard/:facilityId",
+    path: "leaderboard/:address",
     element: <AuthenticationGuard component={LeaderboardPageWrapper} />
   },
   {
