@@ -9,11 +9,13 @@ public class FacilityController : ControllerBase
 {
     private ILogger<FacilityController> _logger;
     private DataAccess.Controllers.FacilityController _facilityController;
+    private DataAccess.Controllers.AreaController _areaController;
 
     public FacilityController(ILogger<FacilityController> logger, IHostEnvironment env)
     {
         _logger = logger;
         _facilityController = new DataAccess.Controllers.FacilityController(env);
+        _areaController = new DataAccess.Controllers.AreaController(env);
     }
 
     [HttpGet("facilities")]
@@ -40,9 +42,30 @@ public class FacilityController : ControllerBase
     public async Task<IActionResult> GetFacilityAreas(int facilityId)
     {
         AreaModel[] areas = (await _facilityController.GetAreas(facilityId)).ToArray();
+        
+        List<AreaWebModel> areaWebModels = [];
+        for(int i = 0; i < areas.Length; i++)
+        {
+            AreaWebModel model = new AreaWebModel()
+            {
+                Id = areas[i].Id,
+                Code = areas[i].Code,
+                ViolationCount = areas[i].ViolationCount,
+                ProductCount = (await _areaController.GetProductIds(areas[i].Id)).Count
+            };
 
-        string json = JsonConvert.SerializeObject(areas);
+            areaWebModels.Add(model);
+        }
+        string json = JsonConvert.SerializeObject(areaWebModels);
 
         return Ok(json);
+    }
+
+    public class AreaWebModel
+    {
+        public required int Id { get; set; }
+        public required string Code { get; set; }
+        public required int ViolationCount { get; set; }
+        public required int ProductCount { get; set; }
     }
 }
