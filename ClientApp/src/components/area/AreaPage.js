@@ -99,7 +99,7 @@ export default class AreaPage extends Component {
                 style={{ width: "100%" }}
                 className="pt-4 d-flex justify-content-center"
               >
-                <h4>
+                <h4 className="px-5">
                   * No products to recommend yet:{" "}
                   <em>Try adding a photo of the area!</em>
                 </h4>
