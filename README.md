@@ -83,9 +83,9 @@ Store sensitive information in a `secrets.json` file located at the root of the 
 
 ```json
 {
-  "DatabaseConnectionString": "your-database-connection-string",
-  "BlobConnectionString": "your-blob-connection-string",
-  "BlobContainerName": "your-blob-container-name"
+  "DatabaseConnectionString": "your-azure-sql-database-connection-string",
+  "BlobConnectionString": "your-azure-blob-connection-string",
+  "BlobContainerName": "your-azure-blob-container-name"
 }
 ```
 
