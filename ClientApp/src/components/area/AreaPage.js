@@ -4,14 +4,11 @@ import NavHeader from "../header/NavHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner } from "../loading/Loading";
 import {
-  Card,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import ProductViolations from "../product/ProductViolations";
-import ImageIcon from "../icons/ImageIcon";
 import { AreaProduct } from "./AreaProduct";
 
 
