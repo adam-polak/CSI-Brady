@@ -14,6 +14,7 @@ import Product from "../product/Product";
 import { LoadingSpinner } from "../loading/Loading";
 import NavHeader from "../header/NavHeader";
 import { AddNoteModal } from "./AddNoteModal";
+import ViolationDescriptionModal from "./ViolationDescriptionModal";
 
 /**
  * violation object
@@ -36,7 +37,14 @@ export function SubmissionPageWrapper() {
   const { areaId, imageId } = useParams();
   const nav = useNavigate();
 
-  return <SubmissionPage nav={nav} areaId={areaId} imageId={imageId} isFromCamera={imageId} />;
+  return (
+    <SubmissionPage
+      nav={nav}
+      areaId={areaId}
+      imageId={imageId}
+      isFromCamera={imageId}
+    />
+  );
 }
 
 export class SubmissionPage extends Component {
@@ -58,7 +66,7 @@ export class SubmissionPage extends Component {
 
   componentDidMount() {
     const { isFromCamera } = this.props;
-    if(isFromCamera) {
+    if (isFromCamera) {
       this.loadImgSrc();
       this.loadViolations();
       this.loadImageProducts();
@@ -107,7 +115,7 @@ export class SubmissionPage extends Component {
       selectedProduct,
       addedProducts,
       violationsLoading,
-      productsLoading
+      productsLoading,
     } = this.state;
 
     const handleChange = (e) => {
@@ -150,13 +158,19 @@ export class SubmissionPage extends Component {
     };
 
     async function confirm() {
-      if(isFromCamera) {
-        for(let i = 0; i < addedProducts.length; i++) {
-          if((addedProducts[i].Note || addedProducts[i].Note !== "") && addedProducts[i].changed) {
-            await fetch(`/areaapi/note/append/${areaId}/${addedProducts[i].Id}`, {
-              method: "POST",
-              body: addedProducts[i].Note
-            });
+      if (isFromCamera) {
+        for (let i = 0; i < addedProducts.length; i++) {
+          if (
+            (addedProducts[i].Note || addedProducts[i].Note !== "") &&
+            addedProducts[i].changed
+          ) {
+            await fetch(
+              `/areaapi/note/append/${areaId}/${addedProducts[i].Id}`,
+              {
+                method: "POST",
+                body: addedProducts[i].Note,
+              }
+            );
           }
         }
 
@@ -167,8 +181,8 @@ export class SubmissionPage extends Component {
       } else {
         await fetch(`/areaapi/setproducts/${areaId}`, {
           method: "POST",
-          body: JSON.stringify(addedProducts.map((p) => p.Id))
-        })
+          body: JSON.stringify(addedProducts.map((p) => p.Id)),
+        });
       }
 
       nav(isFromCamera ? -2 : -1); // Go back to area page
@@ -179,12 +193,12 @@ export class SubmissionPage extends Component {
       const arr = addedProducts;
       arr[index] = product;
       this.setState({ addedProducts: [...arr] });
-    }
+    };
 
     return (
       <div style={{ height: "94vh" }} className="bg-grey">
         <NavHeader />
-        {isFromCamera &&
+        {isFromCamera && (
           <div className="d-flex py-3 px-3">
             <div>
               <img src={imgSrc} alt="Uploaded" style={{ maxWidth: "150px" }} />
@@ -198,13 +212,18 @@ export class SubmissionPage extends Component {
               <div style={{ maxHeight: "95px", overflowY: "auto" }}>
                 <ListGroup>
                   {violations.map((violation, i) => (
-                    <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
+                    <>
+                      {/* <button className="btn">
+                        <ListGroupItem key={i}>{violation.Name}</ListGroupItem>
+                      </button> */}
+                      <ViolationDescriptionModal violation={violation} i={i} />
+                    </>
                   ))}
                 </ListGroup>
               </div>
             </Container>
           </div>
-        }
+        )}
         <div className="d-flex gap-3 mx-3 mt-3">
           <div className="position-relative w-100">
             <Input
@@ -252,7 +271,10 @@ export class SubmissionPage extends Component {
           </button>
         </div>
         <hr className="mx-3" />
-        <div className="px-3" style={{ height: isFromCamera ? "25%" : "55%", overflowY: "scroll" }}>
+        <div
+          className="px-3"
+          style={{ height: isFromCamera ? "25%" : "55%", overflowY: "scroll" }}
+        >
           {productsLoading && <LoadingSpinner />}
           {addedProducts.length === 0 && !productsLoading && (
             <h2 className="text-center">* No products added</h2>
@@ -269,7 +291,13 @@ export class SubmissionPage extends Component {
                   </button>
                 </div>
                 <div className="d-flex align-items-center pe-4">
-                  <AddNoteModal changeAddedProduct={(p) => setProduct(i, p)} isFromCamera={isFromCamera} areaId={areaId} product={product} note={product.Note} />
+                  <AddNoteModal
+                    changeAddedProduct={(p) => setProduct(i, p)}
+                    isFromCamera={isFromCamera}
+                    areaId={areaId}
+                    product={product}
+                    note={product.Note}
+                  />
                   <Product areaId={areaId} product={product} />
                 </div>
               </CardBody>
