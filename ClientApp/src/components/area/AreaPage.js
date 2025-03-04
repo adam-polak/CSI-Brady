@@ -80,7 +80,7 @@ export default class AreaPage extends Component {
                     </div>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem onClick={() => nav("/camera/" + areaId)}>
+                  <DropdownItem onClick={() => nav("/submission/" + areaId + "/" + -1)}>
                     <div className="d-flex align-items-center gap-2">
                       Add Product
                     </div>

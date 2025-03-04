@@ -18,7 +18,7 @@ export function AddNoteModal({ changeAddedProduct, areaId, product, isFromCamera
         const text = noteText.value;
 
         if(!isFromCamera) {
-            await fetch(`/areaapi/note/${areaId}/${product.Id}`, {
+            await fetch(`/areaapi/note/append/${areaId}/${product.Id}`, {
                 method: "POST",
                 body: text
             });
