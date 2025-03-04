@@ -44,7 +44,7 @@ export function AreaProduct({ areaId, product }) {
 
     return (
         <div className="px-4 py-2">
-            <Card className="mb-1 p-3">
+            <Card className="mb-1 p-3 d-flex flex-column gap-3">
                 <div className="d-flex align-items-center justify-content-between">
                 <div className="d-flex gap-3 align-items-center">
                     <div className="d-flex gap-2 align-content-center">
@@ -68,7 +68,7 @@ export function AreaProduct({ areaId, product }) {
                                 <p>{note && note.split("\n").map(x => <p>{x}</p>)}</p>
                             </div>
                             : 
-                            <div className="d-flex flex-column align-items-end gap-2">
+                            <div className="d-flex flex-column align-items-end gap-3">
                                 <textarea onChange={handleChange} className="bg-grey p-2 rounded" value={note} style={{height: "20vh", width: "100%"}} />
                                 <button className="btn btn-success" onClick={() => save()}>Save</button>
                             </div>
