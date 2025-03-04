@@ -66,27 +66,27 @@ export default class AreaPage extends Component {
             <div></div>
             <div style={{ fontSize: "36px" }}>Products</div>
             <div>
-              <Dropdown isOpen={dropdownOpen} toggle={this.toggleDropdown}>
-                <DropdownToggle caret>Add</DropdownToggle>
-                <DropdownMenu>
-
-                    <button
-                      className="btn"
-                      onClick={() => nav("/camera/" + areaId)}
-                    >
-                      <div className="d-flex align-items-center gap-2">
-                        <div
-                          style={{
-                            fontSize: "18px",
-                            color: "rgb(228, 227, 227)",
-                          }}
-                        >
-                          Add
-                        </div>
-                        <CameraIcon color="rgb(228, 227, 227)" />
-                      </div>
-                    </button>
-
+              <Dropdown
+                isOpen={dropdownOpen}
+                toggle={this.toggleDropdown}
+                size="lg"
+              >
+                <DropdownToggle caret className="bg-success" style={{}}>
+                  Add
+                </DropdownToggle>
+                <DropdownMenu end className="m-1">
+                  <DropdownItem onClick={() => nav("/camera/" + areaId)}>
+                    <div className="d-flex align-items-center gap-2">
+                      Add with <strong style={{ fontSize: "17px" }}>AI</strong>
+                      <CameraIcon />
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem onClick={() => nav("/camera/" + areaId)}>
+                    <div className="d-flex align-items-center gap-2">
+                      Add Product
+                    </div>
+                  </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>

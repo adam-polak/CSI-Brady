@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardTitle,
-  CardText,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
+import { Card, CardTitle, CardText, Container, Row, Col } from "reactstrap";
 
 /**
  * facility object
@@ -20,16 +13,36 @@ import {
 export default function FacilityEntry({ facility, onSelectItem }) {
   return (
     <Card>
-      <button className="btn" onClick={onSelectItem} style={{ paddingLeft: "0px" }}>
+      <button
+        className="btn"
+        onClick={onSelectItem}
+        style={{ paddingLeft: "0px" }}
+      >
         <Container className="FacilityContainer">
           <Row>
-            <Col xs="2" className="d-flex justify-content-center">
-              <img
-                alt={facility.CompanyName + " Logo"}
-                src={facility.CompanyImgSrc}
-                width="50px"
-                style={{ alignItems: "center" }}
-              />
+            <Col xs="2" className="d-flex flex-column justify-content-center">
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: "50px",
+                  overflow: "hidden",
+                }}
+              >
+                <img
+                  alt={facility.CompanyName + " Logo"}
+                  src={facility.CompanyImgSrc}
+                  width="50px"
+                  style={{
+                    alignItems: "center",
+                    maxWidth: "100%",
+                    height: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
             </Col>
             <Col>
               <Row>

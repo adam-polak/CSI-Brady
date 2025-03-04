@@ -20,23 +20,33 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
   }
 
   return (
-    <div style={{borderBottom: "2px solid lightgrey"}} className="pt-4 bg-grey">
+    <div
+      style={{ borderBottom: "2px solid lightgrey" }}
+      className="pt-4 bg-grey"
+    >
       <div>
         <div className="text-center">
           <form onSubmit={handleSubmit}>
-            <input 
-              className="rounded-3 p-2" 
-              type="text" 
-              placeholder="Add filters" 
-              style={{ 
-                border: "0px", 
-                marginRight: ".5em", 
-                height: "2.4em", 
-                width: "50%", 
-                display: "inline-block" 
-              }} 
-              name="filter" />
-            <button type="submit" style={{display: "inline-block"}} className="btn btn-success mb-1">+</button>
+            <input
+              className="rounded-3 p-2"
+              type="text"
+              placeholder="Add filters"
+              style={{
+                border: "0px",
+                marginRight: ".5em",
+                height: "2.4em",
+                width: "50%",
+                display: "inline-block",
+              }}
+              name="filter"
+            />
+            <button
+              type="submit"
+              style={{ display: "inline-block", color: "rgb(255, 255, 255)" }}
+              className="btn btn-success mb-1"
+            >
+              +
+            </button>
           </form>
         </div>
 
@@ -46,23 +56,25 @@ export default function FilterBar({ handleAdd, handleRemove, tags }) {
           style={{
             width: "100%",
             flex: "row",
-            justifyContent: "center"
+            justifyContent: "center",
           }}
         >
-          <div style={{
-            width: "90%",
-            padding: "0 10px",
-            overflowX: "auto",
-            display: "flex",
-            flexWrap: "nowrap",
-            gap: "8px",
-          }}>
+          <div
+            style={{
+              width: "90%",
+              padding: "0 10px",
+              overflowX: "auto",
+              display: "flex",
+              flexWrap: "nowrap",
+              gap: "8px",
+            }}
+          >
             {tags.map((tag, i) => (
               <div
                 key={`tag-${i}`}
                 style={{ flexShrink: 0 }} // Safeguard to prevent items from shrinking
               >
-                <FilterTag tag={tag} index={i} onSelectItem={handleRemove}/>
+                <FilterTag tag={tag} index={i} onSelectItem={handleRemove} />
               </div>
             ))}
           </div>
