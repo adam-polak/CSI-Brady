@@ -9,8 +9,15 @@ export default function AreaEntry({ facility }) {
         <div className="fs-3 fw-bold text-dark text-uppercase letter-spacing-1">
           {facility.Code}
         </div>
-        <div className="fs-5 text-secondary">
-          <span className="fw-4 text-danger">Violations:</span> {facility.ViolationCount}
+        <div className="fs-5 text-secondary d-flex flex-column">
+          <div>
+            <span className="fw-4 text-primary">Products:</span>{" "}
+            {facility.ViolationCount}
+          </div>
+          <div>
+            <span className="fw-4 text-danger">Violations:</span>{" "}
+            {facility.ViolationCount}
+          </div>
         </div>
         <div className="text-muted">
           <RightChevron />
