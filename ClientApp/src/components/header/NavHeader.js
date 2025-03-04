@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function NavHeader() {
+    const { imageId } = useParams();
     const nav = useNavigate();
 
     const pageName = window.location.pathname.split('/')[1];
@@ -8,7 +9,7 @@ export default function NavHeader() {
     const routes = [
         ['Home'],
         ['Facility', 'Leaderboard'],
-        ['Area', 'Images'],
+        ['Area', imageId && parseInt(imageId) === -1 ? 'Submission': 'Images'],
         ['Camera'],
         ['Submission']
     ];
