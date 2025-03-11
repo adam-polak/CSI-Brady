@@ -59,26 +59,6 @@ dotnet restore
 dotnet run
 ```
 
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-
-```sh
-cd ClientApp
-```
-
-2. Install npm packages:
-
-```sh
-npm install
-```
-
-3. Start the development server:
-
-```sh
-npm start
-```
-
 ### Environment Variables
 
 Store sensitive information in a `secrets.json` file located at the root of the repository. The file should contain the following parameters:
